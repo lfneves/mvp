@@ -1,0 +1,30 @@
+#version: '3.7'
+#services:
+#  mongodb_container:
+#    image: mongo:latest
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: mongopw
+#    ports:
+#      - 27017:27017
+#    volumes:
+#      - mongodb_data_container:/data/db
+#
+#volumes:
+#  mongodb_data_container:
+
+version: '3.7'
+
+services:
+
+  database:
+    image: 'postgres:latest'
+
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: postgres # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: delivery_database_1
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

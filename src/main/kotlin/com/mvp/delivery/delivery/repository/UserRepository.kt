@@ -1,0 +1,18 @@
+package com.mvp.delivery.delivery.repository
+
+
+import com.mvp.delivery.delivery.model.User
+import org.springframework.data.r2dbc.repository.Query
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+
+interface UserRepository : ReactiveCrudRepository<User?, Long?> {
+    @Query("select id, name, score from reactive_user where name = $1")
+    fun findByName(name: String?): Flux<User>
+    fun findById(id: Int): Mono<User>
+    fun deleteById(id: Int): Mono<Void>
+
+    @Query("SELECT * FROM reactive_user u JOIN address a ON u.address_id = a.id WHERE u.id = $1")
+    fun findByIdWithAddress(id: Int): Mono<User>
+}
