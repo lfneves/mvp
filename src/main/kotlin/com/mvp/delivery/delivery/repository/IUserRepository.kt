@@ -7,8 +7,8 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface UserRepository : ReactiveCrudRepository<User?, Long?> {
-    @Query("select id, name, score from reactive_user where name = $1")
+interface IUserRepository : ReactiveCrudRepository<User?, Long?> {
+    @Query("select id, password, name, score from reactive_user where name = $1")
     fun findByName(name: String?): Flux<User>
     fun findById(id: Int): Mono<User>
     fun deleteById(id: Int): Mono<Void>

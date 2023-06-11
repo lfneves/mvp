@@ -3,8 +3,8 @@ package com.mvp.delivery.delivery.service
 import com.mvp.delivery.delivery.client.UserWebClient
 import com.mvp.delivery.delivery.exception.NotFoundException
 import com.mvp.delivery.delivery.model.User
-import com.mvp.delivery.delivery.repository.AddressRepository
-import com.mvp.delivery.delivery.repository.UserRepository
+import com.mvp.delivery.delivery.repository.IAddressRepository
+import com.mvp.delivery.delivery.repository.IUserRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -13,12 +13,12 @@ import reactor.kotlin.core.publisher.toMono
 @Service
 class UserServiceImpl(
     userWebClient: UserWebClient,
-    userRepository: UserRepository,
-    addressRepository: AddressRepository
+    userRepository: IUserRepository,
+    addressRepository: IAddressRepository
 ) : UserService {
     private val userWebClient: UserWebClient
-    private val userRepository: UserRepository
-    private val addressRepository: AddressRepository
+    private val userRepository: IUserRepository
+    private val addressRepository: IAddressRepository
 
     init {
         this.userWebClient = userWebClient

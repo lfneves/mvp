@@ -5,3 +5,9 @@
 
 server:
   port: 8099
+  error:
+    include-message: always
+
+spring-doc:
+  swagger-ui:
+    path: /swagger-ui.html

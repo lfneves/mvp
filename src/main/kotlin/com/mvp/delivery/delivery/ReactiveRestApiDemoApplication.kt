@@ -20,7 +20,7 @@ class ReactiveRestApiDemoApplication {
             userService.deleteAllUsers()
             val users: Flux<User> = Flux.just(
                 User(
-                    "Lucas", 10, 1,  Address("sp")
+                    "Lucas","123", 10, 1,  Address("sp")
                 )
             )
             userService.saveUser(users)

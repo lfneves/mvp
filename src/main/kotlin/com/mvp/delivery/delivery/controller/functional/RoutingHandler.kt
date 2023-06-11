@@ -11,7 +11,6 @@ class RoutingHandler {
         return RouterFunctions
             .route(RequestPredicates.GET(apiPrefix)) { request: ServerRequest? -> userHandler.getUsers(request) }
     }
-
     companion object {
         private const val apiPrefix = "/api/v1/"
     }

@@ -16,25 +16,33 @@ repositories {
 }
 
 dependencies {
+
+	//Spring
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 //	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.session:spring-session-core")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-	implementation("org.springframework.session:spring-session-core")
 	implementation("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
 
 //	runtimeOnly("io.micrometer:micrometer-registry-influx")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 
-
 	//Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-api:2.1.0")
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 }
 
 tasks.withType<KotlinCompile> {

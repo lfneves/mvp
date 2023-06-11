@@ -11,6 +11,7 @@ class User {
     var id: Int? = null
     var name: String? = null
     var score: Int? = null
+    var password: String = ""
 
     @Column("address_id")
     var addressId: Long? = null
@@ -20,8 +21,9 @@ class User {
 
     constructor()
 
-    constructor(name: String?, score: Int?, addressId: Long?, address: Address) {
+    constructor(name: String?, password: String, score: Int?, addressId: Long?, address: Address) {
         this.name = name
+        this.password = password
         this.score = score
         this.addressId = addressId
         this.address = address
