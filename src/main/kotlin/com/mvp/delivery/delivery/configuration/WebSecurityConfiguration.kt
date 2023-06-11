@@ -24,7 +24,7 @@ class WebSecurityConfiguration {
     @Bean
     fun getSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http.authorizeExchange().pathMatchers(
-            "/api/auth/*", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
+            "/api/auth/*", "/api/v1/users/signup", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
             "/swagger-ui.html", "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**"
         ).permitAll()
             .pathMatchers("/**").authenticated()

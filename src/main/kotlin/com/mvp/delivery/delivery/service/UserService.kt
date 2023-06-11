@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono
 
 interface UserService {
     fun getUserById(id: Int): Mono<User>
-    fun saveUser(user: Flux<User>): Mono<User>
+    fun saveUser(user: User): Mono<User>
     fun updateUser(id: Int, user: User): Mono<User>
     fun deleteUser(id: Int): Mono<Void>
     fun getGuestUserById(id: Int): Mono<User>

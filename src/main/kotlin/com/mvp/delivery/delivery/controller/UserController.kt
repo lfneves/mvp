@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 import java.time.Duration
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 class UserController(userService: UserService) {
     private val userService: UserService
 
@@ -41,7 +41,13 @@ class UserController(userService: UserService) {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createUser(@RequestBody user: Flux<User>): Mono<User> {
+    fun createUser(@RequestBody user: User): Mono<User> {
+        return userService.saveUser(user)
+    }
+
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun signup(@RequestBody user: User): Mono<User> {
         return userService.saveUser(user)
     }
 

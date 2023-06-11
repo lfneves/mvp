@@ -5,12 +5,13 @@ import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("reactive_user")
+@Table("tb_client")
 class User {
     @Id
     var id: Int? = null
     var name: String? = null
-    var score: Int? = null
+    var email: String? = null
+    var cpf: String? = null
     var password: String = ""
 
     @Column("address_id")
@@ -21,21 +22,8 @@ class User {
 
     constructor()
 
-    constructor(name: String?, password: String, score: Int?, addressId: Long?, address: Address) {
+    constructor(name: String?, password: String) {
         this.name = name
         this.password = password
-        this.score = score
-        this.addressId = addressId
-        this.address = address
-    }
-
-    override fun toString(): String {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", score=" + score +
-                ", addressId=" + addressId +
-                ", address=" + address +
-                '}'
     }
 }

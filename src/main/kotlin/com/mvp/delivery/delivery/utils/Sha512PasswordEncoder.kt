@@ -19,7 +19,7 @@ class Sha512PasswordEncoder: PasswordEncoder {
         var generatedPassword: String? = null
         try {
             val md = MessageDigest.getInstance("SHA-512")
-//            md.update(salt)
+            //md.update(salt)
             val bytes = md.digest(password.toByteArray())
             val sb = StringBuilder()
             for (i in bytes.indices) {

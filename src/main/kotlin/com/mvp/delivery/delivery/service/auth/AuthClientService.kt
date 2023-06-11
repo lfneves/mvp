@@ -22,7 +22,6 @@ class AuthClientService @Autowired constructor(
             val username = authentication.principal
             val password = authentication.credentials
             userRepository.findByName(username).map { client ->
-                client.password = passwordEncoder.encode(client.password)
                 if (client != null) {
                     if(!passwordEncoder.matches(password, client.password)) throw Exceptions.BadCredentialsException("Usuário ou senha errados.")
                 }

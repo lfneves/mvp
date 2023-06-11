@@ -5,18 +5,24 @@ import com.mvp.delivery.delivery.exception.NotFoundException
 import com.mvp.delivery.delivery.model.User
 import com.mvp.delivery.delivery.repository.IAddressRepository
 import com.mvp.delivery.delivery.repository.IUserRepository
+import com.mvp.delivery.delivery.utils.Sha512PasswordEncoder
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 
 @Service
 class UserServiceImpl(
     userWebClient: UserWebClient,
     userRepository: IUserRepository,
-    addressRepository: IAddressRepository
+    addressRepository: IAddressRepository,
+    private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
 ) : UserService {
     private val userWebClient: UserWebClient
+    @Autowired
     private val userRepository: IUserRepository
     private val addressRepository: IAddressRepository
 
@@ -42,15 +48,15 @@ class UserServiceImpl(
             }
     }
 
-    override fun saveUser(user: Flux<User>): Mono<User> {
-        return user
-            .flatMap{userFlat -> saveUserWithAddress(userFlat)}
-            .toMono()
+    override fun saveUser(user: User): Mono<User> {
+        user.password = passwordEncoder.encode(user.password)
+        return userRepository.save(user).toMono()
     }
 
     fun saveUserWithAddress(user: User): Mono<User> {
         return addressRepository.save(user.address).flatMap { address ->
             user.addressId = address.id
+            user.password = passwordEncoder.encode(user.password)
             userRepository.save(user)
         }
     }

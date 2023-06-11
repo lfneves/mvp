@@ -39,7 +39,6 @@ class UserWebClient(webClient: WebClient) {
             .onErrorResume { error -> Mono.just(User()) }
             .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(3)))
             .map { user ->
-                user.score = ThreadLocalRandom.current().nextInt(1, 100)
                 user
             }
     }
