@@ -1,4 +1,4 @@
-package com.mvp.delivery.delivery.repository
+package com.mvp.delivery.delivery.repository.user
 
 
 import com.mvp.delivery.delivery.model.Address

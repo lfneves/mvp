@@ -9,7 +9,7 @@ object AuthClientDeserializer {
 
     fun getInstance(claims: Claims): IAuthDTO {
         if(claims.containsKey("idClient")){
-            return AuthClientDTO(claims["idClient"].toString().toLong(), "")
+            return AuthClientDTO(claims["idClient"].toString().toLong(), "", "")
         }
         throw JwtException("Não conseguimos deserializar o JWT")
     }

@@ -3,7 +3,7 @@ package com.mvp.delivery.delivery.controller.security
 import com.mvp.delivery.delivery.model.auth.AuthApplicationDTO
 import com.mvp.delivery.delivery.utils.JWTUtils
 import com.mvp.delivery.delivery.model.auth.IAuthDTO
-import com.mvp.delivery.delivery.repository.IApplicationSecretAuthorityRepository
+import com.mvp.delivery.delivery.repository.auth.IApplicationSecretAuthorityRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority

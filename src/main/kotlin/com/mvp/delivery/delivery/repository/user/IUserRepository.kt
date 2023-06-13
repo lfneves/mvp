@@ -1,4 +1,4 @@
-package com.mvp.delivery.delivery.repository
+package com.mvp.delivery.delivery.repository.user
 
 
 import com.mvp.delivery.delivery.model.User
@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 interface IUserRepository : ReactiveCrudRepository<User?, Long?> {
-    @Query("select id, password, name, score from tb_client where name = $1")
+    @Query("select id, password, name, email, cpf from tb_client where name = $1")
     fun findByName(name: String?): Flux<User>
     fun findById(id: Int): Mono<User>
     fun deleteById(id: Int): Mono<Void>

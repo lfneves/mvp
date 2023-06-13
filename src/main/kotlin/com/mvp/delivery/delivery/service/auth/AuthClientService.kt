@@ -2,7 +2,7 @@ package com.mvp.delivery.delivery.service.auth
 
 import com.mvp.delivery.delivery.exception.Exceptions
 import com.mvp.delivery.delivery.model.auth.AuthenticationVO
-import com.mvp.delivery.delivery.repository.IUserRepository
+import com.mvp.delivery.delivery.repository.user.IUserRepository
 import com.mvp.delivery.delivery.utils.Sha512PasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication

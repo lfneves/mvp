@@ -12,10 +12,10 @@ class User {
     var name: String? = null
     var email: String? = null
     var cpf: String? = null
-    var password: String = ""
+    var password: String? = null
 
-    @Column("address_id")
-    var addressId: Long? = null
+    @Column("id_address")
+    var idAddress: Long? = null
 
     @Transient
     var address: Address = Address()

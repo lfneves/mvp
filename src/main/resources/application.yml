@@ -11,3 +11,7 @@ server:
 spring-doc:
   swagger-ui:
     path: /swagger-ui.html
+
+spring:
+  jpa:
+    show-sql: true

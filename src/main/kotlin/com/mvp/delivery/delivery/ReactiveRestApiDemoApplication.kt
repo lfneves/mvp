@@ -1,34 +1,127 @@
 package com.mvp.delivery.delivery
 
+import com.mvp.delivery.delivery.model.Category
+import com.mvp.delivery.delivery.model.Product
 import com.mvp.delivery.delivery.model.User
-import com.mvp.delivery.delivery.service.UserService
+import com.mvp.delivery.delivery.repository.item.ICategoryRepository
+import com.mvp.delivery.delivery.service.item.IProductService
+import com.mvp.delivery.delivery.service.user.IUserService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
-import reactor.core.publisher.Flux
+import org.springframework.data.r2dbc.config.EnableR2dbcAuditing
+import reactor.core.publisher.Mono
+import java.math.BigDecimal
 
 @SpringBootApplication
+@EnableR2dbcAuditing
 class ReactiveRestApiDemoApplication {
-
-    @Bean
-    fun loadData(userService: UserService): CommandLineRunner {
-        return CommandLineRunner {
-            // save a couple of users
-//            userService.deleteAllUsers()
-            val users =
-                User(
-                    "Lucas","123"
-                )
-
-            userService.saveUser(users)
-        }
-    }
-
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             SpringApplication.run(ReactiveRestApiDemoApplication::class.java, *args)
+        }
+    }
+
+    @Bean
+    fun loadData(
+        userService: IUserService,
+        productService: IProductService,
+        categoryRepository: ICategoryRepository
+    ): CommandLineRunner {
+        return CommandLineRunner {
+            // save a initial user
+            userService.deleteAllUsers()
+            val users = User("Lucas", "123")
+            userService.saveInitialUser(users)
+
+            productService.deleteAllProducts().subscribe()
+            categoryRepository.deleteAll().subscribe()
+
+            Mono.just(
+                Category(
+                    name = "Bebidas"
+                )
+            ).flatMap {
+                categoryRepository.save(it)
+                    .flatMap { category ->
+                        Mono.just(
+                            Product(
+                                name = "Suco",
+                                price = BigDecimal.ONE,
+                                quantity = 1,
+                                idCategory = category.id
+                            )
+                        ).flatMap { product -> productService.saveProduct(product) }
+                    }
+            }.subscribe()
+
+            categoryRepository.findByName("Bebidas")
+                .flatMap { category ->
+                    Mono.just(
+                        Product(
+                            name = "Refrigerante",
+                            price = BigDecimal.ONE,
+                            quantity = 1,
+                            idCategory = category.id
+                        )
+                    ).flatMap { product -> productService.saveProduct(product) }
+                }.subscribe()
+
+            Mono.just(
+                Category(
+                    name = "Lanche",
+                )
+            ).flatMap {
+                categoryRepository.save(it)
+                    .flatMap { category ->
+                        Mono.just(
+                            Product(
+                                name = "Hamburguer",
+                                price = BigDecimal.TEN,
+                                quantity = 1,
+                                idCategory = category.id
+                            )
+                        ).flatMap { productService.saveProduct(it) }
+                    }
+            }.subscribe()
+
+            Mono.just(
+                Category(
+                    name = "Sobremesa",
+                )
+            ).flatMap {
+                categoryRepository.save(it)
+                    .flatMap { category ->
+                        Mono.just(
+                            Product(
+                                name = "Pudim",
+                                price = BigDecimal.ONE,
+                                quantity = 1,
+                                idCategory = category.id
+                            )
+                        ).flatMap { productService.saveProduct(it) }
+                    }
+            }.subscribe()
+
+            Mono.just(
+                Category(
+                    name = "Acompanhamento",
+                )
+            ).flatMap {
+                categoryRepository.save(it)
+                    .flatMap { category ->
+                        Mono.just(
+                            Product(
+                                name = "Batata",
+                                price = BigDecimal.ONE,
+                                quantity = 1,
+                                idCategory = category.id
+                            )
+                        ).flatMap { productService.saveProduct(it) }
+                    }
+            }.subscribe()
         }
     }
 }
