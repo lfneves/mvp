@@ -68,6 +68,9 @@ class ProductServiceImpl(
         return categoryRepository.findByName(name)
             .flatMap {category ->
                 productRepository.findByIdCategory(category.id)
+                    .map { product ->
+                        product.copy(category = category)
+                    }
             }
     }
 }

@@ -7,7 +7,7 @@ import java.math.BigDecimal
 
 
 @Table("tb_product")
-class Product(
+data class Product(
     @Id
     var id: Int? = null,
     var name: String = "",
