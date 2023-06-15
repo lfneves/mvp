@@ -34,7 +34,7 @@ class ProductController(productService: IProductService) {
             .defaultIfEmpty(Product())
     }
 
-    @PutMapping("/update-product/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun updateItem(@PathVariable id: Int, @RequestBody product: Product): Mono<Product> {
         return productService.updateProduct(id, product)

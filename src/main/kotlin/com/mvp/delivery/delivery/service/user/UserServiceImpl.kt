@@ -57,7 +57,7 @@ class UserServiceImpl(
     }
 
     fun saveUserWithAddress(user: User): Mono<User> {
-        return addressRepository.save(user.address).flatMap { address ->
+        return addressRepository.save(user.address!!).flatMap { address ->
             user.idAddress = address.id
             user.password = passwordEncoder.encode(user.password)
             userRepository.save(user)
@@ -76,10 +76,10 @@ class UserServiceImpl(
     private fun updateUserWithAddress(userDTO: User): Mono<out User?> {
         return addressRepository.findById(userDTO.idAddress!!).flatMap { address ->
             address!!.id = userDTO.idAddress
-            address.city = userDTO.address.city
-            address.street = userDTO.address.street
-            address.state = userDTO.address.state
-            address.postalCode = userDTO.address.postalCode
+            address.city = userDTO.address!!.city
+            address.street = userDTO.address!!.street
+            address.state = userDTO.address!!.state
+            address.postalCode = userDTO.address!!.postalCode
             addressRepository.save(address).flatMap { address1 ->
                 userDTO.idAddress = address1.id
                 userRepository.save(userDTO)

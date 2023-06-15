@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
 	implementation("org.springframework.session:spring-session-core:3.0.0")
+	implementation("org.springframework.boot:spring-boot-docker-compose")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
@@ -46,6 +47,9 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	// CPF Validator
+	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
 }
 
 tasks.withType<KotlinCompile> {

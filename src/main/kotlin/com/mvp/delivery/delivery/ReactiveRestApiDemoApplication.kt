@@ -1,9 +1,11 @@
 package com.mvp.delivery.delivery
 
+import com.mvp.delivery.delivery.model.Address
 import com.mvp.delivery.delivery.model.Category
 import com.mvp.delivery.delivery.model.Product
 import com.mvp.delivery.delivery.model.User
 import com.mvp.delivery.delivery.repository.item.ICategoryRepository
+import com.mvp.delivery.delivery.repository.user.IAddressRepository
 import com.mvp.delivery.delivery.service.item.IProductService
 import com.mvp.delivery.delivery.service.user.IUserService
 import org.springframework.boot.CommandLineRunner
@@ -28,13 +30,25 @@ class ReactiveRestApiDemoApplication {
     fun loadData(
         userService: IUserService,
         productService: IProductService,
-        categoryRepository: ICategoryRepository
+        categoryRepository: ICategoryRepository,
+        addressRepository: IAddressRepository
     ): CommandLineRunner {
         return CommandLineRunner {
             // save a initial user
-            userService.deleteAllUsers()
-            val users = User("Lucas", "123")
-            userService.saveInitialUser(users)
+            userService.deleteAllUsers().subscribe()
+            addressRepository.deleteAll().subscribe()
+
+            Mono.just(
+                Address(null, "Rua admin", "São Paulo", "SP", "12345123")
+            ).flatMap {
+                addressRepository.save(it)
+                    .flatMap {address ->
+                        Mono.just(
+                            User(null, "admin", "admin@email.com", "12345678912", "admin", address.id)
+                        ).flatMap { user -> userService.saveUser(user) }
+                    }
+            }.subscribe()
+//            userService.saveInitialUser(users)
 
             productService.deleteAllProducts().subscribe()
             categoryRepository.deleteAll().subscribe()
