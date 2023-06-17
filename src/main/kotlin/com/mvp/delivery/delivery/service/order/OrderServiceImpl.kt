@@ -1,6 +1,6 @@
 package com.mvp.delivery.delivery.service.order
 
-import com.mvp.delivery.delivery.exception.NotFoundException
+import com.mvp.delivery.delivery.exception.Exceptions
 import com.mvp.delivery.delivery.model.Order
 import com.mvp.delivery.delivery.repository.order.IOrderRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +22,7 @@ class OrderServiceImpl(
 
     override fun getOrderById(id: Int): Mono<Order> {
         return orderRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("Order not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Order not found")))
     }
 
     override fun saveInitialOrder(order: Order): Mono<Order> {
@@ -35,7 +35,7 @@ class OrderServiceImpl(
 
     override fun updateOrder(id: Int, Order: Order): Mono<Order> {
         return orderRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("Order not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Order not found")))
             .flatMap { OrderFlat ->
                 OrderFlat.id = Order.id
                 saveOrder(OrderFlat)

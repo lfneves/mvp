@@ -19,6 +19,6 @@ data class User (
     @Schema(hidden = true)
     var idAddress: Long? = null,
 
-    @Transient
+//    @Transient
     var address: Address? = null
 )

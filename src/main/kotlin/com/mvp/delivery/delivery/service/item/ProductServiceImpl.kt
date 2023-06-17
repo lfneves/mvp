@@ -1,6 +1,6 @@
 package com.mvp.delivery.delivery.service.item
 
-import com.mvp.delivery.delivery.exception.NotFoundException
+import com.mvp.delivery.delivery.exception.Exceptions
 import com.mvp.delivery.delivery.model.Product
 import com.mvp.delivery.delivery.repository.item.ICategoryRepository
 import com.mvp.delivery.delivery.repository.item.IProductRepository
@@ -26,7 +26,7 @@ class ProductServiceImpl(
 
     override fun getProductById(id: Int): Mono<Product> {
         return productRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("Item not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
     }
 
     override fun saveProduct(Product: Product): Mono<Product> {
@@ -35,7 +35,7 @@ class ProductServiceImpl(
 
     override fun updateProduct(id: Int, Product: Product): Mono<Product> {
         return productRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("Item not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
             .flatMap { ItemFlat ->
                 ItemFlat.id = Product.id
                 saveProduct(ItemFlat)

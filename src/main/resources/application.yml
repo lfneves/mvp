@@ -1,8 +1,4 @@
 
-#db:
-#  mongo:
-#    host: ${HOST:mongodb://root:mongopw@localhost:27017}
-
 server:
   port: 8099
   error:
@@ -12,6 +8,9 @@ spring-doc:
   swagger-ui:
     path: /swagger-ui.html
 
-spring:
-  jpa:
-    show-sql: true
+#
+
+#  sql:
+#    init:
+#      schema-locations: classpath:init.sql
+#      mode: always

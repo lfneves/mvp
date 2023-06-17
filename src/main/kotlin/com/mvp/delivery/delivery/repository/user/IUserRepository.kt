@@ -10,10 +10,17 @@ import reactor.core.publisher.Mono
 interface IUserRepository : ReactiveCrudRepository<User?, Long?> {
     @Query("SELECT id, password, name, email, cpf FROM tb_client WHERE name = $1")
     fun findByName(name: String?): Flux<User>
+
     @Query("SELECT * FROM tb_client c JOIN tb_address a on c.id_address = a.id WHERE c.cpf = $1")
     fun findByUsernameWithAddress(username: String?): Flux<User>
+
+    @Query("SELECT tb_client.id, tb_client.name, tb_client.email, tb_client.cpf, tb_client.password, tb_client.id_address " +
+            "FROM tb_client " +
+            "WHERE tb_client.id = $1")
     fun findById(id: Int): Mono<User>
+
     fun deleteById(id: Int): Mono<Void>
+
     @Query("SELECT * FROM tb_client u JOIN address a ON u.address_id = a.id WHERE u.id = $1")
     fun findByIdWithAddress(id: Int): Mono<User>
 }

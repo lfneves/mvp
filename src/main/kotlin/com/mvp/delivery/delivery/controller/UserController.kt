@@ -1,6 +1,6 @@
 package com.mvp.delivery.delivery.controller
 
-import com.mvp.delivery.delivery.exception.NotFoundException
+import com.mvp.delivery.delivery.exception.Exceptions
 import com.mvp.delivery.delivery.model.User
 import com.mvp.delivery.delivery.service.user.IUserService
 import org.slf4j.Logger
@@ -37,7 +37,7 @@ class UserController(IUserService: IUserService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun signup(@RequestBody user: User): Mono<User> {
         return userService.signup(user)
-            .switchIfEmpty(Mono.error(NotFoundException("Could not create user.")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user.")))
     }
 
     @GetMapping("/{id}")

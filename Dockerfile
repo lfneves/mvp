@@ -1,5 +1,9 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM openjdk:17
+
 VOLUME /tmp
-ARG JAR_FILE
+EXPOSE 8099
+ARG JAR_FILE=/build/libs/*SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+#WORKDIR /app
+#COPY docker-compose.yml /app/docker-compose.yml
+ENTRYPOINT ["java","-jar","app.jar"]

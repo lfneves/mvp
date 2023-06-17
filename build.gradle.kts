@@ -50,6 +50,9 @@ dependencies {
 
 	// CPF Validator
 	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
+
+	// Spring docker compose
+	//developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 }
 
 tasks.withType<KotlinCompile> {

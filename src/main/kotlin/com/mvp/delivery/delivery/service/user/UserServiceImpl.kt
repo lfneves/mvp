@@ -1,6 +1,6 @@
 package com.mvp.delivery.delivery.service.user
 
-import com.mvp.delivery.delivery.exception.NotFoundException
+import com.mvp.delivery.delivery.exception.Exceptions
 import com.mvp.delivery.delivery.model.User
 import com.mvp.delivery.delivery.repository.user.IAddressRepository
 import com.mvp.delivery.delivery.repository.user.IUserRepository
@@ -29,7 +29,7 @@ class UserServiceImpl(
 
     override fun getUserById(id: Int): Mono<User> {
         return userRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("User not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap { user ->
                 if (user?.idAddress == null) {
                     return@flatMap user?.let { Mono.just(it) }
@@ -53,36 +53,37 @@ class UserServiceImpl(
     }
 
     override fun signup(user: User): Mono<User> {
-        return saveUserWithAddress(user)
+        user.password = passwordEncoder.encode(user.password)
+       return saveUserWithAddress(user)
     }
 
     fun saveUserWithAddress(user: User): Mono<User> {
-        return addressRepository.save(user.address!!).flatMap { address ->
-            user.idAddress = address.id
-            user.password = passwordEncoder.encode(user.password)
-            userRepository.save(user)
-        }.doOnSubscribe { return@doOnSubscribe }
+        return addressRepository.save(user.address!!)
+            .map { address ->
+                user.copy(idAddress = address.id)
+            }.flatMap {
+                it.address = null
+                userRepository.save(it)
+            }
     }
 
     override fun updateUser(id: Int, user: User): Mono<User> {
         return userRepository.findById(id)
-            .switchIfEmpty(Mono.error(NotFoundException("User not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap { userFlat ->
                 userFlat.id = user.id
                 updateUserWithAddress(userFlat)
             }
     }
 
-    private fun updateUserWithAddress(userDTO: User): Mono<out User?> {
-        return addressRepository.findById(userDTO.idAddress!!).flatMap { address ->
-            address!!.id = userDTO.idAddress
-            address.city = userDTO.address!!.city
-            address.street = userDTO.address!!.street
-            address.state = userDTO.address!!.state
-            address.postalCode = userDTO.address!!.postalCode
-            addressRepository.save(address).flatMap { address1 ->
-                userDTO.idAddress = address1.id
-                userRepository.save(userDTO)
+    private fun updateUserWithAddress(user: User): Mono<out User?> {
+        return addressRepository.findById(user.idAddress!!).flatMap { address ->
+            user.idAddress = address?.id
+            user.copy(address = address)
+            addressRepository.save(user.address!!)
+                .flatMap { address1 ->
+                user.idAddress = address1.id
+                userRepository.save(user)
             }
         }
     }
