@@ -1,13 +1,13 @@
 package com.mvp.delivery.delivery
 
-import com.mvp.delivery.delivery.model.Address
-import com.mvp.delivery.delivery.model.Category
-import com.mvp.delivery.delivery.model.Product
-import com.mvp.delivery.delivery.model.entity.User
-import com.mvp.delivery.delivery.repository.item.ICategoryRepository
-import com.mvp.delivery.delivery.repository.user.IAddressRepository
-import com.mvp.delivery.delivery.service.item.IProductService
-import com.mvp.delivery.delivery.service.user.IUserService
+import com.mvp.delivery.delivery.infrastruture.entity.user.AddressEntity
+import com.mvp.delivery.delivery.infrastruture.entity.product.CategoryEntity
+import com.mvp.delivery.delivery.infrastruture.entity.product.ProductEntity
+import com.mvp.delivery.delivery.infrastruture.entity.user.UserEntity
+import com.mvp.delivery.delivery.infrastruture.repository.product.ICategoryRepository
+import com.mvp.delivery.delivery.infrastruture.repository.user.IAddressRepository
+import com.mvp.delivery.delivery.domain.client.service.item.IProductService
+import com.mvp.delivery.delivery.domain.client.service.user.IUserService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -39,12 +39,12 @@ class DeliveryApplication {
             addressRepository.deleteAll().subscribe()
 
             Mono.just(
-                Address(null, "Rua admin", "São Paulo", "SP", "12345123")
+                AddressEntity(null, "Rua admin", "São Paulo", "SP", "12345123")
             ).flatMap {
                 addressRepository.save(it)
                     .flatMap {address ->
                         Mono.just(
-                            User(null, "admin", "admin@email.com", "12345678912", "admin", address.id)
+                            UserEntity(null, "admin", "admin@email.com", "12345678912", "admin", address.id)
                         ).flatMap { user -> userService.saveUser(user) }
                     }
             }.subscribe()
@@ -54,14 +54,14 @@ class DeliveryApplication {
             categoryRepository.deleteAll().subscribe()
 
             Mono.just(
-                Category(
+                CategoryEntity(
                     name = "Bebidas"
                 )
             ).flatMap {
                 categoryRepository.save(it)
                     .flatMap { category ->
                         Mono.just(
-                            Product(
+                            ProductEntity(
                                 name = "Suco",
                                 price = BigDecimal.ONE,
                                 quantity = 1,
@@ -74,7 +74,7 @@ class DeliveryApplication {
             categoryRepository.findByName("Bebidas")
                 .flatMap { category ->
                     Mono.just(
-                        Product(
+                        ProductEntity(
                             name = "Refrigerante",
                             price = BigDecimal.ONE,
                             quantity = 1,
@@ -84,14 +84,14 @@ class DeliveryApplication {
                 }.subscribe()
 
             Mono.just(
-                Category(
+                CategoryEntity(
                     name = "Lanche",
                 )
             ).flatMap {
                 categoryRepository.save(it)
                     .flatMap { category ->
                         Mono.just(
-                            Product(
+                            ProductEntity(
                                 name = "Hamburguer",
                                 price = BigDecimal.TEN,
                                 quantity = 1,
@@ -102,14 +102,14 @@ class DeliveryApplication {
             }.subscribe()
 
             Mono.just(
-                Category(
+                CategoryEntity(
                     name = "Sobremesa",
                 )
             ).flatMap {
                 categoryRepository.save(it)
                     .flatMap { category ->
                         Mono.just(
-                            Product(
+                            ProductEntity(
                                 name = "Pudim",
                                 price = BigDecimal.ONE,
                                 quantity = 1,
@@ -120,14 +120,14 @@ class DeliveryApplication {
             }.subscribe()
 
             Mono.just(
-                Category(
+                CategoryEntity(
                     name = "Acompanhamento",
                 )
             ).flatMap {
                 categoryRepository.save(it)
                     .flatMap { category ->
                         Mono.just(
-                            Product(
+                            ProductEntity(
                                 name = "Batata",
                                 price = BigDecimal.ONE,
                                 quantity = 1,

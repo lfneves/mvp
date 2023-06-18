@@ -1,7 +1,7 @@
 package com.mvp.delivery.delivery.utils
 
-import com.mvp.delivery.delivery.controller.security.AuthClientDeserializer
-import com.mvp.delivery.delivery.model.auth.IAuthDTO
+import com.mvp.delivery.delivery.application.security.AuthClientDeserializer
+import com.mvp.delivery.delivery.domain.client.model.auth.IAuthDTO
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.apache.commons.logging.LogFactory
