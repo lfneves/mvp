@@ -1,7 +1,7 @@
 package com.mvp.delivery.delivery.repository.user
 
 
-import com.mvp.delivery.delivery.model.User
+import com.mvp.delivery.delivery.model.entity.User
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux

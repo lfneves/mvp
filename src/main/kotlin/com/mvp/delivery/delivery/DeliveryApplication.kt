@@ -3,7 +3,7 @@ package com.mvp.delivery.delivery
 import com.mvp.delivery.delivery.model.Address
 import com.mvp.delivery.delivery.model.Category
 import com.mvp.delivery.delivery.model.Product
-import com.mvp.delivery.delivery.model.User
+import com.mvp.delivery.delivery.model.entity.User
 import com.mvp.delivery.delivery.repository.item.ICategoryRepository
 import com.mvp.delivery.delivery.repository.user.IAddressRepository
 import com.mvp.delivery.delivery.service.item.IProductService
@@ -18,11 +18,11 @@ import java.math.BigDecimal
 
 @SpringBootApplication
 @EnableR2dbcAuditing
-class ReactiveRestApiDemoApplication {
+class DeliveryApplication {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            SpringApplication.run(ReactiveRestApiDemoApplication::class.java, *args)
+            SpringApplication.run(DeliveryApplication::class.java, *args)
         }
     }
 

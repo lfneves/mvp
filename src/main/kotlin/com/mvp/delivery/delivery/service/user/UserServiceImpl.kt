@@ -1,10 +1,12 @@
 package com.mvp.delivery.delivery.service.user
 
 import com.mvp.delivery.delivery.exception.Exceptions
-import com.mvp.delivery.delivery.model.User
+import com.mvp.delivery.delivery.model.UserVO
+import com.mvp.delivery.delivery.model.entity.User
 import com.mvp.delivery.delivery.repository.user.IAddressRepository
 import com.mvp.delivery.delivery.repository.user.IUserRepository
 import com.mvp.delivery.delivery.utils.Sha512PasswordEncoder
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -13,12 +15,11 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
 @Service
-class UserServiceImpl(
+class UserServiceImpl @Autowired constructor(
     userRepository: IUserRepository,
     addressRepository: IAddressRepository,
     private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
 ) : IUserService {
-    @Autowired
     private val userRepository: IUserRepository
     private val addressRepository: IAddressRepository
 
@@ -27,87 +28,115 @@ class UserServiceImpl(
         this.addressRepository = addressRepository
     }
 
-    override fun getUserById(id: Int): Mono<User> {
+    override fun getUserById(id: Int): Mono<UserVO> {
         return userRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap { user ->
-                if (user?.idAddress == null) {
-                    return@flatMap user?.let { Mono.just(it) }
-                }
                 addressRepository.findById(user.idAddress!!).map { address ->
-                    if (address != null) {
-                        user.address = address
-                    }
-                    user
+                    user.toVO(user, address)
                 }
             }
     }
 
     override fun saveInitialUser(user: User): Mono<User> {
         user.password = passwordEncoder.encode(user.password)
-        return userRepository.save(user).block().toMono()
-    }
-    override fun saveUser(user: User): Mono<User> {
-        user.password = passwordEncoder.encode(user.password)
-        return userRepository.save(user).doOnSubscribe { return@doOnSubscribe }
+        return userRepository
+            .save(user)
+            .block()
+            .toMono()
     }
 
-    override fun signup(user: User): Mono<User> {
+    override fun saveUser(user: User): Mono<User> {
+        user.password = passwordEncoder.encode(user.password)
+        return userRepository
+            .save(user)
+            .doOnSubscribe { return@doOnSubscribe }
+    }
+
+    override fun signup(user: UserVO): Mono<User> {
         user.password = passwordEncoder.encode(user.password)
        return saveUserWithAddress(user)
     }
 
-    fun saveUserWithAddress(user: User): Mono<User> {
+    private fun saveUserWithAddress(user: UserVO): Mono<User> {
         return addressRepository.save(user.address!!)
             .map { address ->
                 user.copy(idAddress = address.id)
             }.flatMap {
-                it.address = null
-                userRepository.save(it)
+                userRepository.save(it.toEntity())
             }
     }
 
-    override fun updateUser(id: Int, user: User): Mono<User> {
-        return userRepository.findById(id)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
-            .flatMap { userFlat ->
-                userFlat.id = user.id
-                updateUserWithAddress(userFlat)
+    override fun updateUser(id: Int, userVO: UserVO): Mono<UserVO> {
+        return getUserById(id)
+            .flatMap{ user ->
+                updateUserEntity(user, userVO)
+                userRepository.save(user.toEntity())
+            }.flatMap {
+                addressRepository.findById(it.idAddress!!)
+                    .map { address ->
+                        userVO.address?.let { updateAddress ->
+                            if (address != null) {
+                                updateAddress.updateUserEntity(address, updateAddress)
+                                addressRepository.save(address).subscribe()
+                            }
+                        }
+                        it.toVO(address)
+                    }
             }
     }
 
-    private fun updateUserWithAddress(user: User): Mono<out User?> {
-        return addressRepository.findById(user.idAddress!!).flatMap { address ->
-            user.idAddress = address?.id
-            user.copy(address = address)
-            addressRepository.save(user.address!!)
-                .flatMap { address1 ->
-                user.idAddress = address1.id
-                userRepository.save(user)
-            }
+    private fun updateUserEntity(user: UserVO, request: UserVO) {
+        request.id?.let { user.id = it }
+        request.name?.let { user.name = it }
+        request.idAddress?.let { user.idAddress = it }
+        request.cpf?.let { user.cpf = it }
+        request.password?.let { user.password = passwordEncoder.encode(it) }
+        request.cpf?.let { updateCpf(user, it) }
+        request.email?.let { updateEmail(user, it) }
+    }
+
+    private fun updateCpf(user: UserVO, newCpf: String) {
+        if (user.cpf == newCpf) {
+            return
         }
+//        if (userRepository.existsByUsername(newUsername).awaitSingle()) {
+//            throw usernameAlreadyInUseException()
+//        }
+        user.cpf = newCpf
+    }
+
+    private fun updateEmail(user: UserVO, newEmail: String) {
+        if (user.email == newEmail) {
+            return
+        }
+//        if (userRepository.existsByEmail(newEmail).awaitSingle()) {
+//            throw emailAlreadyInUseException()
+//        }
+        user.email = newEmail
     }
 
     override fun deleteUser(id: Int): Mono<Void> {
         // delete user with address
-        return userRepository.findById(id).flatMap { user ->
-            if (user.idAddress == null) return@flatMap userRepository.deleteById(id)
-            addressRepository.deleteById(user.idAddress!!).then(userRepository.deleteById(id))
-        }
+        return userRepository.findById(id)
+            .flatMap { user ->
+                if (user.idAddress == null) return@flatMap userRepository.deleteById(id)
+                userRepository.deleteById(id)
+                    .then(addressRepository.deleteById(user.idAddress!!))
+            }
     }
 
-    override fun getUsers(): Flux<User> {
+    override fun getUsers(): Flux<UserVO> {
         return userRepository
             .findAll()
-            .flatMap label@{ user ->
-                if (user?.idAddress == null) return@label Mono.just(user!!)
-                addressRepository.findById(user.idAddress!!).map { address ->
-                    user.address = address!!
-                    user
+            .flatMap{ user ->
+                addressRepository.findById(user?.idAddress!!).map { address ->
+                    return@map user.toVO(user, address!!)
                 }
             }
     }
 
+    // Used in the development process should not be used in production
     override fun deleteAllUsers(): Mono<Void> {
          return userRepository
              .deleteAll()

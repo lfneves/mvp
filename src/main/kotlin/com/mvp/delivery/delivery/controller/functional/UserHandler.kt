@@ -1,6 +1,6 @@
 package com.mvp.delivery.delivery.controller.functional
 
-import com.mvp.delivery.delivery.model.User
+import com.mvp.delivery.delivery.model.entity.User
 import com.mvp.delivery.delivery.service.user.IUserService
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component

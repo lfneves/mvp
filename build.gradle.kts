@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.21"
 	kotlin("plugin.spring") version "1.8.21"
+	kotlin("kapt") version "1.8.21"
 }
 
 group = "com.mvp.delivery"
@@ -18,8 +19,6 @@ repositories {
 dependencies {
 
 	//Spring
-//	implementation("org.springframework.boot:spring-boot-starter-actuator")
-//	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.4")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
@@ -35,7 +34,6 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
 
-//	runtimeOnly("io.micrometer:micrometer-registry-influx")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
 	testImplementation("io.projectreactor:reactor-test:3.5.4")
 
@@ -50,6 +48,10 @@ dependencies {
 
 	// CPF Validator
 	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
+
+	// Mapstruct
+//	implementation("org.mapstruct:mapstruct:1.5.5.Final")
+//	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
 	// Spring docker compose
 	//developmentOnly("org.springframework.boot:spring-boot-docker-compose")

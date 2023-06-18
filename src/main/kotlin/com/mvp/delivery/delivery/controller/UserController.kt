@@ -1,7 +1,8 @@
 package com.mvp.delivery.delivery.controller
 
 import com.mvp.delivery.delivery.exception.Exceptions
-import com.mvp.delivery.delivery.model.User
+import com.mvp.delivery.delivery.model.UserVO
+import com.mvp.delivery.delivery.model.entity.User
 import com.mvp.delivery.delivery.service.user.IUserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,26 +25,26 @@ class UserController(IUserService: IUserService) {
     }
 
     @GetMapping
-    fun all(): Flux<User> {
+    fun all(): Flux<UserVO> {
         return userService.getUsers()
     }
 
     @get:GetMapping(path = ["/all-users"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
-    val flux: Flux<User?>
+    val flux: Flux<UserVO?>
         get() = userService.getUsers()
             .delayElements(Duration.ofSeconds(1)).log()
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    fun signup(@RequestBody user: User): Mono<User> {
+    fun signup(@RequestBody user: UserVO): Mono<User> {
         return userService.signup(user)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user.")))
     }
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: Int): Mono<User> {
+    fun getUserById(@PathVariable id: Int): Mono<UserVO> {
         return userService.getUserById(id)
-            .defaultIfEmpty(User())
+            .defaultIfEmpty(UserVO())
     }
 
     @PostMapping("/create")
@@ -54,7 +55,7 @@ class UserController(IUserService: IUserService) {
 
     @PutMapping("/update-user/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateUser(@PathVariable id: Int, @RequestBody user: User): Mono<User> {
+    fun updateUser(@PathVariable id: Int, @RequestBody user: UserVO): Mono<UserVO> {
         return userService.updateUser(id, user)
     }
 

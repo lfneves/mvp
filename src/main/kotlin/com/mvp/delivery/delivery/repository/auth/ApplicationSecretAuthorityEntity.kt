@@ -1,4 +1,4 @@
-package com.mvp.delivery.delivery.model.auth
+package com.mvp.delivery.delivery.repository.auth
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
