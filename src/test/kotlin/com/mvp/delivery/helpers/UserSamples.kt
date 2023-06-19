@@ -5,7 +5,7 @@ import com.mvp.delivery.utils.Sha512PasswordEncoder
 
 object UserSamples {
     private const val SAMPLE_USERNAME = "123456789000"
-    private const val SAMPLE_EMAIL = "testemail@gmail.com"
+    private const val SAMPLE_EMAIL = "testemail@email.com"
     private const val SAMPLE_PASSWORD = "testpassword"
     private const val SAMPLE_USER_ID = 9999
     private val passwordService = Sha512PasswordEncoder()
@@ -31,7 +31,7 @@ object UserSamples {
     fun sampleUser() = sampleUser(passwordService)
 
     fun sampleUpdateUserRequest() = UserDTO(
-        email = "newemail@gmail.com",
+        email = "test@email.com",
         cpf = "123456789000",
         password = "new password",
     )

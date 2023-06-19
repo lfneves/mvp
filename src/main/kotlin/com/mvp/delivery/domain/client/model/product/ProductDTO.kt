@@ -18,7 +18,7 @@ data class ProductDTO(
             name = this.name,
             price = this.price,
             quantity = this.quantity,
-            idCategory = category.id
+            idCategory = this.idCategory
         )
     }
 }

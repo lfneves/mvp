@@ -67,7 +67,7 @@ class DeliveryApplication {
                                 quantity = 1,
                                 idCategory = category.id
                             )
-                        ).flatMap { product -> productService.saveProduct(product.toDTO()) }
+                        ).flatMap { product -> productService.saveProduct(product.toDTO(category.toDTO())) }
                     }
             }.subscribe()
 
@@ -80,7 +80,7 @@ class DeliveryApplication {
                             quantity = 1,
                             idCategory = category.id
                         )
-                    ).flatMap { product -> productService.saveProduct(product.toDTO()) }
+                    ).flatMap { product -> productService.saveProduct(product.toDTO(category.toDTO())) }
                 }.subscribe()
 
             Mono.just(

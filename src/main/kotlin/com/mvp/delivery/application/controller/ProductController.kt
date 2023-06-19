@@ -31,7 +31,7 @@ class ProductController(productService: IProductService) {
         get() = productService.getProducts()
             .delayElements(Duration.ofSeconds(1)).log()
 
-    @DeleteMapping("/create")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     fun createProduct(@RequestBody productDTO: ProductDTO): Mono<ProductDTO> {
         return productService.saveProduct(productDTO)
@@ -55,7 +55,7 @@ class ProductController(productService: IProductService) {
         return productService.deleteProductById(id)
     }
 
-    @PostMapping("/get-by-category")
+    @GetMapping("/get-by-category-name")
     @ResponseStatus(HttpStatus.OK)
     fun findByCategory(@RequestBody category: CategoryDTO): Flux<ProductDTO> {
         return productService.getProductsByCategoryByName(category.name)

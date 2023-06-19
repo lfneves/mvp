@@ -36,12 +36,13 @@ class ProductServiceImpl(
 
     override fun saveProduct(productDTO: ProductDTO): Mono<ProductDTO> {
        return getCategoryByName(productDTO.category.name)
-            .switchIfEmpty {
-                categoryRepository.findById(productDTO.category.toEntity().id!!)
-                    .map { it?.toDTO() ?: CategoryDTO() }
-            }.switchIfEmpty(
+           .switchIfEmpty(
+               categoryRepository.findById(productDTO.idCategory)
+                   .map { it?.toDTO()}
+           ).switchIfEmpty(
                 Mono.error(Exceptions.NotFoundException("Category not found"))
             ).flatMap{ category ->
+               productDTO.idCategory = category?.id!!
                 productRepository.save(productDTO.toEntity())
                     .map { it.toDTO(category) }
             }
@@ -51,8 +52,16 @@ class ProductServiceImpl(
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product not found")))
             .flatMap { product ->
-                product.id = productDTO.id
-                saveProduct(product.toDTO())
+                product.updateUserEntity(product, productDTO.toEntity())
+                productRepository.save(product)
+                    .flatMap { productEntity ->
+                        productEntity.idCategory?.let {
+                            categoryRepository.findById(it)
+                                .flatMap {categoryEntity ->
+                                    Mono.justOrEmpty(productEntity.toDTO(categoryEntity?.toDTO()))
+                                }
+                        }
+                    }
             }
     }
 
@@ -71,7 +80,7 @@ class ProductServiceImpl(
             .flatMap{ product ->
                 categoryRepository.findById(product?.idCategory!!)
                     .map { category ->
-                    return@map product.toDTO(product, category!!)
+                    return@map product.toDTO(category?.toDTO())
                 }
             }
     }
@@ -97,7 +106,7 @@ class ProductServiceImpl(
             .flatMap {category ->
                 productRepository.findByIdCategory(category.id)
                     .map { product ->
-                        product.toDTO(product, category)
+                        product.toDTO(category.toDTO())
                     }
             }
     }
