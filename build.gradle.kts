@@ -25,14 +25,20 @@ dependencies {
 	implementation("org.springframework.session:spring-session-core:3.0.0")
 	implementation("org.springframework.boot:spring-boot-docker-compose")
 
+	// Kotlin utils
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
+
+	// Postgress reactive
 	implementation("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
 
+	// Coroutines and Reactor not used yet! (used to more imperative reactive programing with suspend functions)
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
+
+	// Mercado Pago SDK
+	//implementation("com.mercadopago:sdk-java:2.1.11")
 
 	// Test dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
@@ -50,14 +56,11 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
 	// CPF Validator
-	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
+	//implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
 
-	// Mapstruct
+	// Mapstruct (applies when application growing - need kapt)
 	//implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	//annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-
-	// Spring docker compose
-	//developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 }
 
 tasks.withType<KotlinCompile> {
