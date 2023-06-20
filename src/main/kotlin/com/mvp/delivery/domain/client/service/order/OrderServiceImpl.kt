@@ -1,7 +1,7 @@
 package com.mvp.delivery.domain.client.service.order
 
+import com.mvp.delivery.domain.client.model.order.OrderDTO
 import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import com.mvp.delivery.infrastruture.repository.order.IOrderRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -20,25 +20,28 @@ class OrderServiceImpl(
         this.orderRepository = orderRepository
     }
 
-    override fun getOrderById(id: Int): Mono<OrderEntity> {
+    override fun getOrderById(id: Int): Mono<OrderDTO> {
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Order not found")))
+            .map { it.toDTO() }
     }
 
-    override fun saveInitialOrder(orderEntity: OrderEntity): Mono<OrderEntity> {
-        return orderRepository.save(orderEntity).block().toMono()
+    override fun saveInitialOrder(orderDTO: OrderDTO): Mono<OrderDTO> {
+        return orderRepository.save(orderDTO.toEntity())
+            .map { it.toDTO() }
     }
 
-    override fun saveOrder(orderEntity: OrderEntity): Mono<OrderEntity> {
-        return orderRepository.save(orderEntity).doOnSubscribe { return@doOnSubscribe }
+    override fun saveOrder(orderDTO: OrderDTO): Mono<OrderDTO> {
+        return orderRepository.save(orderDTO.toEntity())
+            .map { it.toDTO() }
     }
 
-    override fun updateOrder(id: Int, orderEntity: OrderEntity): Mono<OrderEntity> {
+    override fun updateOrder(id: Int, orderDTO: OrderDTO): Mono<OrderDTO> {
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Order not found")))
-            .flatMap { OrderFlat ->
-                OrderFlat.id = orderEntity.id
-                saveOrder(OrderFlat)
+            .flatMap { orderFlat ->
+                orderFlat.id = orderDTO.id
+                saveOrder(orderFlat.toDTO())
             }
     }
 
@@ -49,10 +52,10 @@ class OrderServiceImpl(
         }
     }
 
-    override fun getOrders(): Flux<OrderEntity> {
+    override fun getOrders(): Flux<OrderDTO> {
         return orderRepository
             .findAll()
-            .map{ it }
+            .map{ it?.toDTO() }
     }
 
     override fun deleteAllOrders(): Mono<Void> {

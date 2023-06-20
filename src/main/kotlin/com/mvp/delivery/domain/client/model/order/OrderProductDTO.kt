@@ -1,20 +1,18 @@
 package com.mvp.delivery.domain.client.model.order
 
-import com.mvp.delivery.infrastruture.entity.order.OrderEntity
+import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
 import java.math.BigDecimal
 
 data class OrderProductDTO(
-    var id: Int? = null,
-    var idClient: Int = -1,
-    var totalPrice: BigDecimal = BigDecimal.ZERO,
-    var checkout: Boolean = false
+    var idOrderProduct: Int? = null,
+    var idProduct: Int = -1,
+    var idOrder: BigDecimal = BigDecimal.ZERO
 ) {
-    fun toEntity(): OrderEntity{
-        return OrderEntity(
-            id = this.id,
-            idClient = this.idClient,
-            totalPrice = this.totalPrice,
-            checkout = this.checkout
+    fun toEntity() : OrderProductEntity {
+        return OrderProductEntity(
+            idOrderProduct = this.idOrderProduct,
+            idProduct = this.idProduct,
+            idOrder = this.idOrder
         )
     }
 }

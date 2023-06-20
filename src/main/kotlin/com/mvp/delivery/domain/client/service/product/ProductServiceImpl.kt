@@ -48,6 +48,7 @@ class ProductServiceImpl(
             }
     }
 
+    //TODO fix save category
     override fun updateProduct(id: Int, productDTO: ProductDTO): Mono<ProductDTO> {
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product not found")))

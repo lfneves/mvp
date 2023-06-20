@@ -1,6 +1,7 @@
 package com.mvp.delivery.application.controller
 
 
+import com.mvp.delivery.domain.client.model.order.OrderDTO
 import com.mvp.delivery.domain.client.service.order.IOrderService
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import org.springframework.http.HttpStatus
@@ -20,25 +21,31 @@ class OrderController(orderService: IOrderService) {
     }
 
     @GetMapping
-    fun all(): Flux<OrderEntity> {
+    fun all(): Flux<OrderDTO> {
         return orderService.getOrders()
     }
 
     @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
-    val flux: Flux<OrderEntity?>
+    val flux: Flux<OrderDTO?>
         get() = orderService.getOrders()
             .delayElements(Duration.ofSeconds(1)).log()
 
+    @PostMapping("/create")
+    fun create(@RequestBody orderDTO: OrderDTO): Mono<OrderDTO> {
+        return orderService.saveOrder(orderDTO)
+            .defaultIfEmpty(OrderDTO())
+    }
+
     @GetMapping("/{id}")
-    fun getOrderById(@PathVariable id: Int): Mono<OrderEntity> {
+    fun getOrderById(@PathVariable id: Int): Mono<OrderDTO> {
         return orderService.getOrderById(id)
-            .defaultIfEmpty(OrderEntity())
+            .defaultIfEmpty(OrderDTO())
     }
 
     @PutMapping("/update-order/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateOrder(@PathVariable id: Int, @RequestBody orderEntity: OrderEntity): Mono<OrderEntity> {
-        return orderService.updateOrder(id, orderEntity)
+    fun updateOrder(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO): Mono<OrderDTO> {
+        return orderService.updateOrder(id, orderDTO)
     }
 
     @DeleteMapping("/{id}")
