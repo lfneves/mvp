@@ -37,31 +37,37 @@ class UserController(IUserService: IUserService) {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     fun signup(@RequestBody user: UserDTO): Mono<UserDTO> {
+        logger.info("/signup")
         return userService.signup(user)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user.")))
     }
 
     @GetMapping("/{id}")
     fun getUserById(@PathVariable id: Int): Mono<UserDTO> {
+        logger.info("/getUserById")
         return userService.getUserById(id)
             .defaultIfEmpty(UserDTO())
     }
 
+    @Deprecated("Not used - create signup function")
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createUser(@RequestBody userEntity: UserEntity): Mono<UserEntity> {
-        return userService.saveUser(userEntity)
+    fun createUser(@RequestBody user: UserDTO): Mono<UserDTO> {
+        logger.info("/create")
+        return userService.saveUser(user)
     }
 
     @PutMapping("/update-user/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun updateUser(@PathVariable id: Int, @RequestBody user: UserDTO): Mono<UserDTO> {
+        logger.info("/update-user/{id}")
         return userService.updateUser(id, user)
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteUser(@PathVariable id: Int): Mono<Void> {
+        logger.info("deleteUserById")
         return userService.deleteUser(id)
     }
 }

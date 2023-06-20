@@ -45,11 +45,11 @@ class UserServiceImpl @Autowired constructor(
             .toMono()
     }
 
-    override fun saveUser(userEntity: UserEntity): Mono<UserEntity> {
-        userEntity.password = passwordEncoder.encode(userEntity.password)
-        return userRepository
-            .save(userEntity)
-            .doOnSubscribe { return@doOnSubscribe }
+    override fun saveUser(user: UserDTO): Mono<UserDTO> {
+        user.password = passwordEncoder.encode(user.password)
+        return userRepository.save(user.toEntity())
+            .map { it.toVO() }
+
     }
 
     override fun signup(user: UserDTO): Mono<UserDTO> {

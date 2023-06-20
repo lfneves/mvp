@@ -48,7 +48,7 @@ class DeliveryApplication {
                     .flatMap {address ->
                         Mono.just(
                             UserEntity(null, "admin", "admin@email.com", "12345678912", "123", address.id)
-                        ).flatMap { user -> userService.saveUser(user) }
+                        ).flatMap { user -> userService.saveUser(user.toVO()) }
                     }
             }.subscribe()
 
