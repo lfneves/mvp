@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("tb_address")
-data class AddressEntity (
+data class AddressDTO (
     @Id
     @Schema(hidden = true)
     var id: Long? = null,
@@ -17,10 +17,10 @@ data class AddressEntity (
     @Column("postal_code")
     var postalCode: String? =null
 ) {
-    fun updateUserEntity(addressEntity: AddressEntity, request: AddressEntity) {
-        request.id?.let { addressEntity.id = it }
-        request.street?.let { addressEntity.street = it }
-        request.city?.let { addressEntity.city = it }
-        request.state?.let { addressEntity.state = it }
+    fun updateUserEntity(address: AddressDTO, request: AddressDTO) {
+        request.id?.let { address.id = it }
+        request.street?.let { address.street = it }
+        request.city?.let { address.city = it }
+        request.state?.let { address.state = it }
     }
 }

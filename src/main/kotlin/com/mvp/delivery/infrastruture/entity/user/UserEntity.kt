@@ -20,7 +20,7 @@ data class UserEntity (
     @Schema(hidden = true)
     var idAddress: Long? = null,
 ) {
-    fun toVO(userEntity: UserEntity, addressEntity: AddressEntity? = null): UserDTO {
+    fun toVO(userEntity: UserEntity, address: AddressDTO? = null): UserDTO {
         return UserDTO(
             id = this.id,
             name = this.name,
@@ -28,11 +28,11 @@ data class UserEntity (
             cpf = this.cpf,
             idAddress = this.idAddress,
             password = this.password,
-            address = addressEntity
+            address = address
         )
     }
 
-    fun toVO(addressEntity: AddressEntity? = null): UserDTO {
+    fun toVO(address: AddressDTO? = null): UserDTO {
         return UserDTO(
             id = this.id,
             name = this.name,
@@ -40,7 +40,7 @@ data class UserEntity (
             cpf = this.cpf,
             idAddress = this.idAddress,
             password = this.password,
-            address = addressEntity
+            address = address
         )
     }
 }

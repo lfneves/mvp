@@ -15,8 +15,8 @@ import reactor.kotlin.core.publisher.toMono
 
 @Service
 class UserServiceImpl @Autowired constructor(
-    userRepository: IUserRepository,
-    addressRepository: IAddressRepository,
+    @Autowired userRepository: IUserRepository,
+    @Autowired addressRepository: IAddressRepository,
     private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
 ) : IUserService {
     private val userRepository: IUserRepository
@@ -52,17 +52,18 @@ class UserServiceImpl @Autowired constructor(
             .doOnSubscribe { return@doOnSubscribe }
     }
 
-    override fun signup(user: UserDTO): Mono<UserEntity> {
+    override fun signup(user: UserDTO): Mono<UserDTO> {
         user.password = passwordEncoder.encode(user.password)
        return saveUserWithAddress(user)
     }
 
-    private fun saveUserWithAddress(user: UserDTO): Mono<UserEntity> {
+    private fun saveUserWithAddress(user: UserDTO): Mono<UserDTO> {
         return addressRepository.save(user.address!!)
             .map { address ->
                 user.copy(idAddress = address.id)
-            }.flatMap {
-                userRepository.save(it.toEntity())
+            }.flatMap {userDTO ->
+                userRepository.save(userDTO.toEntity())
+                    .map { it.toVO() }
             }
     }
 

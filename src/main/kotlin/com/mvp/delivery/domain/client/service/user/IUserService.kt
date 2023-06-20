@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 interface IUserService {
     fun getUserById(id: Int): Mono<UserDTO>
     fun saveUser(userEntity: UserEntity): Mono<UserEntity>
-    fun signup(user: UserDTO): Mono<UserEntity>
+    fun signup(user: UserDTO): Mono<UserDTO>
     fun updateUser(id: Int, userDTO: UserDTO): Mono<UserDTO>
     fun deleteUser(id: Int): Mono<Void>
     fun getUsers(): Flux<UserDTO>

@@ -4,7 +4,7 @@ import com.mvp.delivery.domain.client.service.product.IProductService
 import com.mvp.delivery.domain.client.service.user.IUserService
 import com.mvp.delivery.infrastruture.entity.product.CategoryEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
-import com.mvp.delivery.infrastruture.entity.user.AddressEntity
+import com.mvp.delivery.infrastruture.entity.user.AddressDTO
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
 import com.mvp.delivery.infrastruture.repository.product.ICategoryRepository
 import com.mvp.delivery.infrastruture.repository.user.IAddressRepository
@@ -42,7 +42,7 @@ class DeliveryApplication {
 
             // save a initial user
             Mono.just(
-                AddressEntity(null, "Rua admin", "São Paulo", "SP", "12345123")
+                AddressDTO(null, "Rua admin", "São Paulo", "SP", "12345123")
             ).flatMap {
                 addressRepository.save(it)
                     .flatMap {address ->

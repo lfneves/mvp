@@ -1,11 +1,12 @@
 package com.mvp.delivery.utils
 
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Component
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 
-
+@Component
 class Sha512PasswordEncoder: PasswordEncoder {
     override fun encode(rawPassword: CharSequence): String {
         return getSecurePassword(rawPassword.toString(), getSecurutyByte())!!

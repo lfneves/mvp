@@ -1,6 +1,6 @@
 package com.mvp.delivery.domain.client.model.user
 
-import com.mvp.delivery.infrastruture.entity.user.AddressEntity
+import com.mvp.delivery.infrastruture.entity.user.AddressDTO
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
 
 data class UserDTO (
@@ -11,7 +11,7 @@ data class UserDTO (
     var password: String? = null,
     var idAddress: Long? = null,
 
-    var address: AddressEntity? = AddressEntity()
+    var address: AddressDTO? = AddressDTO()
 ) {
     fun toEntity(): UserEntity {
         return UserEntity(

@@ -34,8 +34,11 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
 
+	// Test dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
+	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("io.projectreactor:reactor-test:3.5.4")
+	testImplementation("io.mockk:mockk:1.13.4")
 
 	//Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
@@ -50,8 +53,8 @@ dependencies {
 	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
 
 	// Mapstruct
-//	implementation("org.mapstruct:mapstruct:1.5.5.Final")
-//	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+	//implementation("org.mapstruct:mapstruct:1.5.5.Final")
+	//annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
 	// Spring docker compose
 	//developmentOnly("org.springframework.boot:spring-boot-docker-compose")

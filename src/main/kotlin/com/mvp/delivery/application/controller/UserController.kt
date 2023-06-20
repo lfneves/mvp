@@ -36,7 +36,7 @@ class UserController(IUserService: IUserService) {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    fun signup(@RequestBody user: UserDTO): Mono<UserEntity> {
+    fun signup(@RequestBody user: UserDTO): Mono<UserDTO> {
         return userService.signup(user)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user.")))
     }
