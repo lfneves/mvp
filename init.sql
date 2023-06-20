@@ -35,10 +35,16 @@ CREATE TABLE tb_product
 
 CREATE TABLE tb_order
 (
-    id              SERIAL  PRIMARY KEY,
-    id_client       INTEGER NOT NULL,
-    id_item         INTEGER NOT NULL,
-    total_price     NUMERIC NOT NULL,
-    checkout        BOOLEAN DEFAULT FALSE
+    id                  SERIAL  PRIMARY KEY,
+    id_client           INTEGER REFERENCES tb_client(id) NOT NULL,
+    total_price         NUMERIC NOT NULL,
+    checkout            BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE tb_order_product
+(
+    id_order_product    SERIAL  PRIMARY KEY,
+    id_product          INTEGER REFERENCES tb_product(id),
+    id_order            INTEGER REFERENCES tb_order(id)
 );
 
