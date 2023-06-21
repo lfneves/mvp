@@ -17,6 +17,7 @@ class AuthClientDTO(
         )
     }
 
+    //TODO Melhorar Claims para não usar o cpf no body do token por segurança usar um UUID
     @Schema(required = false, hidden = true)
-    override fun getClaims(): Map<String, String> = mapOf("idClient" to idClient.toString())
+    override fun getClaims(): Map<String, String> = mapOf("idClient" to idClient.toString(), "username" to username)
 }

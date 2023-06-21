@@ -11,7 +11,7 @@ data class AuthenticationVO (
 
     private var isAuthenticated = authorities.isNotEmpty()
 
-    override fun getName(): String {
+    override fun getName(): String? {
         return iAuthDTO.username
     }
 
@@ -28,7 +28,7 @@ data class AuthenticationVO (
         return iAuthDTO
     }
 
-    override fun getPrincipal(): String {
+    override fun getPrincipal(): String? {
         return iAuthDTO.username
     }
 

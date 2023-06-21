@@ -1,5 +1,6 @@
 package com.mvp.delivery.domain.client.service.auth
 
+import com.mvp.delivery.domain.client.model.auth.AuthApplicationDTO
 import com.mvp.delivery.domain.client.model.auth.AuthClientDTO
 import com.mvp.delivery.domain.client.model.auth.AuthenticationVO
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,7 @@ import reactor.core.publisher.Mono
 
 @Service
 class CustomReactiveAuthenticationManager @Autowired constructor(
-    private val authClientService: AuthClientService
+    private val authClientService: AuthClientService,
 ): ReactiveAuthenticationManager {
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {

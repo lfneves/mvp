@@ -1,6 +1,7 @@
 package com.mvp.delivery.application.controller
 
 import com.mvp.delivery.domain.client.model.user.UserDTO
+import com.mvp.delivery.domain.client.model.user.UsernameDTO
 import com.mvp.delivery.domain.client.service.user.IUserService
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
@@ -8,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -43,9 +45,16 @@ class UserController(IUserService: IUserService) {
     }
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: Int): Mono<UserDTO> {
+    fun getUserById(@PathVariable id: Int, authentication: Authentication): Mono<UserDTO> {
         logger.info("/getUserById")
-        return userService.getUserById(id)
+        return userService.getUserById(id, authentication)
+            .defaultIfEmpty(UserDTO())
+    }
+
+    @GetMapping("/get-by-username")
+    fun getUserByUsername(@RequestBody usernameDTO: UsernameDTO, authentication: Authentication): Mono<UserDTO> {
+        logger.info("/getbyUsername")
+        return userService.getByUsername(usernameDTO, authentication)
             .defaultIfEmpty(UserDTO())
     }
 
@@ -59,15 +68,15 @@ class UserController(IUserService: IUserService) {
 
     @PutMapping("/update-user/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateUser(@PathVariable id: Int, @RequestBody user: UserDTO): Mono<UserDTO> {
+    fun updateUser(@PathVariable id: Int, @RequestBody user: UserDTO, authentication: Authentication): Mono<UserDTO> {
         logger.info("/update-user/{id}")
-        return userService.updateUser(id, user)
+        return userService.updateUser(id, user, authentication)
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteUser(@PathVariable id: Int): Mono<Void> {
+    fun deleteUser(@PathVariable id: Int, authentication: Authentication): Mono<Void> {
         logger.info("deleteUserById")
-        return userService.deleteUser(id)
+        return userService.deleteUserById(id, authentication)
     }
 }

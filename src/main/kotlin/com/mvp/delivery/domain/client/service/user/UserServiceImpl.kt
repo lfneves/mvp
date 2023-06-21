@@ -1,12 +1,16 @@
 package com.mvp.delivery.domain.client.service.user
 
+import com.mvp.delivery.domain.client.model.auth.AuthenticationVO
 import com.mvp.delivery.domain.client.model.user.UserDTO
+import com.mvp.delivery.domain.client.model.user.UsernameDTO
+import com.mvp.delivery.domain.client.service.auth.validator.AuthValidatorService
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
 import com.mvp.delivery.infrastruture.repository.user.IAddressRepository
 import com.mvp.delivery.infrastruture.repository.user.IUserRepository
 import com.mvp.delivery.utils.Sha512PasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -17,6 +21,7 @@ import reactor.kotlin.core.publisher.toMono
 class UserServiceImpl @Autowired constructor(
     @Autowired userRepository: IUserRepository,
     @Autowired addressRepository: IAddressRepository,
+    private val authValidatorService: AuthValidatorService,
     private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
 ) : IUserService {
     private val userRepository: IUserRepository
@@ -27,14 +32,32 @@ class UserServiceImpl @Autowired constructor(
         this.addressRepository = addressRepository
     }
 
-    override fun getUserById(id: Int): Mono<UserDTO> {
+    override fun getUserById(id: Int, authentication: Authentication): Mono<UserDTO> {
+        authentication as AuthenticationVO
+        if (authentication.iAuthDTO.username == null) return Mono.empty()
         return userRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
-            .flatMap { user ->
+            .flatMap {
+                authValidatorService.validate(authentication, it.toVO())
+                    .then(Mono.just(it))
+            }.flatMap { user ->
                 addressRepository.findById(user.idAddress!!).map { address ->
                     user.toVO(user, address)
                 }
             }
+    }
+
+    override fun getByUsername(usernameDTO: UsernameDTO, authentication: Authentication): Mono<UserDTO> {
+        return userRepository.findByUsernameWithAddress(usernameDTO.username)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
+            .flatMap {
+                authValidatorService.validate(authentication, it.toVO())
+                    .then(Mono.just(it))
+            }.flatMap { user ->
+                addressRepository.findById(user.idAddress!!).map { address ->
+                    user.toVO(user, address)
+                }
+            }.toMono()
     }
 
     override fun saveInitialUser(userEntity: UserEntity): Mono<UserEntity> {
@@ -67,9 +90,12 @@ class UserServiceImpl @Autowired constructor(
             }
     }
 
-    override fun updateUser(id: Int, userDTO: UserDTO): Mono<UserDTO> {
-        return getUserById(id)
-            .flatMap{ user ->
+    override fun updateUser(id: Int, userDTO: UserDTO, authentication: Authentication): Mono<UserDTO> {
+        return getUserById(id, authentication)
+            .flatMap {
+                authValidatorService.validate(authentication, it)
+                    .then(Mono.just(it))
+            }.flatMap{ user ->
                 updateUserEntity(user, userDTO)
                 userRepository.save(user.toEntity())
             }.flatMap {
@@ -116,10 +142,13 @@ class UserServiceImpl @Autowired constructor(
         user.email = newEmail
     }
 
-    override fun deleteUser(id: Int): Mono<Void> {
+    override fun deleteUserById(id: Int, authentication: Authentication): Mono<Void> {
         // delete user with address
         return userRepository.findById(id)
-            .flatMap { user ->
+            .flatMap {
+                authValidatorService.validate(authentication, it.toVO())
+                    .then(Mono.just(it))
+            }.flatMap { user ->
                 if (user.idAddress == null) return@flatMap userRepository.deleteById(id)
                 userRepository.deleteById(id)
                     .then(addressRepository.deleteById(user.idAddress!!))

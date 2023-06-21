@@ -38,4 +38,15 @@ class AuthController() {
             AuthTokenDTO(token)
         }
     }
+
+    @PostMapping("/token-by-application")
+    @Operation(summary = "Authenticação clientID + secretID", description = "Se authenticado corretamente, retorno o token de Authorização nas headers")
+    fun tokenByApplication(@RequestBody authDTO: AuthClientDTO): Mono<AuthTokenDTO> {
+        return Mono.just(authDTO).flatMap {
+            authenticationManager.authenticate(it.toAuthentication())
+        }.map {
+            val token = JWTUtils.createToken(authDTO)
+            AuthTokenDTO(token)
+        }
+    }
 }
