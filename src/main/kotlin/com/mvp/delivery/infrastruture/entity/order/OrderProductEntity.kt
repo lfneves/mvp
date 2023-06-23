@@ -3,16 +3,25 @@ package com.mvp.delivery.infrastruture.entity.order
 import com.mvp.delivery.domain.client.model.order.OrderProductDTO
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
-import java.math.BigDecimal
+import org.springframework.data.relational.core.mapping.Table
 
+@Table("tb_order_product")
 data class OrderProductEntity(
-    @Id @Column("id_order_product") var idOrderProduct: Int? = null,
-    @Column("id_product") var idProduct: Int = -1,
-    @Column("id_order") var idOrder: BigDecimal = BigDecimal.ZERO
+    @Id @Column("id") var id: Long? = null,
+    @Column("id_product") var idProduct: Long? = null,
+    @Column("id_order") var idOrder: Long? = null
 ) {
     fun toDTO() : OrderProductDTO{
         return OrderProductDTO(
-            idOrderProduct = this.idOrderProduct,
+            id = this.id,
+            idProduct = this.idProduct,
+            idOrder = this.idOrder
+        )
+    }
+
+    fun OrderProductEntity.transform(): OrderProductDTO {
+        return OrderProductDTO(
+            id = this.id,
             idProduct = this.idProduct,
             idOrder = this.idOrder
         )

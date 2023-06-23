@@ -8,17 +8,17 @@ import java.math.BigDecimal
 
 @Table("tb_order")
 data class OrderEntity (
-    @Id var id: Int? = null,
-    @Column("id_client") var idClient: Int = -1,
+    @Id var id: Long? = null,
+    @Column("id_client") var idClient: Int? = null,
     @Column("total_price") var totalPrice: BigDecimal = BigDecimal.ZERO,
-    var checkout: Boolean = false
+    @Column("is_finished") var isFinished: Boolean = false
 ) {
     fun toDTO(): OrderDTO {
         return OrderDTO(
             id = this.id,
             idClient = this.idClient,
             totalPrice = this.totalPrice,
-            checkout = this.checkout
+            isFinished = this.isFinished
         )
     }
 }

@@ -12,5 +12,5 @@ spring-doc:
 
 #  sql:
 #    init:
-#      schema-locations: classpath:init.sql
+#      schema-locations: classpath:
 #      mode: always

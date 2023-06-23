@@ -1,16 +1,15 @@
 package com.mvp.delivery.domain.client.model.order
 
 import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
-import java.math.BigDecimal
 
 data class OrderProductDTO(
-    var idOrderProduct: Int? = null,
-    var idProduct: Int = -1,
-    var idOrder: BigDecimal = BigDecimal.ZERO
+    var id: Long? = null,
+    var idProduct: Long? = null,
+    var idOrder: Long? = null
 ) {
     fun toEntity() : OrderProductEntity {
         return OrderProductEntity(
-            idOrderProduct = this.idOrderProduct,
+            id = this.id,
             idProduct = this.idProduct,
             idOrder = this.idOrder
         )

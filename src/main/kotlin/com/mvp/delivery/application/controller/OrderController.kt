@@ -2,10 +2,15 @@ package com.mvp.delivery.application.controller
 
 
 import com.mvp.delivery.domain.client.model.order.OrderDTO
+import com.mvp.delivery.domain.client.model.order.OrderRequestDTO
+import com.mvp.delivery.domain.client.model.order.OrderResponseDTO
 import com.mvp.delivery.domain.client.service.order.IOrderService
-import com.mvp.delivery.infrastruture.entity.order.OrderEntity
+import com.mvp.delivery.domain.exception.Exceptions
+import kotlinx.coroutines.reactive.awaitFirstOrElse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -30,10 +35,9 @@ class OrderController(orderService: IOrderService) {
         get() = orderService.getOrders()
             .delayElements(Duration.ofSeconds(1)).log()
 
-    @PostMapping("/create")
-    fun create(@RequestBody orderDTO: OrderDTO): Mono<OrderDTO> {
-        return orderService.saveOrder(orderDTO)
-            .defaultIfEmpty(OrderDTO())
+    @PostMapping("/create-order")
+    suspend fun createOrder(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Flux<OrderResponseDTO>> {
+        return ResponseEntity.ok(orderService.createOrder(orderRequestDTO, authentication))
     }
 
     @GetMapping("/{id}")
@@ -44,7 +48,7 @@ class OrderController(orderService: IOrderService) {
 
     @PutMapping("/update-order/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateOrder(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO): Mono<OrderDTO> {
+    suspend fun updateOrder(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO): OrderDTO {
         return orderService.updateOrder(id, orderDTO)
     }
 

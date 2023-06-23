@@ -60,6 +60,16 @@ class UserServiceImpl @Autowired constructor(
             }.toMono()
     }
 
+    fun getByUsername(username: String): Mono<UserDTO>  {
+        return userRepository.findByUsernameWithAddress(username)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
+            .flatMap { user ->
+                addressRepository.findById(user.idAddress!!).map { address ->
+                    user.toVO(user, address)
+                }
+            }
+    }
+
     override fun saveInitialUser(userEntity: UserEntity): Mono<UserEntity> {
         userEntity.password = passwordEncoder.encode(userEntity.password)
         return userRepository
@@ -159,9 +169,10 @@ class UserServiceImpl @Autowired constructor(
         return userRepository
             .findAll()
             .flatMap{ user ->
-                addressRepository.findById(user?.idAddress!!).map { address ->
-                    return@map user.toVO(user, address!!)
-                }
+                addressRepository.findById(user?.idAddress!!)
+                    .map { address ->
+                        return@map user.toVO(user, address!!)
+                    }
             }
     }
 

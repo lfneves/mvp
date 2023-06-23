@@ -2,12 +2,17 @@ package com.mvp.delivery
 
 import com.mvp.delivery.domain.client.service.product.IProductService
 import com.mvp.delivery.domain.client.service.user.IUserService
+import com.mvp.delivery.domain.configuration.CoroutineConfiguration
 import com.mvp.delivery.infrastruture.entity.product.CategoryEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import com.mvp.delivery.infrastruture.entity.user.AddressDTO
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
+import com.mvp.delivery.infrastruture.repository.order.IOrderRepository
+import com.mvp.delivery.infrastruture.repository.order.OrderProductRepository
 import com.mvp.delivery.infrastruture.repository.product.ICategoryRepository
 import com.mvp.delivery.infrastruture.repository.user.IAddressRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -31,10 +36,14 @@ class DeliveryApplication {
         userService: IUserService,
         productService: IProductService,
         categoryRepository: ICategoryRepository,
-        addressRepository: IAddressRepository
+        addressRepository: IAddressRepository,
+        orderRepository: IOrderRepository,
+        orderProductRepository: OrderProductRepository
     ): CommandLineRunner {
         return CommandLineRunner {
 
+            orderProductRepository.deleteAll().subscribe()
+            orderRepository.deleteAll().subscribe()
             userService.deleteAllUsers().subscribe()
             addressRepository.deleteAll().subscribe()
             productService.deleteAllProducts().subscribe()

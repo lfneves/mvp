@@ -12,7 +12,7 @@ interface IUserRepository : ReactiveCrudRepository<UserEntity?, Long?> {
     fun findByName(name: String?): Flux<UserEntity>
 
     @Query("SELECT * FROM tb_client c JOIN tb_address a on c.id_address = a.id WHERE c.cpf = $1")
-    fun findByUsernameWithAddress(username: String?): Flux<UserEntity>
+    fun findByUsernameWithAddress(username: String?): Mono<UserEntity>
 
     @Query("SELECT tb_client.id, tb_client.name, tb_client.email, tb_client.cpf, tb_client.password, tb_client.id_address " +
             "FROM tb_client " +
