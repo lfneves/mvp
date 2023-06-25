@@ -8,6 +8,10 @@ spring-doc:
   swagger-ui:
     path: /swagger-ui.html
 
+spring:
+  docker:
+    compose:
+      file: "./docker-compose.yml"
 #
 
 #  sql:

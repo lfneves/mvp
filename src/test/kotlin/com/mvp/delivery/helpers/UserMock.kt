@@ -4,10 +4,10 @@ import com.mvp.delivery.domain.client.model.user.UserDTO
 import com.mvp.delivery.utils.Sha512PasswordEncoder
 
 object UserMock {
-    private const val TEST_USERNAME = "123456789000"
+    private const val TEST_USERNAME = "12345678912"
     private const val TEST_NAME = "Lucas"
     private const val TEST_EMAIL = "testemail@email.com"
-    private const val TEST_PASSWORD = "testpassword"
+    private const val TEST_PASSWORD = "123"
     private const val TEST_USER_ID = 9999
     private const val TEST_ADDRESS_ID = 99L
     private const val TEST_ADDRESS_STREET = "São Paulo"
@@ -38,7 +38,7 @@ object UserMock {
 
     fun mockUpdateUserRequest() = UserDTO(
         email = "test@email.com",
-        cpf = "123456789000",
-        password = "new password",
+        cpf = "12345678912",
+        password = "1234",
     )
 }

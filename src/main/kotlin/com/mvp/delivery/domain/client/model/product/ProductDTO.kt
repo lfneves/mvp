@@ -1,10 +1,11 @@
 package com.mvp.delivery.domain.client.model.product
 
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
+import org.reactivestreams.Publisher
 import java.math.BigDecimal
 
 data class ProductDTO(
-    var id: Int? = null,
+    var id: Long? = null,
     var name: String = "",
     var price: BigDecimal = BigDecimal.ZERO,
     var quantity: Int = 0,

@@ -3,30 +3,38 @@ package com.mvp.delivery.domain.client.service.product
 
 import com.mvp.delivery.domain.client.model.product.CategoryDTO
 import com.mvp.delivery.domain.client.model.product.ProductDTO
+import com.mvp.delivery.domain.client.model.product.ProductTotalPriceDTO
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import com.mvp.delivery.infrastruture.repository.product.ICategoryRepository
 import com.mvp.delivery.infrastruture.repository.product.IProductRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.switchIfEmpty
-import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
+import java.math.BigDecimal
 
 @Service
+@CacheConfig(cacheNames = ["products"])
 class ProductServiceImpl(
     productRepository: IProductRepository,
-    categoryRepository: ICategoryRepository,
+    categoryRepository: ICategoryRepository
 ) : IProductService {
     @Autowired
     private val productRepository: IProductRepository
     private val categoryRepository: ICategoryRepository
 
+    lateinit var productsCache: Flux<ProductDTO>
+
     init {
         this.productRepository = productRepository
         this.categoryRepository = categoryRepository
+        this.productsCache = getProducts()
     }
 
     override fun getProductById(id: Int): Mono<ProductEntity> {
@@ -34,6 +42,7 @@ class ProductServiceImpl(
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
     }
 
+    @CacheEvict(cacheNames = ["products"], allEntries = true)
     override fun saveProduct(productDTO: ProductDTO): Mono<ProductDTO> {
        return getCategoryByName(productDTO.category.name)
            .switchIfEmpty(
@@ -49,6 +58,7 @@ class ProductServiceImpl(
     }
 
     //TODO fix save category
+    @CacheEvict(cacheNames = ["products"], allEntries = true)
     override fun updateProduct(id: Int, productDTO: ProductDTO): Mono<ProductDTO> {
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product not found")))
@@ -75,6 +85,7 @@ class ProductServiceImpl(
         }
     }
 
+    @Cacheable("products")
     override fun getProducts(): Flux<ProductDTO> {
         return productRepository
             .findAll()
@@ -84,6 +95,23 @@ class ProductServiceImpl(
                     return@map product.toDTO(category?.toDTO())
                 }
             }
+    }
+
+    override fun getAllById(id: List<Long?>): Flux<ProductDTO> {
+        return productRepository
+            .findAllById(id)
+            .flatMap{ product ->
+                categoryRepository.findById(product?.idCategory!!)
+                    .map { category ->
+                        return@map product.toDTO(category?.toDTO())
+                    }
+            }
+    }
+
+    override fun getByIdTotalPrice(ids: List<Long?>): Mono<BigDecimal> {
+        return productRepository.findByIdTotalPrice(ids)
+            .flatMap { Mono.just(it.price) }
+            .map { it }
     }
 
     override fun deleteAllProducts(): Mono<Void> {
@@ -111,4 +139,5 @@ class ProductServiceImpl(
                     }
             }
     }
+
 }

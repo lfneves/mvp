@@ -42,7 +42,7 @@ object JWTUtils {
                 .parseClaimsJws(token.replace("$TOKEN_PREFIX ", ""))
             AuthClientDeserializer.getInstance(user.body)
         } catch (e: Exception){
-            logger.error("Ocorreu um erro ao verificar o token", e)
+            logger.error("Ocorreu um erro ao verificar o token")
             null
         }
     }

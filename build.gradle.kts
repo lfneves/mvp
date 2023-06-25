@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.0"
+	id("org.springframework.boot") version "3.1.1"
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.21"
 	kotlin("plugin.spring") version "1.8.21"
@@ -19,10 +19,11 @@ repositories {
 dependencies {
 
 	//Spring
-	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.0.4")
-	implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.4")
-	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
-	implementation("org.springframework.session:spring-session-core:3.0.0")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.1.1")
+	implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.1")
+	implementation("org.springframework.boot:spring-boot-starter-security:3.1.1")
+	implementation("org.springframework.session:spring-session-core:3.1.1")
+	implementation("org.springframework.boot:spring-boot-starter-cache:3.1.1")
 	implementation("org.springframework.boot:spring-boot-docker-compose")
 
 	// Kotlin utils

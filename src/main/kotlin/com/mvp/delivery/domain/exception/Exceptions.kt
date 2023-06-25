@@ -13,4 +13,8 @@ object Exceptions {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     class NotFoundException(message: String): RuntimeException(message)
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    class BadStatusException(message: String): RuntimeException(message)
+
 }

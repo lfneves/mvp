@@ -5,13 +5,14 @@ import com.mvp.delivery.domain.client.model.product.ProductDTO
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
 
 @Table("tb_product")
 data class ProductEntity(
     @Id
-    var id: Int? = null,
+    var id: Long? = null,
     var name: String = "",
     var price: BigDecimal = BigDecimal.ZERO,
     var quantity: Int = 0,
@@ -45,5 +46,20 @@ data class ProductEntity(
         request.name?.let { productEntity.name = it }
         request.price?.let { productEntity.price = it }
         request.quantity?.let { productEntity.quantity = it }
+    }
+
+    fun toListDTO(listEntity: List<ProductEntity>): List<ProductDTO> {
+        var listDTO: MutableList<ProductDTO> = mutableListOf()
+        listEntity.forEach {
+            listDTO.add(ProductDTO(
+                    id = it.id,
+                    name = it.name,
+                    price = it.price,
+                    quantity = it.quantity,
+                    idCategory = it.idCategory!!
+                )
+            )
+        }
+        return listDTO.toList()
     }
 }

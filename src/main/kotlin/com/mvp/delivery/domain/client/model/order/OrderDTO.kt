@@ -1,6 +1,7 @@
 package com.mvp.delivery.domain.client.model.order
 
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
+import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
 data class OrderDTO(
@@ -9,13 +10,14 @@ data class OrderDTO(
     var totalPrice: BigDecimal = BigDecimal.ZERO,
     var status: String = "",
     var isFinished: Boolean = false,
-    var orderProduct : MutableList<OrderProductDTO> = mutableListOf()
+//    var orderProduct: Mono<List<OrderProductDTO>>? = null
 ) {
     fun toEntity(): OrderEntity{
         return OrderEntity(
             id = this.id,
             idClient = this.idClient,
             totalPrice = this.totalPrice,
+            status = this.status,
             isFinished = this.isFinished
         )
     }

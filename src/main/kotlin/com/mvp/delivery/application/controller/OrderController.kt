@@ -1,12 +1,10 @@
 package com.mvp.delivery.application.controller
 
 
-import com.mvp.delivery.domain.client.model.order.OrderDTO
-import com.mvp.delivery.domain.client.model.order.OrderRequestDTO
-import com.mvp.delivery.domain.client.model.order.OrderResponseDTO
+import com.mvp.delivery.domain.client.model.order.*
+import com.mvp.delivery.domain.client.model.order.OrderProductDTO
+import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.client.service.order.IOrderService
-import com.mvp.delivery.domain.exception.Exceptions
-import kotlinx.coroutines.reactive.awaitFirstOrElse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -36,7 +34,7 @@ class OrderController(orderService: IOrderService) {
             .delayElements(Duration.ofSeconds(1)).log()
 
     @PostMapping("/create-order")
-    suspend fun createOrder(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Flux<OrderResponseDTO>> {
+    suspend fun createOrder(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
         return ResponseEntity.ok(orderService.createOrder(orderRequestDTO, authentication))
     }
 
@@ -46,15 +44,33 @@ class OrderController(orderService: IOrderService) {
             .defaultIfEmpty(OrderDTO())
     }
 
-    @PutMapping("/update-order/{id}")
+    @GetMapping("all-products-by-order-id/{id}")
+    fun getAllOrderProductsByIdOrder(@PathVariable id: Long): Flux<OrderProductDTO> {
+        return orderService.getAllOrderProductsByIdOrder(id)
+            .defaultIfEmpty(OrderProductDTO())
+    }
+
+    @PutMapping("/update-order-product/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun updateOrder(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO): OrderDTO {
-        return orderService.updateOrder(id, orderDTO)
+    suspend fun updateOrderProduct(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO): OrderDTO {
+        return orderService.updateOrderProduct(id, orderDTO)
+    }
+
+    @PutMapping("/update-order-status/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    suspend fun updateOrderStatus(@PathVariable id: Int, @RequestBody orderStatusDTO: OrderStatusDTO): ResponseEntity<Mono<OrderDTO>> {
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatusDTO))
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteOrder(@PathVariable id: Int): Mono<Void> {
-        return orderService.deleteOrderById(id)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun deleteOrder(@PathVariable id: Int): ResponseEntity<Mono<Void>> {
+        return ResponseEntity.ok(orderService.deleteOrderById(id))
+    }
+
+    @DeleteMapping("/remove-product-order")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun deleteOrderProductById(@RequestBody productRemoveOrderDTO: ProductRemoveOrderDTO): ResponseEntity<Mono<Void>> {
+        return ResponseEntity.ok(orderService.deleteOrderProductById(productRemoveOrderDTO))
     }
 }

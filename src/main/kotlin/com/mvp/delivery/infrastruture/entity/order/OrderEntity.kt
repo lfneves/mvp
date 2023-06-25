@@ -11,6 +11,7 @@ data class OrderEntity (
     @Id var id: Long? = null,
     @Column("id_client") var idClient: Int? = null,
     @Column("total_price") var totalPrice: BigDecimal = BigDecimal.ZERO,
+    @Column("status") var status: String = "",
     @Column("is_finished") var isFinished: Boolean = false
 ) {
     fun toDTO(): OrderDTO {
@@ -18,6 +19,7 @@ data class OrderEntity (
             id = this.id,
             idClient = this.idClient,
             totalPrice = this.totalPrice,
+            status = this.status,
             isFinished = this.isFinished
         )
     }
