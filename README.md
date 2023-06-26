@@ -50,6 +50,9 @@ This is an example of how to use the software and how to install them.
 <!-- ROADMAP -->
 ## Roadmap
 
+- [ ] Update order add paid status and adjusting service
+- [ ] Create checkout endpoint
+- [ ] Refactor admin services and repository to new package
 - [ ] Fix create order exceptions
 
 <!-- LICENSE -->
