@@ -1,9 +1,10 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk-focal
 
-VOLUME /tmp
-EXPOSE 8099
-ARG JAR_FILE=/build/libs/*SNAPSHOT.jar
+MAINTAINER lfneves
+ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-#WORKDIR /app
-#COPY docker-compose.yml /app/docker-compose.yml
+COPY docker-compose.yml /docker-compose.yml
+
+EXPOSE 8099
 ENTRYPOINT ["java","-jar","app.jar"]
+

@@ -16,22 +16,6 @@
 version: '3.7'
 
 services:
-  database:
-    image: 'postgres:latest'
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: delivery_database_1
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-#      - ./postgres-data:/var/lib/postgresql/data
-#      - ./init.sql:/docker-entrypoint-initdb.d/in
-#        it.sql
-    networks:
-      - mvp-network
-
 #  delivery-mvp:
 #    image: delivery-mvp:latest
 #    container_name: delivery
@@ -44,6 +28,36 @@ services:
 #      - "8099:8099"
 #    networks:
 #      - mvp-network
+
+  delivery-mvp:
+    image: delivery-mvp:latest
+    container_name: delivery
+    build: .
+    ports:
+      - '8099:8099'
+    depends_on:
+      - database
+    networks:
+      - mvp-network
+
+  database:
+    image: 'postgres:latest'
+    container_name: 'db'
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: delivery_database_1
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+    networks:
+      - mvp-network
 
 networks:
   mvp-network:

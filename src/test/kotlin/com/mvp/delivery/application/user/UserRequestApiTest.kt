@@ -32,7 +32,7 @@ class UserRequestApiTest(
         .responseBody!!
 
     fun deleteUserById(id: Int): UserDTO = client.delete()
-        .uri("/api/v1/users")
+        .uri("/api/v1/users/$id")
         .exchange()
         .expectBody<UserDTO>()
         .returnResult()

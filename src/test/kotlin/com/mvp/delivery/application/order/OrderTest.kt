@@ -47,7 +47,7 @@ class OrderTest {
     @Test
     @Throws(Exception::class)
     fun test1() {
-        var orderRequestDTO = OrderMock.mockOrderRequest()
+        OrderMock.mockOrderRequest()
         val response = orderService.createOrder(OrderMock.mockOrderRequest(), authentication)
         println(response.map { it.orderDTO?.id })
     }
