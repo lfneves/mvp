@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 interface IProductService {
 
-    fun getProductById(id: Int): Mono<ProductEntity>
+    fun getProductById(id: Int): Mono<ProductDTO>
 
     fun saveProduct(productDTO: ProductDTO): Mono<ProductDTO>
 

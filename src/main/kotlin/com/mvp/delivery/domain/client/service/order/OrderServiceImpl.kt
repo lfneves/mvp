@@ -43,20 +43,52 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .map { it.toDTO() }
     }
 
     override fun saveInitialOrders(order: OrderDTO, authentication: Authentication): Mono<OrderDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository.save(order.toEntity())
             .map { it.toDTO() }
     }
 
+    fun test(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO> {
+        return userService.getByUsername(orderRequestDTO.username)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_USER_NOT_FOUND)))
+            .flatMap { userDTO ->
+                authValidatorService.validate(authentication, userDTO)
+                    .then(Mono.just(userDTO))
+            }.flatMap { userDTO ->
+                val listProductId = orderRequestDTO.orderProduct.map { it.idProduct!! }.toList()
+                val allProducts = productService.findByIdTotalPrice(listProductId)
+                Mono.zip(
+                    Mono.just(userDTO),
+                    orderRepository.findByUsername(orderRequestDTO.username),
+                    allProducts
+                ).flatMap { tuple ->
+                   if(tuple.t2.id != null) {
+                       val saveOrderEntity = OrderEntity(
+                            idClient = tuple.t1.id,
+                            totalPrice = tuple.t3.price
+                       )
+                       orderRepository.save(saveOrderEntity)
+                    } else {
+                        val saveOrderEntity = OrderEntity(
+                            idClient = tuple.t1.id,
+                            status = "PENDING",
+                            totalPrice = tuple.t3.price
+                        )
+                       orderRepository.save(saveOrderEntity)
+                    }
+                    Mono.just(tuple.t2)
+                }.map {
+                    OrderResponseDTO(it.toDTO())
+                }
+            }
+    }
+
     override fun createOrder(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return userService.getByUsername(orderRequestDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_USER_NOT_FOUND)))
             .flatMap {
@@ -67,7 +99,7 @@ class OrderServiceImpl @Autowired constructor(
                     .flatMap {orderEntity ->
                         orderEntity.idClient = userDTO.id
                         orderEntity.toMono()
-                    }.onErrorMap { Exceptions.NotFoundException(ErrorMsgConstants.ERROR_USER_NOT_FOUND) }
+                    }
                     .switchIfEmpty {
                         var total: BigDecimal = BigDecimal.ZERO
                         productService.productsCache.map { it.price }
@@ -103,7 +135,6 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository.findById(id)
             .doOnNext { setStatus ->
                 setStatus.status = OrderStatusEnum.valueOf(orderStatusDTO.status).value
@@ -112,21 +143,28 @@ class OrderServiceImpl @Autowired constructor(
                 .map { return@map it.toDTO() }
     }
 
+    override fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO> {
+        return orderRepository.findById(orderFinishDTO.idOrder.toInt())
+            .doOnNext { orderFinished ->
+                orderFinished.status = OrderStatusEnum.FINISHED.value
+                orderFinished.isFinished = true
+            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_STATUS_NOT_FOUND) }
+            .flatMap(orderRepository::save)
+            .map { return@map it.toDTO() }
+    }
+
     private fun saveAllOrderProduct(data: List<OrderProductEntity>?): Flux<OrderProductEntity> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return Flux.fromIterable(data!!).flatMap(orderProductRepository::save)
             .onErrorMap { Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND) }
     }
 
     override fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
        return orderProductRepository.findAllByIdOrder(id)
            .switchIfEmpty(Flux.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
            .map { it.toDTO() }
     }
 
     override fun deleteOrderById(id: Int, authentication: Authentication): Mono<Void> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository.findById(id).flatMap {order ->
             orderProductRepository.deleteByIdOrder(order.id!!)
                 .then(orderRepository.deleteById(id))
@@ -134,28 +172,22 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun deleteOrderProductById(products: ProductRemoveOrderDTO, authentication: Authentication): Mono<Void> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         val listProductId = products.productId.map { it }.toList()
         return orderProductRepository.deleteByIdProduct(listProductId)
     }
 
     override fun getOrders(): Flux<OrderDTO> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository
             .findAllOrder()
             .map{ it?.toDTO() }
     }
 
     override fun deleteAllOrders(): Mono<Void> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
          return orderRepository
              .deleteAll()
-             .block().
-             toMono()
     }
 
     private fun updateCreateOrder(orderRequestDTO: OrderRequestDTO): Mono<OrderEntity> {
-        logger.info(LogMsgConstants.LOG_INIT_METHOD_NAME)
         return orderRepository.findByUsername(orderRequestDTO.username)
             .flatMap {
                 orderRepository.save(it)

@@ -1,5 +1,15 @@
 # MVP - Tech challenge
 
+This is an [Spring Boot WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
+app using [Koltin](https://kotlinlang.org/). Spring WebFlux uses [Reactor](https://projectreactor.io/) library, an implementation of Reactive Streams
+Specs for building non-blocking applications.
+
+This project:
+* Uses [Reactor Netty](https://github.com/reactor/reactor-netty), the default Web container for Spring WebFlux
+* Uses functional endpoints
+* Uses [PostgreSQL](https://www.postgresql.org/) database
+
+
 ## 💡 Requirements
 
 Java 17 or later - [SDKMAN - Recommendation](https://sdkman.io/install)

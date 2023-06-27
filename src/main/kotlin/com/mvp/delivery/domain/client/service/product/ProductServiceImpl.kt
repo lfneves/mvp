@@ -37,9 +37,10 @@ class ProductServiceImpl(
         this.productsCache = getProducts()
     }
 
-    override fun getProductById(id: Int): Mono<ProductEntity> {
+    override fun getProductById(id: Int): Mono<ProductDTO> {
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
+            .map { it.toDTO() }
     }
 
     @CacheEvict(cacheNames = ["products"], allEntries = true)
@@ -117,8 +118,6 @@ class ProductServiceImpl(
     override fun deleteAllProducts(): Mono<Void> {
          return productRepository
              .deleteAll()
-             .block().
-             toMono()
     }
 
     private fun getCategoryByName(name: String): Mono<CategoryDTO> {
@@ -138,6 +137,11 @@ class ProductServiceImpl(
                         product.toDTO(category.toDTO())
                     }
             }
+    }
+
+    fun findByIdTotalPrice(ids: List<Long>): Mono<ProductDTO> {
+        return productRepository.findByIdTotalPrice(ids)
+            .map { it.toDTO() }
     }
 
 }

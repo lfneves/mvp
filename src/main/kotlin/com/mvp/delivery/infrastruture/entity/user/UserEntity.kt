@@ -2,6 +2,9 @@ package com.mvp.delivery.infrastruture.entity.user
 
 import com.mvp.delivery.domain.client.model.user.UserDTO
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.CascadeType
+import jakarta.persistence.FetchType
+import jakarta.persistence.OneToMany
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
@@ -10,6 +13,7 @@ import org.springframework.data.relational.core.mapping.Table
 data class UserEntity (
     @Id
     @Schema(hidden = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = [CascadeType.PERSIST])
     var id: Int? = null,
     var name: String? = null,
     var email: String? = null,

@@ -29,16 +29,16 @@ services:
 #    networks:
 #      - mvp-network
 
-  delivery-mvp:
-    image: delivery-mvp:latest
-    container_name: delivery
-    build: .
-    ports:
-      - '8099:8099'
-    depends_on:
-      - database
-    networks:
-      - mvp-network
+#  delivery-mvp:
+#    image: delivery-mvp:latest
+#    container_name: delivery
+#    build: .
+#    ports:
+#      - '8099:8099'
+#    depends_on:
+#      - database
+#    networks:
+#      - mvp-network
 
   database:
     image: 'postgres:latest'
@@ -53,9 +53,9 @@ services:
       POSTGRES_DB: delivery_database_1
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 1s
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+#      interval: 1s
     networks:
       - mvp-network
 

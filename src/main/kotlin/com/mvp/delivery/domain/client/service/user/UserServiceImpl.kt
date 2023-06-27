@@ -74,7 +74,6 @@ class UserServiceImpl @Autowired constructor(
         userEntity.password = passwordEncoder.encode(userEntity.password)
         return userRepository
             .save(userEntity)
-            .block()
             .toMono()
     }
 
@@ -180,7 +179,5 @@ class UserServiceImpl @Autowired constructor(
     override fun deleteAllUsers(): Mono<Void> {
          return userRepository
              .deleteAll()
-             .block().
-             toMono()
     }
 }

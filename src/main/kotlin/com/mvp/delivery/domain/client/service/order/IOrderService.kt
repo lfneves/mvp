@@ -29,4 +29,6 @@ interface IOrderService {
     fun getOrders(): Flux<OrderDTO>
 
     fun deleteAllOrders(): Mono<Void>
+
+    fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO>
 }

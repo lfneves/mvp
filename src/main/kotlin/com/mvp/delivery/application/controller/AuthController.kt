@@ -22,7 +22,10 @@ class AuthController() {
     private lateinit var authenticationManager: ReactiveAuthenticationManager
 
     @PostMapping("/login-token")
-    @Operation(summary = "Authenticação usuário + senha", description = "Se authenticado corretamente, retorna o token de Authorização")
+    @Operation(summary = "Authenticação usuário + senha",
+        description = "Se authenticado corretamente, retorna o token de Authorização",
+        tags = ["Autorização"]
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "202", description = "Successful login token."),
@@ -40,7 +43,10 @@ class AuthController() {
     }
 
     @PostMapping("/token-by-application")
-    @Operation(summary = "Authenticação clientID + secretID", description = "Se authenticado corretamente, retorno o token de Authorização nas headers")
+    @Operation(summary = "Authenticação clientID + secretID",
+        description = "Se authenticado corretamente, retorno o token de Authorização nas headers",
+        tags = ["Autorização"]
+    )
     fun tokenByApplication(@RequestBody authDTO: AuthClientDTO): Mono<AuthTokenDTO> {
         return Mono.just(authDTO).flatMap {
             authenticationManager.authenticate(it.toAuthentication())
