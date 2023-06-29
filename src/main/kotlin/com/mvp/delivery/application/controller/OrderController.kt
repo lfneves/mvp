@@ -133,4 +133,15 @@ class OrderController(orderService: OrderService) {
     suspend fun updateOrderFinishedAndStatus(@RequestBody orderFinishDTO: OrderFinishDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
         return ResponseEntity.ok(orderService.updateOrderFinishedAndStatus(orderFinishDTO, authentication))
     }
+
+    @PutMapping("/fake-checkout")
+    @Operation(
+        summary = "Efetua o pagamento atualizando os status",
+        description = "Efetua o pagamento atualizando os status",
+        tags = ["Pedidos"]
+    )
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    suspend fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<Void>> {
+        return ResponseEntity.ok(orderService.checkoutOrder(orderCheckoutDTO, authentication))
+    }
 }

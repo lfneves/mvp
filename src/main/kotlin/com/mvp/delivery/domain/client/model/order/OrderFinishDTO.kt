@@ -7,3 +7,7 @@ data class OrderFinishDTO(
     var idOrder: Long = 0,
     var isFinished: Boolean = false
 )
+
+data class OrderCheckoutDTO(
+    var isPayment: Boolean = false
+)

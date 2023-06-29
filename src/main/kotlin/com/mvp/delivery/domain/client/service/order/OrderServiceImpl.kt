@@ -164,4 +164,16 @@ class OrderServiceImpl @Autowired constructor(
                 orderRepository.save(it)
             }.map { it }
     }
+
+    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void> {
+        authentication as AuthenticationVO
+        return orderRepository.findByUsername(authentication.iAuthDTO.username)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
+            .doOnNext { setStatus ->
+                setStatus.status = OrderStatusEnum.PAID.value
+            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_STATUS_NOT_FOUND) }
+            .flatMap(orderRepository::save)
+            .then()
+            //.map { return@map it.toDTO() }
+    }
 }

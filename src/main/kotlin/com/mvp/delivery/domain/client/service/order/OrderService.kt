@@ -30,4 +30,6 @@ interface OrderService {
     fun deleteAllOrders(): Mono<Void>
 
     fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO>
+
+    fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void>
 }
