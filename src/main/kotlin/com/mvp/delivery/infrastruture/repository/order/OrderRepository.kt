@@ -8,7 +8,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface IOrderRepository : ReactiveCrudRepository<OrderEntity?, Long?> {
+interface OrderRepository : ReactiveCrudRepository<OrderEntity?, Long?> {
 
     @Query("""
         SELECT tb_order.id, id_client, SUM(price) AS total_price, status, is_finished

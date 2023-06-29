@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface IUserService {
+interface UserService {
     fun getUserById(id: Int, authentication: Authentication): Mono<UserDTO>
 
     fun getByUsername(usernameDTO: UsernameDTO, authentication: Authentication): Mono<UserDTO>

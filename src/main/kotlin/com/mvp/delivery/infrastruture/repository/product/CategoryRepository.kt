@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface ICategoryRepository : ReactiveCrudRepository<CategoryEntity?, Long?> {
+interface CategoryRepository : ReactiveCrudRepository<CategoryEntity?, Long?> {
     @Query("SELECT id, name, description FROM tb_category WHERE name = $1")
     fun findByName(name: String?): Flux<CategoryEntity>
     fun findById(id: Int): Mono<CategoryEntity>

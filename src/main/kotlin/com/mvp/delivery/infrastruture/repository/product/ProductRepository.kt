@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface IProductRepository : ReactiveCrudRepository<ProductEntity?, Long?> {
+interface ProductRepository : ReactiveCrudRepository<ProductEntity?, Long?> {
     @Query("SELECT id, name, price, quantity FROM tb_product WHERE name = $1")
     fun findByName(name: String?): Flux<ProductEntity>
 

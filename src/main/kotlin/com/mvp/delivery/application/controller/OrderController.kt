@@ -4,9 +4,7 @@ package com.mvp.delivery.application.controller
 import com.mvp.delivery.domain.client.model.order.*
 import com.mvp.delivery.domain.client.model.order.OrderProductDTO
 import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
-import com.mvp.delivery.domain.client.service.order.IOrderService
-import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.utils.constants.ErrorMsgConstants
+import com.mvp.delivery.domain.client.service.order.OrderService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -19,8 +17,8 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/order")
-class OrderController(orderService: IOrderService) {
-    private val orderService: IOrderService
+class OrderController(orderService: OrderService) {
+    private val orderService: OrderService
 
     init {
         this.orderService = orderService
@@ -30,7 +28,7 @@ class OrderController(orderService: IOrderService) {
     @Operation(
         summary = "Busca todos pedidos",
         description = "Busca todos pedidos",
-        tags = ["Admin-Pedidos"]
+        tags = ["Admin Pedidos"]
     )
     fun all(): Flux<OrderDTO> {
         return orderService.getOrders()
@@ -62,9 +60,10 @@ class OrderController(orderService: IOrderService) {
         description = "Busca pedido por id",
         tags = ["Pedidos"]
     )
-    fun getOrderById(@PathVariable id: Int, authentication: Authentication): Mono<OrderDTO> {
-        return orderService.getOrderById(id, authentication)
+    fun getOrderById(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
+        return ResponseEntity.ok(orderService.getOrderById(id, authentication)
             .defaultIfEmpty(OrderDTO())
+        )
     }
 
     @GetMapping("all-products-by-order-id/{id}")
@@ -73,16 +72,23 @@ class OrderController(orderService: IOrderService) {
         description = "Busca os produtos que estão associados por um pedido pelo id ",
         tags = ["Pedidos"]
     )
-    fun getAllOrderProductsByIdOrder(@PathVariable id: Long, authentication: Authentication): Flux<OrderProductDTO> {
-        return orderService.getAllOrderProductsByIdOrder(id, authentication)
-            .defaultIfEmpty(OrderProductDTO())
+    fun getAllOrderProductsByIdOrder(@PathVariable id: Long, authentication: Authentication):  ResponseEntity<Flux<OrderProductResponseDTO>> {
+        return  ResponseEntity.ok(
+            orderService.getAllOrderProductsByIdOrder(id, authentication)
+            .defaultIfEmpty(OrderProductResponseDTO())
+        )
     }
 
-//    @PutMapping("/update-order-product/{id}")
-//    @ResponseStatus(HttpStatus.ACCEPTED)
-//    suspend fun updateOrderProduct(@PathVariable id: Int, @RequestBody orderDTO: OrderDTO, authentication: Authentication): OrderDTO {
-//        return orderService.updateOrderProduct(id, orderDTO, authentication)
-//    }
+    @PutMapping("/add-new-product-to-order")
+    @Operation(
+        summary = "Adiciona iten(s) ao pedido",
+        description = "Adiciona iten(s) ao pedido recebe por uma lista de id(s) do(s) produto(s)",
+        tags = ["Pedidos"]
+    )
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    suspend fun updateOrderProduct(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
+        return ResponseEntity.ok(orderService.updateOrderProduct(orderRequestDTO, authentication))
+    }
 
     @DeleteMapping("/{id}")
     @Operation(
@@ -111,7 +117,7 @@ class OrderController(orderService: IOrderService) {
     @Operation(
         summary = "Atualiza o status do pedido",
         description = "Altera o status do pedido exemplo: PENDING, PREPARING, PAID, FINISHED ",
-        tags = ["Admin-Pedidos"]
+        tags = ["Admin Pedidos"]
     )
     suspend fun updateOrderStatus(@PathVariable id: Int, @RequestBody orderStatusDTO: OrderStatusDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatusDTO, authentication))
@@ -121,7 +127,7 @@ class OrderController(orderService: IOrderService) {
     @Operation(
         summary = "Finaliza o pedido atualizando os status",
         description = "Executa update dos status e fecha o pedido",
-        tags = ["Admin-Pedidos"]
+        tags = ["Admin Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun updateOrderFinishedAndStatus(@RequestBody orderFinishDTO: OrderFinishDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {

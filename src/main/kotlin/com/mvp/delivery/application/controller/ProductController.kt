@@ -3,8 +3,7 @@ package com.mvp.delivery.application.controller
 
 import com.mvp.delivery.domain.client.model.product.CategoryDTO
 import com.mvp.delivery.domain.client.model.product.ProductDTO
-import com.mvp.delivery.domain.client.service.product.IProductService
-import com.mvp.delivery.infrastruture.entity.product.ProductEntity
+import com.mvp.delivery.domain.client.service.product.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -15,8 +14,8 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/product")
-class ProductController(productService: IProductService) {
-    private val productService: IProductService
+class ProductController(productService: ProductService) {
+    private val productService: ProductService
 
     init {
         this.productService = productService

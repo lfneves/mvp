@@ -1,12 +1,11 @@
 package com.mvp.delivery.domain.client.service.product
 
 import com.mvp.delivery.domain.client.model.product.ProductDTO
-import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
-interface IProductService {
+interface ProductService {
 
     fun getProductById(id: Int): Mono<ProductDTO>
 

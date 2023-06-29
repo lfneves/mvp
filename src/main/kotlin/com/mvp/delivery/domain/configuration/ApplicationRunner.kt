@@ -1,27 +1,28 @@
 package com.mvp.delivery.domain.configuration
 
-import com.mvp.delivery.domain.client.service.product.IProductService
-import com.mvp.delivery.domain.client.service.user.IUserService
+import com.mvp.delivery.domain.client.service.product.ProductService
+import com.mvp.delivery.domain.client.service.user.UserService
 import com.mvp.delivery.infrastruture.entity.product.CategoryEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import com.mvp.delivery.infrastruture.entity.user.AddressDTO
 import com.mvp.delivery.infrastruture.entity.user.UserEntity
-import com.mvp.delivery.infrastruture.repository.order.IOrderRepository
+import com.mvp.delivery.infrastruture.repository.order.OrderRepository
 import com.mvp.delivery.infrastruture.repository.order.OrderProductRepository
-import com.mvp.delivery.infrastruture.repository.product.ICategoryRepository
-import com.mvp.delivery.infrastruture.repository.user.IAddressRepository
+import com.mvp.delivery.infrastruture.repository.product.CategoryRepository
+import com.mvp.delivery.infrastruture.repository.user.AddressRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
+import java.time.Duration
 
 class ApplicationRunner: CommandLineRunner {
 
-    @Autowired private lateinit var userService: IUserService
-    @Autowired private lateinit var productService: IProductService
-    @Autowired private lateinit var categoryRepository: ICategoryRepository
-    @Autowired private lateinit var addressRepository: IAddressRepository
-    @Autowired private lateinit var orderRepository: IOrderRepository
+    @Autowired private lateinit var userService: UserService
+    @Autowired private lateinit var productService: ProductService
+    @Autowired private lateinit var categoryRepository: CategoryRepository
+    @Autowired private lateinit var addressRepository: AddressRepository
+    @Autowired private lateinit var orderRepository: OrderRepository
     @Autowired private lateinit var orderProductRepository: OrderProductRepository
 
     override fun run(vararg args: String?) {

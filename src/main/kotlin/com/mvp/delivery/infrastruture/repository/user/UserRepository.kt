@@ -7,7 +7,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-interface IUserRepository : ReactiveCrudRepository<UserEntity?, Long?> {
+interface UserRepository : ReactiveCrudRepository<UserEntity?, Long?> {
     @Query("SELECT id, password, name, email, cpf FROM tb_client WHERE name = $1")
     fun findByName(name: String?): Flux<UserEntity>
 

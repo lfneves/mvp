@@ -2,8 +2,7 @@ package com.mvp.delivery.domain.client.service.auth
 
 import com.mvp.delivery.domain.client.model.auth.AuthenticationVO
 import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.infrastruture.repository.user.IAddressRepository
-import com.mvp.delivery.infrastruture.repository.user.IUserRepository
+import com.mvp.delivery.infrastruture.repository.user.UserRepository
 import com.mvp.delivery.utils.Sha512PasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
@@ -15,8 +14,7 @@ import reactor.kotlin.core.publisher.toMono
 @Service
 class AuthClientService @Autowired constructor(
     private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
-    private val userRepository: IUserRepository,
-    private val addressRepository: IAddressRepository
+    private val userRepository: UserRepository
 ) {
 
     fun authenticate(authenticationVO: AuthenticationVO): Mono<Authentication> {

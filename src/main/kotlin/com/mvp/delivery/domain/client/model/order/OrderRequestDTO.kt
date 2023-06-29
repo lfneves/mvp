@@ -3,7 +3,6 @@ package com.mvp.delivery.domain.client.model.order
 import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
 
 data class OrderRequestDTO(
-    val username: String,
     var orderProduct : List<OrderProductDTO>
 ) {
     fun toEntityList(): List<OrderProductEntity> {

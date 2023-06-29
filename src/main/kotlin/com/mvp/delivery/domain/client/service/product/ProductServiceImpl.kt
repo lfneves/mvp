@@ -3,15 +3,12 @@ package com.mvp.delivery.domain.client.service.product
 
 import com.mvp.delivery.domain.client.model.product.CategoryDTO
 import com.mvp.delivery.domain.client.model.product.ProductDTO
-import com.mvp.delivery.domain.client.model.product.ProductTotalPriceDTO
 import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.infrastruture.entity.product.ProductEntity
-import com.mvp.delivery.infrastruture.repository.product.ICategoryRepository
-import com.mvp.delivery.infrastruture.repository.product.IProductRepository
+import com.mvp.delivery.infrastruture.repository.product.CategoryRepository
+import com.mvp.delivery.infrastruture.repository.product.ProductRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -22,12 +19,12 @@ import java.math.BigDecimal
 @Service
 @CacheConfig(cacheNames = ["products"])
 class ProductServiceImpl(
-    productRepository: IProductRepository,
-    categoryRepository: ICategoryRepository
-) : IProductService {
+    productRepository: ProductRepository,
+    categoryRepository: CategoryRepository
+) : ProductService {
     @Autowired
-    private val productRepository: IProductRepository
-    private val categoryRepository: ICategoryRepository
+    private val productRepository: ProductRepository
+    private val categoryRepository: CategoryRepository
 
     lateinit var productsCache: Flux<ProductDTO>
 
@@ -138,10 +135,4 @@ class ProductServiceImpl(
                     }
             }
     }
-
-    fun findByIdTotalPrice(ids: List<Long>): Mono<ProductDTO> {
-        return productRepository.findByIdTotalPrice(ids)
-            .map { it.toDTO() }
-    }
-
 }

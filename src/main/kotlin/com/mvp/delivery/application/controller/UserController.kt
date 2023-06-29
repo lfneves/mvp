@@ -2,9 +2,8 @@ package com.mvp.delivery.application.controller
 
 import com.mvp.delivery.domain.client.model.user.UserDTO
 import com.mvp.delivery.domain.client.model.user.UsernameDTO
-import com.mvp.delivery.domain.client.service.user.IUserService
+import com.mvp.delivery.domain.client.service.user.UserService
 import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.infrastruture.entity.user.UserEntity
 import io.swagger.v3.oas.annotations.Operation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,13 +17,13 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/users")
-class UserController(IUserService: IUserService) {
+class UserController(userService: UserService) {
     var logger: Logger = LoggerFactory.getLogger(UserController::class.java)
 
-    private val userService: IUserService
+    private val userService: UserService
 
     init {
-        this.userService = IUserService
+        this.userService = userService
     }
 
     @GetMapping

@@ -15,7 +15,7 @@ import java.math.BigDecimal
 @Table("tb_product")
 data class ProductEntity(
     @Id
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = [CascadeType.PERSIST])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = [CascadeType.ALL], orphanRemoval=true)
     var id: Long? = null,
     var name: String = "",
     var price: BigDecimal = BigDecimal.ZERO,
