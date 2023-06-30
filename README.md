@@ -54,7 +54,7 @@ Check versions
 This is an example of how to use the software and how to install them.
 
 Main project directory
-* gradle
+* Gradle
   ```sh
   ./gradlew clean
   ./gradlew bootJar
