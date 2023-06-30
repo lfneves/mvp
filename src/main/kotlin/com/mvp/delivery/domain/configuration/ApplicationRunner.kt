@@ -40,7 +40,7 @@ class ApplicationRunner: CommandLineRunner {
                 addressRepository.save(it)
                     .flatMap {address ->
                         Mono.just(
-                            UserEntity(null, "admin", "admin@email.com", "12345678912", "123", address.id)
+                            UserEntity(null, "admin", "admin@email.com", "99999999999", "admin", address.id)
                         ).flatMap { user -> userService.saveUser(user.toVO()) }
                     }
             }.subscribe()
