@@ -1,8 +1,7 @@
-package com.mvp.delivery.application.controller
+package com.mvp.delivery.application.controller.v1.client
 
 
 import com.mvp.delivery.domain.client.model.order.*
-import com.mvp.delivery.domain.client.model.order.OrderProductDTO
 import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.client.service.order.OrderService
 import io.swagger.v3.oas.annotations.Operation

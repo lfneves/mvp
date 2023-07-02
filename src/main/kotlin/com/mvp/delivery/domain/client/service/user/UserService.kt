@@ -18,11 +18,5 @@ interface UserService {
 
     fun updateUser(id: Int, userDTO: UserDTO, authentication: Authentication): Mono<UserDTO>
 
-    fun getUsers(): Flux<UserDTO>
-
     fun deleteUserById(id: Int, authentication: Authentication): Mono<Void>
-
-    fun deleteAllUsers(): Mono<Void>
-
-    fun saveInitialUser(userEntity: UserEntity): Mono<UserEntity>
 }

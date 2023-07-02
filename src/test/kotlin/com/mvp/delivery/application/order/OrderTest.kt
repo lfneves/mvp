@@ -1,10 +1,9 @@
 package com.mvp.delivery.application.order
 
 import com.mvp.delivery.application.user.UserApplicationTest
-import com.mvp.delivery.application.user.UserRequestApiTest
 import com.mvp.delivery.domain.client.model.auth.AuthClientDTO
 import com.mvp.delivery.domain.client.service.order.OrderServiceImpl
-import com.mvp.delivery.domain.client.service.user.UserServiceImpl
+import com.mvp.delivery.domain.admin.user.UserAdminServiceImpl
 import com.mvp.delivery.domain.configuration.ApplicationRunner
 import com.mvp.delivery.helpers.OrderMock
 import com.mvp.delivery.helpers.UserMock
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.security.core.Authentication
@@ -33,7 +31,7 @@ class OrderTest(
 
     @Autowired private lateinit var orderService: OrderServiceImpl
     @Autowired private lateinit var orderProductRepository: OrderProductRepository
-    @Autowired private lateinit var userServiceImpl: UserServiceImpl
+    @Autowired private lateinit var userServiceImpl: UserAdminServiceImpl
     private lateinit var authentication: Authentication
 
     val orderApiRequestTest = OrderRequestApiTest(client)

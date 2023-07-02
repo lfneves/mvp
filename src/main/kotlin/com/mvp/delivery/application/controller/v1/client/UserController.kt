@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.controller
+package com.mvp.delivery.application.controller.v1.client
 
 import com.mvp.delivery.domain.client.model.user.UserDTO
 import com.mvp.delivery.domain.client.model.user.UsernameDTO
@@ -8,13 +8,10 @@ import io.swagger.v3.oas.annotations.Operation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -26,26 +23,6 @@ class UserController(userService: UserService) {
     init {
         this.userService = userService
     }
-
-    @GetMapping
-    @Operation(
-        summary = "Busca todos usuários",
-        description = "Busca todos usuários cadastrados",
-        tags = ["Administrador de Usuários"]
-    )
-    fun all(): ResponseEntity<Flux<UserDTO>> {
-        return ResponseEntity.ok(userService.getUsers())
-    }
-
-    @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
-    @get:Operation(
-        summary = "Perfomace Usuários",
-        description = "Utilizado para testes de performace e latência alterado o delay entre outros parametros",
-        tags = ["Performace Usuários"]
-    )
-    val flux: ResponseEntity<Flux<UserDTO>>
-        get() = ResponseEntity.ok(userService.getUsers()
-            .delayElements(Duration.ofSeconds(1)).log())
 
     @PostMapping("/signup")
     @Operation(

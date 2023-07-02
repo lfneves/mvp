@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.controller
+package com.mvp.delivery.application.controller.v1.client
 
 
 import com.mvp.delivery.domain.client.model.auth.AuthClientDTO

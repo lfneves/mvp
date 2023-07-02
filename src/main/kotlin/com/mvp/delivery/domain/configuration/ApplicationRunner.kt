@@ -1,6 +1,7 @@
 package com.mvp.delivery.domain.configuration
 
 import com.mvp.delivery.domain.client.service.product.ProductService
+import com.mvp.delivery.domain.admin.user.UserAdminService
 import com.mvp.delivery.domain.client.service.user.UserService
 import com.mvp.delivery.infrastruture.entity.product.CategoryEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
@@ -18,6 +19,7 @@ import java.math.BigDecimal
 class ApplicationRunner: CommandLineRunner {
 
     @Autowired private lateinit var userService: UserService
+    @Autowired private lateinit var userAdminService: UserAdminService
     @Autowired private lateinit var productService: ProductService
     @Autowired private lateinit var categoryRepository: CategoryRepository
     @Autowired private lateinit var addressRepository: AddressRepository
@@ -28,8 +30,7 @@ class ApplicationRunner: CommandLineRunner {
             orderProductRepository.deleteAll().subscribe()
             orderRepository.deleteAll().subscribe()
             productService.deleteAllProducts().thenEmpty(categoryRepository.deleteAll())
-//            categoryRepository.deleteAll().subscribe()
-            userService.deleteAllUsers().subscribe()
+            userAdminService.deleteAllUsers().subscribe()
             addressRepository.deleteAll().subscribe()
 
 

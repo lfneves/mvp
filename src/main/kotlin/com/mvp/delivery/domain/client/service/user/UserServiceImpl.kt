@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
@@ -68,13 +67,6 @@ class UserServiceImpl @Autowired constructor(
                     user.toDTO(user, address)
                 }
             }
-    }
-
-    override fun saveInitialUser(userEntity: UserEntity): Mono<UserEntity> {
-        userEntity.password = passwordEncoder.encode(userEntity.password)
-        return userRepository
-            .save(userEntity)
-            .toMono()
     }
 
     override fun saveUser(user: UserDTO): Mono<UserDTO> {
@@ -170,22 +162,5 @@ class UserServiceImpl @Autowired constructor(
                 userRepository.deleteById(id)
                     .then(addressRepository.deleteById(user.idAddress!!))
             }
-    }
-
-    override fun getUsers(): Flux<UserDTO> {
-        return userRepository
-            .findAll()
-            .flatMap{ user ->
-                addressRepository.findById(user?.idAddress!!)
-                    .map { address ->
-                        return@map user.toDTO(user, address!!)
-                    }
-            }
-    }
-
-    // Used in the development process should not be used in production
-    override fun deleteAllUsers(): Mono<Void> {
-         return userRepository
-             .deleteAll()
     }
 }
