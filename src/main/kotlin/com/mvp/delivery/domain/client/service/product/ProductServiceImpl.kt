@@ -17,7 +17,6 @@ import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
 
 @Service
-@CacheConfig(cacheNames = ["products"])
 class ProductServiceImpl(
     productRepository: ProductRepository,
     categoryRepository: CategoryRepository
@@ -38,49 +37,6 @@ class ProductServiceImpl(
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
             .map { it.toDTO() }
-    }
-
-    @CacheEvict(cacheNames = ["products"], allEntries = true)
-    override fun saveProduct(productDTO: ProductDTO): Mono<ProductDTO> {
-       return getCategoryByName(productDTO.category.name)
-           .switchIfEmpty(
-               categoryRepository.findById(productDTO.idCategory)
-                   .map { it?.toDTO()}
-           ).switchIfEmpty(
-                Mono.error(Exceptions.NotFoundException("Category not found"))
-            ).flatMap{ category ->
-               productDTO.idCategory = category?.id!!
-                productRepository.save(productDTO.toEntity())
-                    .map { it.toDTO(category) }
-            }
-    }
-
-    //TODO fix save category
-    @CacheEvict(cacheNames = ["products"], allEntries = true)
-    override fun updateProduct(id: Int, productDTO: ProductDTO): Mono<ProductDTO> {
-        return productRepository.findById(id)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product not found")))
-            .flatMap { product ->
-                product.updateUserEntity(product, productDTO.toEntity())
-                productRepository.save(product)
-                    .flatMap { productEntity ->
-                        productEntity.idCategory?.let {
-                            categoryRepository.findById(it)
-                                .flatMap {categoryEntity ->
-                                    Mono.justOrEmpty(productEntity.toDTO(categoryEntity?.toDTO()))
-                                }
-                        }
-                    }
-            }
-    }
-
-    override fun deleteProductById(id: Int): Mono<Void> {
-        // delete Item
-        return productRepository.findById(id)
-            .flatMap { product ->
-            productRepository.deleteById(product.id!!)
-                .then(categoryRepository.deleteById(id))
-        }
     }
 
     @Cacheable("products")
@@ -110,11 +66,6 @@ class ProductServiceImpl(
         return productRepository.findByIdTotalPrice(ids)
             .flatMap { Mono.just(it.price) }
             .map { it }
-    }
-
-    override fun deleteAllProducts(): Mono<Void> {
-         return productRepository
-             .deleteAll()
     }
 
     private fun getCategoryByName(name: String): Mono<CategoryDTO> {

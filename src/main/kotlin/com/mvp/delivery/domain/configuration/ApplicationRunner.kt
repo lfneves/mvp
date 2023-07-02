@@ -1,5 +1,6 @@
 package com.mvp.delivery.domain.configuration
 
+import com.mvp.delivery.domain.admin.product.ProductAdminService
 import com.mvp.delivery.domain.client.service.product.ProductService
 import com.mvp.delivery.domain.admin.user.UserAdminService
 import com.mvp.delivery.domain.client.service.user.UserService
@@ -21,6 +22,7 @@ class ApplicationRunner: CommandLineRunner {
     @Autowired private lateinit var userService: UserService
     @Autowired private lateinit var userAdminService: UserAdminService
     @Autowired private lateinit var productService: ProductService
+    @Autowired private lateinit var productAdminService: ProductAdminService
     @Autowired private lateinit var categoryRepository: CategoryRepository
     @Autowired private lateinit var addressRepository: AddressRepository
     @Autowired private lateinit var orderRepository: OrderRepository
@@ -29,7 +31,8 @@ class ApplicationRunner: CommandLineRunner {
     override fun run(vararg args: String?) {
             orderProductRepository.deleteAll().subscribe()
             orderRepository.deleteAll().subscribe()
-            productService.deleteAllProducts().thenEmpty(categoryRepository.deleteAll())
+            productAdminService.deleteAllProducts().subscribe()
+            categoryRepository.deleteAll().subscribe()
             userAdminService.deleteAllUsers().subscribe()
             addressRepository.deleteAll().subscribe()
 
@@ -61,7 +64,7 @@ class ApplicationRunner: CommandLineRunner {
                                 quantity = 1,
                                 idCategory = category.id
                             )
-                        ).flatMap { product -> productService.saveProduct(product.toDTO(category.toDTO())) }
+                        ).flatMap { product -> productAdminService.saveProduct(product.toDTO(category.toDTO())) }
                     }
             }.subscribe()
 
@@ -74,7 +77,7 @@ class ApplicationRunner: CommandLineRunner {
                             quantity = 1,
                             idCategory = category.id
                         )
-                    ).flatMap { product -> productService.saveProduct(product.toDTO(category.toDTO())) }
+                    ).flatMap { product -> productAdminService.saveProduct(product.toDTO(category.toDTO())) }
                 }.subscribe()
 
             Mono.just(
@@ -91,7 +94,7 @@ class ApplicationRunner: CommandLineRunner {
                                 quantity = 1,
                                 idCategory = category.id
                             )
-                        ).flatMap { productService.saveProduct(it.toDTO(category.toDTO())) }
+                        ).flatMap { productAdminService.saveProduct(it.toDTO(category.toDTO())) }
                     }
             }.subscribe()
 
@@ -109,7 +112,7 @@ class ApplicationRunner: CommandLineRunner {
                                 quantity = 1,
                                 idCategory = category.id
                             )
-                        ).flatMap { productService.saveProduct(it.toDTO(category.toDTO())) }
+                        ).flatMap { productAdminService.saveProduct(it.toDTO(category.toDTO())) }
                     }
             }.subscribe()
 
@@ -127,7 +130,7 @@ class ApplicationRunner: CommandLineRunner {
                                 quantity = 1,
                                 idCategory = category.id
                             )
-                        ).flatMap { productService.saveProduct(it.toDTO(category.toDTO())) }
+                        ).flatMap { productAdminService.saveProduct(it.toDTO(category.toDTO())) }
                     }
             }.subscribe()
         }
