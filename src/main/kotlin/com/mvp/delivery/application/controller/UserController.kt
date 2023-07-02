@@ -9,6 +9,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
@@ -32,8 +33,8 @@ class UserController(userService: UserService) {
         description = "Busca todos usuários cadastrados",
         tags = ["Administrador de Usuários"]
     )
-    fun all(): Flux<UserDTO> {
-        return userService.getUsers()
+    fun all(): ResponseEntity<Flux<UserDTO>> {
+        return ResponseEntity.ok(userService.getUsers())
     }
 
     @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
@@ -42,9 +43,9 @@ class UserController(userService: UserService) {
         description = "Utilizado para testes de performace e latência alterado o delay entre outros parametros",
         tags = ["Performace Usuários"]
     )
-    val flux: Flux<UserDTO?>
-        get() = userService.getUsers()
-            .delayElements(Duration.ofSeconds(1)).log()
+    val flux: ResponseEntity<Flux<UserDTO>>
+        get() = ResponseEntity.ok(userService.getUsers()
+            .delayElements(Duration.ofSeconds(1)).log())
 
     @PostMapping("/signup")
     @Operation(
@@ -53,10 +54,10 @@ class UserController(userService: UserService) {
         tags = ["Usuários"]
     )
     @ResponseStatus(HttpStatus.CREATED)
-    fun signup(@RequestBody user: UserDTO): Mono<UserDTO> {
+    fun signup(@RequestBody user: UserDTO): ResponseEntity<Mono<UserDTO>> {
         logger.info("/signup")
-        return userService.signup(user)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user.")))
+        return ResponseEntity.ok(userService.signup(user)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Could not create user."))))
     }
 
     @GetMapping("/{id}")
@@ -65,10 +66,10 @@ class UserController(userService: UserService) {
         description = "Busca usuário usando o id informado",
         tags = ["Usuários"]
     )
-    fun getUserById(@PathVariable id: Int, authentication: Authentication): Mono<UserDTO> {
+    fun getUserById(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<UserDTO>> {
         logger.info("/getUserById")
-        return userService.getUserById(id, authentication)
-            .defaultIfEmpty(UserDTO())
+        return ResponseEntity.ok(userService.getUserById(id, authentication)
+            .defaultIfEmpty(UserDTO()))
     }
 
     @GetMapping("/get-by-username")
@@ -77,10 +78,10 @@ class UserController(userService: UserService) {
         description = "Busca Usuário por username(CPF) cadastrado",
         tags = ["Usuários"]
     )
-    fun getUserByUsername(@RequestBody usernameDTO: UsernameDTO, authentication: Authentication): Mono<UserDTO> {
+    fun getUserByUsername(@RequestBody usernameDTO: UsernameDTO, authentication: Authentication): ResponseEntity<Mono<UserDTO>> {
         logger.info("/getbyUsername")
-        return userService.getByUsername(usernameDTO, authentication)
-            .defaultIfEmpty(UserDTO())
+        return ResponseEntity.ok(userService.getByUsername(usernameDTO, authentication)
+            .defaultIfEmpty(UserDTO()))
     }
 
 
@@ -96,9 +97,9 @@ class UserController(userService: UserService) {
         level = DeprecationLevel.WARNING,
         replaceWith = ReplaceWith("/signup")
     )
-    fun createUser(@RequestBody user: UserDTO): Mono<UserDTO> {
+    fun createUser(@RequestBody user: UserDTO): ResponseEntity<Mono<UserDTO>> {
         logger.info("/create")
-        return userService.saveUser(user)
+        return ResponseEntity.ok(userService.saveUser(user))
     }
 
     @PutMapping("/update-user/{id}")
@@ -108,9 +109,9 @@ class UserController(userService: UserService) {
         tags = ["Usuários"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateUser(@PathVariable id: Int, @RequestBody user: UserDTO, authentication: Authentication): Mono<UserDTO> {
+    fun updateUser(@PathVariable id: Int, @RequestBody user: UserDTO, authentication: Authentication): ResponseEntity<Mono<UserDTO>> {
         logger.info("/update-user/{id}")
-        return userService.updateUser(id, user, authentication)
+        return ResponseEntity.ok(userService.updateUser(id, user, authentication))
     }
 
     @DeleteMapping("/{id}")
@@ -120,8 +121,8 @@ class UserController(userService: UserService) {
         tags = ["Usuários"]
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteUser(@PathVariable id: Int, authentication: Authentication): Mono<Void> {
+    fun deleteUser(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<Void>> {
         logger.info("deleteUserById")
-        return userService.deleteUserById(id, authentication)
+        return ResponseEntity.ok(userService.deleteUserById(id, authentication))
     }
 }

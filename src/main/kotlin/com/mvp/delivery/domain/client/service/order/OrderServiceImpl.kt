@@ -74,7 +74,7 @@ class OrderServiceImpl @Autowired constructor(
                         return@switchIfEmpty Mono.just(
                             OrderEntity(
                                 idClient = userDTO.id,
-                                status = "PENDING",
+                                status = OrderStatusEnum.PENDING.value,
                                 totalPrice = total.setScale(8, RoundingMode.HALF_UP)
                             )
                         ).flatMap {
@@ -143,8 +143,8 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun deleteOrderProductById(products: ProductRemoveOrderDTO, authentication: Authentication): Mono<Void> {
-        val listProductId = products.productId.map { it }.toList()
-        return orderProductRepository.deleteByIdProduct(listProductId)
+        val listProductId = products.orderProductId.map { it }.toList()
+        return orderProductRepository.deleteById(listProductId)
     }
 
     override fun getOrders(): Flux<OrderDTO> {
@@ -171,7 +171,7 @@ class OrderServiceImpl @Autowired constructor(
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .doOnNext { setStatus ->
                 setStatus.status = OrderStatusEnum.PAID.value
-            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_STATUS_NOT_FOUND) }
+            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND) }
             .flatMap(orderRepository::save)
             .then()
             //.map { return@map it.toDTO() }

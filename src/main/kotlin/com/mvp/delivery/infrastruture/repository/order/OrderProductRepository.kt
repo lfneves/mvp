@@ -23,7 +23,7 @@ interface OrderProductRepository : ReactiveCrudRepository<OrderProductEntity?, L
     fun deleteByIdOrder(id: Long): Mono<Void>
 
     @Query("""
-        DELETE FROM tb_order_product WHERE id_product IN (:ids)
+        DELETE FROM tb_order_product WHERE id IN (:ids)
     """)
-    fun deleteByIdProduct(ids: List<Long>): Mono<Void>
+    fun deleteById(ids: List<Long>): Mono<Void>
 }

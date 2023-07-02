@@ -38,11 +38,11 @@ class UserServiceImpl @Autowired constructor(
         return userRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap {
-                authValidatorService.validate(authentication, it.toVO())
+                authValidatorService.validate(authentication, it.toDTO())
                     .then(Mono.just(it))
             }.flatMap { user ->
                 addressRepository.findById(user.idAddress!!).map { address ->
-                    user.toVO(user, address)
+                    user.toDTO(user, address)
                 }
             }
     }
@@ -51,11 +51,11 @@ class UserServiceImpl @Autowired constructor(
         return userRepository.findByUsernameWithAddress(usernameDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap {
-                authValidatorService.validate(authentication, it.toVO())
+                authValidatorService.validate(authentication, it.toDTO())
                     .then(Mono.just(it))
             }.flatMap { user ->
                 addressRepository.findById(user.idAddress!!).map { address ->
-                    user.toVO(user, address)
+                    user.toDTO(user, address)
                 }
             }.toMono()
     }
@@ -65,7 +65,7 @@ class UserServiceImpl @Autowired constructor(
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException("User not found")))
             .flatMap { user ->
                 addressRepository.findById(user.idAddress!!).map { address ->
-                    user.toVO(user, address)
+                    user.toDTO(user, address)
                 }
             }
     }
@@ -80,7 +80,7 @@ class UserServiceImpl @Autowired constructor(
     override fun saveUser(user: UserDTO): Mono<UserDTO> {
         user.password = passwordEncoder.encode(user.password)
         return userRepository.save(user.toEntity())
-            .map { it.toVO() }
+            .map { it.toDTO() }
 
     }
 
@@ -92,10 +92,18 @@ class UserServiceImpl @Autowired constructor(
     private fun saveUserWithAddress(user: UserDTO): Mono<UserDTO> {
         return addressRepository.save(user.address!!)
             .map { address ->
+                user.address = address
                 user.copy(idAddress = address.id)
             }.flatMap {userDTO ->
                 userRepository.save(userDTO.toEntity())
-                    .map { it.toVO() }
+                    .map {
+                        it
+                    }
+            }.flatMap {userEntity ->
+                addressRepository.findById(userEntity.idAddress!!)
+                    .map { address ->
+                        return@map userEntity.toDTO(userEntity, address!!)
+                    }
             }
     }
 
@@ -116,7 +124,7 @@ class UserServiceImpl @Autowired constructor(
                                 addressRepository.save(address).subscribe()
                             }
                         }
-                        it.toVO(address)
+                        it.toDTO(address)
                     }
             }
     }
@@ -155,7 +163,7 @@ class UserServiceImpl @Autowired constructor(
         // delete user with address
         return userRepository.findById(id)
             .flatMap {
-                authValidatorService.validate(authentication, it.toVO())
+                authValidatorService.validate(authentication, it.toDTO())
                     .then(Mono.just(it))
             }.flatMap { user ->
                 if (user.idAddress == null) return@flatMap userRepository.deleteById(id)
@@ -170,7 +178,7 @@ class UserServiceImpl @Autowired constructor(
             .flatMap{ user ->
                 addressRepository.findById(user?.idAddress!!)
                     .map { address ->
-                        return@map user.toVO(user, address!!)
+                        return@map user.toDTO(user, address!!)
                     }
             }
     }
