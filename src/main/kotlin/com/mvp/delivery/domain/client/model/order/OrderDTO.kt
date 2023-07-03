@@ -1,7 +1,6 @@
 package com.mvp.delivery.domain.client.model.order
 
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
-import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
 data class OrderDTO(

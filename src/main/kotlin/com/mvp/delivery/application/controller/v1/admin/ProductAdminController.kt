@@ -2,9 +2,7 @@ package com.mvp.delivery.application.controller.v1.admin
 
 
 import com.mvp.delivery.domain.admin.product.ProductAdminService
-import com.mvp.delivery.domain.client.model.product.CategoryDTO
 import com.mvp.delivery.domain.client.model.product.ProductDTO
-import com.mvp.delivery.domain.client.service.product.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

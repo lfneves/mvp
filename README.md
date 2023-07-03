@@ -159,7 +159,8 @@ http://localhost:8099/webjars/swagger-ui/index.html
 - [x] Create checkout endpoint(simple version)
 - [ ] Add time wait Order after payment
 - ### Improvements
-- [ ] Refactor admin services and repository to new package
+- [x] Refactor admin services and repository to new package
+- [ ] Reduce endpoints path size
 - [ ] Create validator example: username and email
 - [ ] Fix create order exceptions
 

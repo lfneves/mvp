@@ -25,7 +25,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security:3.1.1")
 	implementation("org.springframework.session:spring-session-core:3.1.1")
 	implementation("org.springframework.boot:spring-boot-starter-cache:3.1.1")
-	implementation("org.springframework.boot:spring-boot-docker-compose:3.1.1")
+	//implementation("org.springframework.boot:spring-boot-docker-compose:3.1.1")
 
 	// Kotlin utils
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")

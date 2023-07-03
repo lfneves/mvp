@@ -3,6 +3,7 @@ package com.mvp.delivery.domain.client.service.order
 import com.mvp.delivery.domain.client.model.auth.AuthenticationVO
 import com.mvp.delivery.domain.client.model.order.*
 import com.mvp.delivery.domain.client.model.order.enums.OrderStatusEnum
+import com.mvp.delivery.domain.client.model.product.ProductDTO
 import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.client.service.auth.validator.AuthValidatorService
 import com.mvp.delivery.domain.client.service.product.ProductServiceImpl
@@ -21,13 +22,13 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.switchIfEmpty
+import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 @Service
 class OrderServiceImpl @Autowired constructor(
-    orderRepository: OrderRepository,
+    private val orderRepository: OrderRepository,
     private val authValidatorService: AuthValidatorService,
     private val userService: UserServiceImpl,
     private val orderProductRepository: OrderProductRepository,
@@ -35,12 +36,12 @@ class OrderServiceImpl @Autowired constructor(
 ) : OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
 
-    @Autowired
-    private val orderRepository: OrderRepository
+//    @Autowired
+//    private lateinit var orderRepository: OrderRepository
 
-    init {
-        this.orderRepository = orderRepository
-    }
+//    init {
+//        this.orderRepository = orderRepository
+//    }
 
     override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderDTO> {
         return orderRepository.findById(id)
@@ -55,8 +56,27 @@ class OrderServiceImpl @Autowired constructor(
 
     override fun createOrder(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO> {
         authentication as AuthenticationVO
+
+        var total: BigDecimal = BigDecimal.ZERO
+        var listIDproduct = mutableListOf<Long>()
+        orderRequestDTO.orderProduct.forEach {
+            it.idProduct?.let { it1 -> listIDproduct.add(it1) }
+        }
+
         return userService.getByUsername(authentication.iAuthDTO.username!!)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_USER_NOT_FOUND)))
+            .flatMap {
+                productService.getAllById(listIDproduct).toFlux()
+                    .collectList()
+                    .flatMap { product ->
+                        if(product.isEmpty()) {
+                            Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND))
+                        } else {
+                            total = product.reduce { acc, productDTO -> ProductDTO(price = acc.price.add(productDTO.price)) }.price
+                            Mono.just(it)
+                        }
+                    }
+            }.switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
             .flatMap {
                 authValidatorService.validate(authentication, it)
                     .then(Mono.just(it))
@@ -64,35 +84,25 @@ class OrderServiceImpl @Autowired constructor(
                 orderRepository.findByUsername(authentication.iAuthDTO.username!!)
                     .flatMap {orderEntity ->
                         orderEntity.idClient = userDTO.id
+                        orderEntity.totalPrice.add(total)
                         orderEntity.toMono()
-                    }
-                    .switchIfEmpty {
-                        var total: BigDecimal = BigDecimal.ZERO
-                        productService.productsCache.map { it.price }
-                            .reduce { acc, next -> total.plus(acc.add(next)) }
-                            .map { total.add(it) }
+                    }.switchIfEmpty {
                         return@switchIfEmpty Mono.just(
                             OrderEntity(
                                 idClient = userDTO.id,
                                 status = OrderStatusEnum.PENDING.value,
-                                totalPrice = total.setScale(8, RoundingMode.HALF_UP)
+                                totalPrice = total
                             )
                         ).flatMap {
                             orderRepository.save(it)
                         }
                     }
-            }.map { orderEntity ->
+            }.map {orderEntity ->
                 orderRequestDTO.orderProduct.forEach {
                     it.idOrder = orderEntity.id
                 }
                 saveAllOrderProduct(orderRequestDTO.toEntityList().toList()).subscribe()
-                orderEntity
-            }.flatMap { orderUpdate ->
-                updateCreateOrder(authentication.iAuthDTO.username!!).flatMap {
-                    orderUpdate.totalPrice = it.totalPrice
-                    Mono.just(orderUpdate)
-                }.subscribe()
-                Mono.just(OrderResponseDTO(orderUpdate.toDTO()))
+                OrderResponseDTO(orderEntity.toDTO())
             }
     }
 
@@ -105,28 +115,8 @@ class OrderServiceImpl @Autowired constructor(
             }
     }
 
-    override fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO> {
-        return orderRepository.findById(id)
-            .doOnNext { setStatus ->
-                setStatus.status = OrderStatusEnum.valueOf(orderStatusDTO.status).value
-            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_STATUS_NOT_FOUND) }
-            .flatMap(orderRepository::save)
-                .map { return@map it.toDTO() }
-    }
-
-    override fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO> {
-        return orderRepository.findById(orderFinishDTO.idOrder.toInt())
-            .doOnNext { orderFinished ->
-                orderFinished.status = OrderStatusEnum.FINISHED.value
-                orderFinished.isFinished = true
-            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_STATUS_NOT_FOUND) }
-            .flatMap(orderRepository::save)
-            .map { return@map it.toDTO() }
-    }
-
     private fun saveAllOrderProduct(data: List<OrderProductEntity>?): Flux<OrderProductEntity> {
         return Flux.fromIterable(data!!).flatMap(orderProductRepository::save)
-            .onErrorMap { Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND) }
     }
 
     override fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductResponseDTO> {
@@ -143,26 +133,11 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun deleteOrderProductById(products: ProductRemoveOrderDTO, authentication: Authentication): Mono<Void> {
+        authentication as AuthenticationVO
         val listProductId = products.orderProductId.map { it }.toList()
-        return orderProductRepository.deleteById(listProductId)
-    }
-
-    override fun getOrders(): Flux<OrderDTO> {
-        return orderRepository
-            .findAllOrder()
-            .map{ it?.toDTO() }
-    }
-
-    override fun deleteAllOrders(): Mono<Void> {
-         return orderRepository
-             .deleteAll()
-    }
-
-    private fun updateCreateOrder(username: String): Mono<OrderEntity> {
-        return orderRepository.findByUsername(username)
-            .flatMap {
-                orderRepository.save(it)
-            }.map { it }
+        return orderRepository.findByUsername(authentication.iAuthDTO.username)
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
+            .flatMap { orderProductRepository.deleteById(listProductId) }
     }
 
     override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void> {
@@ -174,6 +149,5 @@ class OrderServiceImpl @Autowired constructor(
             }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND) }
             .flatMap(orderRepository::save)
             .then()
-            //.map { return@map it.toDTO() }
     }
 }

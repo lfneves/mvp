@@ -1,7 +1,6 @@
 package com.mvp.delivery.domain.client.model.product
 
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
-import org.reactivestreams.Publisher
 import java.math.BigDecimal
 
 data class ProductDTO(

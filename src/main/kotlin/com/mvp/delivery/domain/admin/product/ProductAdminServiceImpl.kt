@@ -6,17 +6,17 @@ import com.mvp.delivery.domain.client.model.product.ProductDTO
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.repository.product.CategoryRepository
 import com.mvp.delivery.infrastruture.repository.product.ProductRepository
+import com.mvp.delivery.utils.constants.ErrorMsgConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheConfig
-import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.annotation.CachePut
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
 @Service
-@CacheConfig(cacheNames = ["products"])
+@CacheConfig(cacheNames = ["productsCache"])
 class ProductAdminServiceImpl(
     productRepository: ProductRepository,
     categoryRepository: CategoryRepository
@@ -33,14 +33,14 @@ class ProductAdminServiceImpl(
         this.productsCache = getProducts()
     }
 
-    @CacheEvict(cacheNames = ["products"], allEntries = true)
+    @CachePut(cacheNames = ["productsCache"])
     override fun saveProduct(productDTO: ProductDTO): Mono<ProductDTO> {
        return getCategoryByName(productDTO.category.name)
            .switchIfEmpty(
                categoryRepository.findById(productDTO.idCategory)
                    .map { it?.toDTO()}
            ).switchIfEmpty(
-                Mono.error(Exceptions.NotFoundException("Category not found"))
+                Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_CATEGORY_NOT_FOUD))
             ).flatMap{ category ->
                productDTO.idCategory = category?.id!!
                 productRepository.save(productDTO.toEntity())
@@ -49,10 +49,10 @@ class ProductAdminServiceImpl(
     }
 
     //TODO fix save category
-    @CacheEvict(cacheNames = ["products"], allEntries = true)
+    @CachePut(cacheNames = ["productsCache"])
     override fun updateProduct(id: Int, productDTO: ProductDTO): Mono<ProductDTO> {
         return productRepository.findById(id)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
             .flatMap { product ->
                 product.updateUserEntity(product, productDTO.toEntity())
                 productRepository.save(product)
@@ -68,15 +68,14 @@ class ProductAdminServiceImpl(
     }
 
     override fun deleteProductById(id: Int): Mono<Void> {
-        // delete Item
         return productRepository.findById(id)
-            .flatMap { product ->
-            productRepository.deleteById(product.id!!)
-                .then(categoryRepository.deleteById(id))
-        }
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
+            .then(
+                productRepository.deleteById(id)
+            )
     }
 
-    @Cacheable("products")
+    @CachePut("productsCache")
     override fun getProducts(): Flux<ProductDTO> {
         return productRepository
             .findAll()
@@ -96,7 +95,7 @@ class ProductAdminServiceImpl(
 
     private fun getCategoryByName(name: String): Mono<CategoryDTO> {
         return categoryRepository.findByName(name)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product category not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
             .map { it.toDTO() }
             .toMono()
 

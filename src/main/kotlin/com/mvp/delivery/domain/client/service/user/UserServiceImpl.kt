@@ -5,7 +5,6 @@ import com.mvp.delivery.domain.client.model.user.UserDTO
 import com.mvp.delivery.domain.client.model.user.UsernameDTO
 import com.mvp.delivery.domain.client.service.auth.validator.AuthValidatorService
 import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.infrastruture.entity.user.UserEntity
 import com.mvp.delivery.infrastruture.repository.user.AddressRepository
 import com.mvp.delivery.infrastruture.repository.user.UserRepository
 import com.mvp.delivery.utils.Sha512PasswordEncoder
@@ -135,9 +134,6 @@ class UserServiceImpl @Autowired constructor(
         if (user.cpf == newCpf) {
             return
         }
-//        if (userRepository.existsByUsername(newUsername).awaitSingle()) {
-//            throw usernameAlreadyInUseException()
-//        }
         user.cpf = newCpf
     }
 
@@ -145,9 +141,6 @@ class UserServiceImpl @Autowired constructor(
         if (user.email == newEmail) {
             return
         }
-//        if (userRepository.existsByEmail(newEmail).awaitSingle()) {
-//            throw emailAlreadyInUseException()
-//        }
         user.email = newEmail
     }
 

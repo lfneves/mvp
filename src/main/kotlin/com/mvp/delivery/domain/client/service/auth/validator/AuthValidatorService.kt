@@ -6,7 +6,6 @@ import com.mvp.delivery.domain.client.model.auth.AuthenticationVO
 import com.mvp.delivery.domain.client.model.user.UserDTO
 import com.mvp.delivery.domain.exception.Exceptions
 import kotlinx.coroutines.reactor.awaitSingle
-import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.stereotype.Service

@@ -13,7 +13,7 @@ interface ProductRepository : ReactiveCrudRepository<ProductEntity?, Long?> {
     @Query("SELECT id, name, price, quantity, id_category FROM tb_product WHERE id_category = $1")
     fun findByIdCategory(id: Long?): Flux<ProductEntity>
 
-    @Query("SELECT id, name, price, quantity, id_category FROM tb_product WHERE id = $1")
+    @Query("SELECT id, name, price, quantity, id_category FROM tb_product WHERE id IN(:ids)")
     fun findAllById(ids: List<Long>): Flux<ProductEntity>
 
     @Query("SELECT SUM(price) AS price FROM tb_product WHERE id IN(:ids)")

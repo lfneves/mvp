@@ -16,13 +16,13 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/admin/users")
-class UserAdminController(userService: UserAdminService) {
+class UserAdminController(userAdminService: UserAdminService) {
     var logger: Logger = LoggerFactory.getLogger(UserAdminController::class.java)
 
-    private val userService: UserAdminService
+    private val userAdminService: UserAdminService
 
     init {
-        this.userService = userService
+        this.userAdminService = userAdminService
     }
 
     @GetMapping
@@ -32,7 +32,7 @@ class UserAdminController(userService: UserAdminService) {
         tags = ["Administrador de Usuários"]
     )
     fun all(): ResponseEntity<Flux<UserDTO>> {
-        return ResponseEntity.ok(userService.getUsers())
+        return ResponseEntity.ok(userAdminService.getUsers())
     }
 
     @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
@@ -42,7 +42,7 @@ class UserAdminController(userService: UserAdminService) {
         tags = ["Performace Usuários"]
     )
     val flux: ResponseEntity<Flux<UserDTO>>
-        get() = ResponseEntity.ok(userService.getUsers()
+        get() = ResponseEntity.ok(userAdminService.getUsers()
             .delayElements(Duration.ofSeconds(1)).log())
 
     @DeleteMapping("/delete-all")
@@ -54,6 +54,6 @@ class UserAdminController(userService: UserAdminService) {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteAllUsers(authentication: Authentication): ResponseEntity<Mono<Void>> {
         logger.info("Admin - delete all users")
-        return ResponseEntity.ok(userService.deleteAllUsers())
+        return ResponseEntity.ok(userAdminService.deleteAllUsers())
     }
 }

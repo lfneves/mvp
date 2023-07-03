@@ -8,5 +8,6 @@ class ErrorMsgConstants {
         const val ERROR_USER_NOT_FOUND          = "Usuário não encontrado."
         const val ERROR_ORDER_NOT_FOUND         = "Pedido não encontrado."
         const val ERROR_STATUS_NOT_FOUND        = "Status não encontrado utilize: PENDING, PREPARING, PAID, FINISHED"
+        const val ERROR_CATEGORY_NOT_FOUD       = "Categoria do produto não encontrada."
     }
 }

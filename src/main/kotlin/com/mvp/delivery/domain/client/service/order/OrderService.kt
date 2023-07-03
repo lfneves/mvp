@@ -1,7 +1,6 @@
 package com.mvp.delivery.domain.client.service.order
 
 import com.mvp.delivery.domain.client.model.order.*
-import com.mvp.delivery.domain.client.model.order.OrderProductDTO
 import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
 import org.springframework.security.core.Authentication
 import reactor.core.publisher.Flux
@@ -15,8 +14,6 @@ interface OrderService {
 
     fun updateOrderProduct(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO>
 
-    fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO>
-
     fun deleteOrderById(id: Int, authentication: Authentication): Mono<Void>
 
     fun deleteOrderProductById(products: ProductRemoveOrderDTO, authentication: Authentication): Mono<Void>
@@ -24,12 +21,6 @@ interface OrderService {
     fun saveInitialOrders(order: OrderDTO, authentication: Authentication): Mono<OrderDTO>
 
     fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductResponseDTO>
-
-    fun getOrders(): Flux<OrderDTO>
-
-    fun deleteAllOrders(): Mono<Void>
-
-    fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO>
 
     fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void>
 }

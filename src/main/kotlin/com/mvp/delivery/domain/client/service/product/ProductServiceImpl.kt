@@ -6,9 +6,10 @@ import com.mvp.delivery.domain.client.model.product.ProductDTO
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.repository.product.CategoryRepository
 import com.mvp.delivery.infrastruture.repository.product.ProductRepository
+import com.mvp.delivery.utils.constants.ErrorMsgConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheConfig
-import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -17,6 +18,7 @@ import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
 
 @Service
+@CacheConfig(cacheNames = ["productsCache"])
 class ProductServiceImpl(
     productRepository: ProductRepository,
     categoryRepository: CategoryRepository
@@ -35,11 +37,11 @@ class ProductServiceImpl(
 
     override fun getProductById(id: Int): Mono<ProductDTO> {
         return productRepository.findById(id)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Item not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
             .map { it.toDTO() }
     }
 
-    @Cacheable("products")
+    @CachePut(cacheNames = ["productsCache"])
     override fun getProducts(): Flux<ProductDTO> {
         return productRepository
             .findAll()
@@ -51,6 +53,7 @@ class ProductServiceImpl(
             }
     }
 
+    @CachePut("productsCache")
     override fun getAllById(id: List<Long?>): Flux<ProductDTO> {
         return productRepository
             .findAllById(id)
@@ -59,7 +62,7 @@ class ProductServiceImpl(
                     .map { category ->
                         return@map product.toDTO(category?.toDTO())
                     }
-            }
+            }.switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
     }
 
     override fun getByIdTotalPrice(ids: List<Long?>): Mono<BigDecimal> {
@@ -70,15 +73,16 @@ class ProductServiceImpl(
 
     private fun getCategoryByName(name: String): Mono<CategoryDTO> {
         return categoryRepository.findByName(name)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product category not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_CATEGORY_NOT_FOUD)))
             .map { it.toDTO() }
             .toMono()
 
     }
 
+    @Cacheable("productsCache")
     override fun getProductsByCategoryByName(name: String): Flux<ProductDTO> {
         return categoryRepository.findByName(name)
-            .switchIfEmpty(Mono.error(Exceptions.NotFoundException("Product category not found")))
+            .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_CATEGORY_NOT_FOUD)))
             .flatMap {category ->
                 productRepository.findByIdCategory(category.id)
                     .map { product ->

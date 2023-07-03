@@ -14,6 +14,6 @@ class WebClientConfiguration {
     }
 
     companion object {
-        private const val BASE_URL = "https://jsonplaceholder.typicode.com"
+        private const val BASE_URL = "http://localhost:8099"
     }
 }
