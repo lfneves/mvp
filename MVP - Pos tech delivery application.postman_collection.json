@@ -19,7 +19,7 @@
 									"name": "admin",
 									"item": [
 										{
-											"name": "all users",
+											"name": "busca todos usuários",
 											"request": {
 												"auth": {
 													"type": "bearer",
@@ -39,14 +39,46 @@
 													}
 												],
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/users",
+													"raw": "{{baseUrl}}/api/v1/admin/users",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"users"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "remove todos usuários",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/admin/users/delete-all",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"admin",
+														"users",
+														"delete-all"
 													]
 												}
 											},
@@ -90,7 +122,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"12345678912\",\n  \"password\": \"123\"\n}",
+											"raw": "{\n  \"username\": \"99999999999\",\n  \"password\": \"admin\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -117,14 +149,7 @@
 									"name": "cadastro",
 									"request": {
 										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "",
-													"type": "string"
-												}
-											]
+											"type": "noauth"
 										},
 										"method": "POST",
 										"header": [
@@ -139,7 +164,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"Lucas\",\n    \"email\": \"lucas@email.com\",\n    \"cpf\": \"39856404835\",\n    \"password\": \"123\",\n    \"address\": {\n        \"street\": \"rua 1\",\n        \"city\": \"sp\",\n        \"state\": \"sp\",\n        \"postalCode\": \"1234\"\n    }\n}",
+											"raw": "{\n    \"name\": \"Lucas\",\n    \"email\": \"lucas@email.com\",\n    \"cpf\": \"11111111111\",\n    \"password\": \"123\",\n    \"address\": {\n        \"street\": \"rua 1\",\n        \"city\": \"sp\",\n        \"state\": \"sp\",\n        \"postalCode\": \"1234\"\n    }\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -163,7 +188,7 @@
 									"response": []
 								},
 								{
-									"name": "remove usuario",
+									"name": "remove usuario {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -193,7 +218,7 @@
 									"response": []
 								},
 								{
-									"name": "atualizar dados",
+									"name": "atualizar dados {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -218,7 +243,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "    {\n        \"name\": \"admin-test\",\n        \"email\": \"admin@email.com\",\n        \"cpf\": \"12345678912\",\n        \"address\": {\n            \"street\": \"Rua admin 2\",\n            \"city\": \"São Paulo 2\",\n            \"state\": \"SP1\",\n            \"postalCode\": \"12345123\"\n        }\n    }",
+											"raw": "    {\n        \"name\": \"admin-test\",\n        \"email\": \"admin@email.com\",\n        \"address\": {\n            \"street\": \"Rua admin 2\",\n            \"city\": \"São Paulo 2\",\n            \"state\": \"SP1\",\n            \"postalCode\": \"12345123\"\n        }\n    }",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -227,7 +252,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/users/update-user/55",
+											"raw": "{{baseUrl}}/api/v1/users/update-user/83",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -236,14 +261,14 @@
 												"v1",
 												"users",
 												"update-user",
-												"55"
+												"83"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "busca pelo id",
+									"name": "busca pelo {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -263,7 +288,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/users/52",
+											"raw": "{{baseUrl}}/api/v1/users/59",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -271,7 +296,7 @@
 												"api",
 												"v1",
 												"users",
-												"52"
+												"59"
 											]
 										}
 									},
@@ -302,7 +327,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    //User cpf\n    \"username\":\"39856404835\"\n}",
+											"raw": "{\n    //User cpf\n    \"username\":\"11111111111\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -362,13 +387,14 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/product/create",
+													"raw": "{{baseUrl}}/api/v1/admin/product/create",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"product",
 														"create"
 													]
@@ -392,22 +418,23 @@
 												"method": "DELETE",
 												"header": [],
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/product/288",
+													"raw": "{{baseUrl}}/api/v1/admin/product/925",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"product",
-														"288"
+														"925"
 													]
 												}
 											},
 											"response": []
 										},
 										{
-											"name": "update product",
+											"name": "update product {id}",
 											"request": {
 												"auth": {
 													"type": "bearer",
@@ -441,16 +468,17 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/product/update/286",
+													"raw": "{{baseUrl}}/api/v1/admin/product/update/927",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"product",
 														"update",
-														"286"
+														"927"
 													]
 												}
 											},
@@ -608,13 +636,14 @@
 													}
 												],
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/order",
+													"raw": "{{baseUrl}}/api/v1/admin/order",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"order"
 													]
 												}
@@ -656,16 +685,17 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/order/update-order-status/74",
+													"raw": "{{baseUrl}}/api/v1/admin/order/update-order-status/23",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"order",
 														"update-order-status",
-														"74"
+														"23"
 													]
 												}
 											},
@@ -697,7 +727,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"idOrder\": 0,\n  \"isFinished\": true\n}",
+													"raw": "{\n  \"idOrder\": 5,\n  \"isFinished\": true\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -706,13 +736,14 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/order/finish-order",
+													"raw": "{{baseUrl}}/api/v1/admin/order/finish-order",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
 														"api",
 														"v1",
+														"admin",
 														"order",
 														"finish-order"
 													]
@@ -778,7 +809,7 @@
 									"response": []
 								},
 								{
-									"name": "busca pedido",
+									"name": "busca pedido id",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -798,7 +829,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/9",
+											"raw": "{{baseUrl}}/api/v1/order/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -806,14 +837,14 @@
 												"api",
 												"v1",
 												"order",
-												"9"
+												"1"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "busca items do pedido",
+									"name": "busca produtos no pedido pelo id",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -833,7 +864,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/all-products-by-order-id/21",
+											"raw": "{{baseUrl}}/api/v1/order/all-products-by-order-id/23",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -842,7 +873,7 @@
 												"v1",
 												"order",
 												"all-products-by-order-id",
-												"21"
+												"23"
 											]
 										}
 									},
@@ -968,7 +999,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"productId\": [\n    0\n  ]\n}",
+											"raw": "{\n  \"orderProductId\": [\n    3, 2\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -976,7 +1007,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/create-order",
+											"raw": "{{baseUrl}}/api/v1/order/remove-product-order",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -984,7 +1015,7 @@
 												"api",
 												"v1",
 												"order",
-												"create-order"
+												"remove-product-order"
 											]
 										}
 									},
@@ -1006,7 +1037,7 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/6",
+											"raw": "{{baseUrl}}/api/v1/order/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -1014,7 +1045,7 @@
 												"api",
 												"v1",
 												"order",
-												"6"
+												"1"
 											]
 										}
 									},
