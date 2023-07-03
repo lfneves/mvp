@@ -13,6 +13,7 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 
 @Configuration
 @EnableWebFluxSecurity
+@SuppressWarnings
 class WebSecurityConfiguration {
 
     @Autowired
