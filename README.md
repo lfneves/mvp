@@ -71,6 +71,11 @@ Main project directory
   docker-compose up -d --build
   ```
 
+  To recreate the application, in case of problems use the command
+    ```sh
+  docker-compose down
+  ```
+
 ---
 ### This project uses [CommandLineRunner](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/CommandLineRunner.html)
 - CommandLineRunner is used to create a default user, products and categories on start application.
