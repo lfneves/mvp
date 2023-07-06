@@ -16,7 +16,6 @@ import com.mvp.delivery.infrastruture.repository.order.OrderRepository
 import com.mvp.delivery.utils.constants.ErrorMsgConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -27,21 +26,14 @@ import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
 
 @Service
-class OrderServiceImpl @Autowired constructor(
+class OrderServiceImpl(
     private val orderRepository: OrderRepository,
     private val authValidatorService: AuthValidatorService,
     private val userService: UserServiceImpl,
     private val orderProductRepository: OrderProductRepository,
     private val productService: ProductServiceImpl
-) : OrderService {
+): OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
-
-//    @Autowired
-//    private lateinit var orderRepository: OrderRepository
-
-//    init {
-//        this.orderRepository = orderRepository
-//    }
 
     override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderDTO> {
         return orderRepository.findById(id)

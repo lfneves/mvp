@@ -8,7 +8,6 @@ import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.repository.user.AddressRepository
 import com.mvp.delivery.infrastruture.repository.user.UserRepository
 import com.mvp.delivery.utils.Sha512PasswordEncoder
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -16,19 +15,12 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
 @Service
-class UserServiceImpl @Autowired constructor(
-    @Autowired userRepository: UserRepository,
-    @Autowired addressRepository: AddressRepository,
+class UserServiceImpl(
+    private val userRepository: UserRepository,
+    private val addressRepository: AddressRepository,
     private val authValidatorService: AuthValidatorService,
     private val passwordEncoder: PasswordEncoder = Sha512PasswordEncoder(),
 ) : UserService {
-    private val userRepository: UserRepository
-    private val addressRepository: AddressRepository
-
-    init {
-        this.userRepository = userRepository
-        this.addressRepository = addressRepository
-    }
 
     override fun getUserById(id: Int, authentication: Authentication): Mono<UserDTO> {
         authentication as AuthenticationVO

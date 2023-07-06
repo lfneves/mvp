@@ -16,14 +16,8 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/admin/users")
-class UserAdminController(userAdminService: UserAdminService) {
+class UserAdminController(private val userAdminService: UserAdminService) {
     var logger: Logger = LoggerFactory.getLogger(UserAdminController::class.java)
-
-    private val userAdminService: UserAdminService
-
-    init {
-        this.userAdminService = userAdminService
-    }
 
     @GetMapping
     @Operation(

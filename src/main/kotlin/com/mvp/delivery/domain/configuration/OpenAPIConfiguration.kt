@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration
 class OpenAPIConfiguration {
 
     @Bean
-    open fun customOpenAPI(): OpenAPI {
+    fun customOpenAPI(): OpenAPI {
         val securitySchemeName = "BearerAuth"
         val apiTitle = "MVP - Pos tech delivery application"
         return OpenAPI()

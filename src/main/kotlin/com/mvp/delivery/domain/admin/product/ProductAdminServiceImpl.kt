@@ -7,7 +7,6 @@ import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.repository.product.CategoryRepository
 import com.mvp.delivery.infrastruture.repository.product.ProductRepository
 import com.mvp.delivery.utils.constants.ErrorMsgConstants
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CachePut
 import org.springframework.stereotype.Service
@@ -18,18 +17,13 @@ import reactor.kotlin.core.publisher.toMono
 @Service
 @CacheConfig(cacheNames = ["productsCache"])
 class ProductAdminServiceImpl(
-    productRepository: ProductRepository,
-    categoryRepository: CategoryRepository
-) : ProductAdminService {
-    @Autowired
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository
+): ProductAdminService {
 
     lateinit var productsCache: Flux<ProductDTO>
 
     init {
-        this.productRepository = productRepository
-        this.categoryRepository = categoryRepository
         this.productsCache = getProducts()
     }
 

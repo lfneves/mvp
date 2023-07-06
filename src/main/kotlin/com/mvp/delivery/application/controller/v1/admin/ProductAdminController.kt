@@ -13,12 +13,7 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/admin/product")
-class ProductAdminController(productAdminService: ProductAdminService) {
-    private val productAdminService: ProductAdminService
-
-    init {
-        this.productAdminService = productAdminService
-    }
+class ProductAdminController(private val productAdminService: ProductAdminService) {
 
     @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
     @get:Operation(

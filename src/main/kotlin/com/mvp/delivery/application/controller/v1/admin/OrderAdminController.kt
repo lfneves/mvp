@@ -15,12 +15,7 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("/api/v1/admin/order")
-class OrderAdminController(orderAdminService: OrderAdminService) {
-    private val orderAdminService: OrderAdminService
-
-    init {
-        this.orderAdminService = orderAdminService
-    }
+class OrderAdminController(private val orderAdminService: OrderAdminService) {
 
     @GetMapping
     @Operation(

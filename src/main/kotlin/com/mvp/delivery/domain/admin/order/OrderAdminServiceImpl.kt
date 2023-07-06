@@ -1,31 +1,24 @@
 package com.mvp.delivery.domain.admin.order
 
-import com.mvp.delivery.domain.client.model.order.*
+import com.mvp.delivery.domain.client.model.order.OrderDTO
+import com.mvp.delivery.domain.client.model.order.OrderFinishDTO
+import com.mvp.delivery.domain.client.model.order.OrderStatusDTO
 import com.mvp.delivery.domain.client.model.order.enums.OrderStatusEnum
-import com.mvp.delivery.domain.client.service.auth.validator.AuthValidatorService
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.infrastruture.repository.order.OrderRepository
 import com.mvp.delivery.utils.constants.ErrorMsgConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
-class OrderAdminServiceImpl @Autowired constructor(
-    orderRepository: OrderRepository
-) : OrderAdminService {
-    var logger: Logger = LoggerFactory.getLogger(OrderAdminServiceImpl::class.java)
-
-    @Autowired
+class OrderAdminServiceImpl(
     private val orderRepository: OrderRepository
-
-    init {
-        this.orderRepository = orderRepository
-    }
+): OrderAdminService {
+    var logger: Logger = LoggerFactory.getLogger(OrderAdminServiceImpl::class.java)
 
     override fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO> {
         return orderRepository.findById(id)

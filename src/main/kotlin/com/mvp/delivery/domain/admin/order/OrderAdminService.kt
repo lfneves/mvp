@@ -1,8 +1,8 @@
 package com.mvp.delivery.domain.admin.order
 
-import com.mvp.delivery.domain.client.model.order.*
-import com.mvp.delivery.domain.client.model.order.OrderProductDTO
-import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
+import com.mvp.delivery.domain.client.model.order.OrderDTO
+import com.mvp.delivery.domain.client.model.order.OrderFinishDTO
+import com.mvp.delivery.domain.client.model.order.OrderStatusDTO
 import org.springframework.security.core.Authentication
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

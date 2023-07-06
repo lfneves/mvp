@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController() {
+class AuthController {
 
     @Autowired
     private lateinit var authenticationManager: ReactiveAuthenticationManager

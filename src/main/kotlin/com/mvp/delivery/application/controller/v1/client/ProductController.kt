@@ -12,12 +12,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/v1/product")
-class ProductController(productService: ProductService) {
-    private val productService: ProductService
-
-    init {
-        this.productService = productService
-    }
+class ProductController(private val productService: ProductService) {
 
     @GetMapping
     @Operation(
