@@ -1,9 +1,9 @@
 package com.mvp.delivery.application.controller.v1.client
 
 
-import com.mvp.delivery.domain.client.model.order.*
-import com.mvp.delivery.domain.client.model.product.ProductRemoveOrderDTO
-import com.mvp.delivery.domain.client.service.order.OrderService
+import com.mvp.delivery.domain.model.product.ProductRemoveOrderDTO
+import com.mvp.delivery.domain.service.client.order.OrderService
+import com.mvp.delivery.domain.model.order.*
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,7 @@ class OrderController(private val orderService: OrderService) {
         description = "Inicia um pedido informando e adiciona produdos pelo id",
         tags = ["Pedidos"]
     )
-    suspend fun createOrder(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
+    fun createOrder(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
         return ResponseEntity.ok(orderService.createOrder(orderRequestDTO, authentication))
     }
 
@@ -58,7 +58,7 @@ class OrderController(private val orderService: OrderService) {
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun updateOrderProduct(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
+    fun updateOrderProduct(@RequestBody orderRequestDTO: OrderRequestDTO, authentication: Authentication): ResponseEntity<Mono<OrderResponseDTO>> {
         return ResponseEntity.ok(orderService.updateOrderProduct(orderRequestDTO, authentication))
     }
 
@@ -91,7 +91,7 @@ class OrderController(private val orderService: OrderService) {
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<Boolean>> {
+    fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<Boolean>> {
         return ResponseEntity.ok(orderService.checkoutOrder(orderCheckoutDTO, authentication))
     }
 }

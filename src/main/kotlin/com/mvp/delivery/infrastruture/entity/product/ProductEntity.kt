@@ -1,7 +1,7 @@
 package com.mvp.delivery.infrastruture.entity.product
 
-import com.mvp.delivery.domain.client.model.product.CategoryDTO
-import com.mvp.delivery.domain.client.model.product.ProductDTO
+import com.mvp.delivery.domain.model.product.CategoryDTO
+import com.mvp.delivery.domain.model.product.ProductDTO
 import jakarta.persistence.CascadeType
 import jakarta.persistence.FetchType
 import jakarta.persistence.OneToMany
@@ -46,15 +46,17 @@ data class ProductEntity(
 
     fun updateUserEntity(productEntity: ProductEntity, request: ProductEntity) {
         request.id?.let { productEntity.id = it }
-        request.name?.let { productEntity.name = it }
-        request.price?.let { productEntity.price = it }
-        request.quantity?.let { productEntity.quantity = it }
+        request.name.let { productEntity.name = it }
+        request.price.let { productEntity.price = it }
+        request.quantity.let { productEntity.quantity = it }
+        request.idCategory?.let { productEntity.idCategory = it }
     }
 
     fun toListDTO(listEntity: List<ProductEntity>): List<ProductDTO> {
         var listDTO: MutableList<ProductDTO> = mutableListOf()
         listEntity.forEach {
-            listDTO.add(ProductDTO(
+            listDTO.add(
+                ProductDTO(
                     id = it.id,
                     name = it.name,
                     price = it.price,

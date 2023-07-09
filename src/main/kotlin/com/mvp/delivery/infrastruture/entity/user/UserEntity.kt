@@ -1,6 +1,6 @@
 package com.mvp.delivery.infrastruture.entity.user
 
-import com.mvp.delivery.domain.client.model.user.UserDTO
+import com.mvp.delivery.domain.model.user.UserDTO
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.CascadeType
 import jakarta.persistence.FetchType

@@ -1,6 +1,6 @@
 package com.mvp.delivery.application.user
 
-import com.mvp.delivery.domain.client.model.user.UserDTO
+import com.mvp.delivery.domain.model.user.UserDTO
 import com.mvp.delivery.helpers.UserMock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient

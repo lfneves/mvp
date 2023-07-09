@@ -1,8 +1,8 @@
 package com.mvp.delivery.application.order
 
-import com.mvp.delivery.domain.client.model.order.OrderDTO
-import com.mvp.delivery.domain.client.model.order.OrderRequestDTO
-import com.mvp.delivery.domain.client.model.order.OrderResponseDTO
+import com.mvp.delivery.domain.model.order.OrderDTO
+import com.mvp.delivery.domain.model.order.OrderRequestDTO
+import com.mvp.delivery.domain.model.order.OrderResponseDTO
 import com.mvp.delivery.helpers.OrderMock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient

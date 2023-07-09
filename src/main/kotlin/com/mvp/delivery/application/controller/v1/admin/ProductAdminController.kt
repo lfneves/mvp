@@ -1,11 +1,14 @@
 package com.mvp.delivery.application.controller.v1.admin
 
 
-import com.mvp.delivery.domain.admin.product.ProductAdminService
-import com.mvp.delivery.domain.client.model.product.ProductDTO
+import com.mvp.delivery.domain.service.admin.product.ProductAdminService
+import com.mvp.delivery.domain.model.product.CategoryDTO
+import com.mvp.delivery.domain.model.product.ProductDTO
+import com.mvp.delivery.domain.model.product.ProductRequestDTO
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -32,8 +35,8 @@ class ProductAdminController(private val productAdminService: ProductAdminServic
         tags = ["Administrador Produtos"]
     )
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProduct(@RequestBody productDTO: ProductDTO): Mono<ProductDTO> {
-        return productAdminService.saveProduct(productDTO)
+    fun createProduct(@RequestBody productDTO: ProductDTO): ResponseEntity<Mono<ProductDTO>> {
+        return ResponseEntity.ok(productAdminService.saveProduct(productDTO))
     }
 
     @PutMapping("/update/{id}")
@@ -43,8 +46,8 @@ class ProductAdminController(private val productAdminService: ProductAdminServic
         tags = ["Administrador Produtos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun updateProduct(@PathVariable id: Int, @RequestBody productDTO: ProductDTO): Mono<ProductDTO> {
-        return productAdminService.updateProduct(id, productDTO)
+    fun updateProduct(@PathVariable id: Int, @RequestBody productRequestDTO: ProductRequestDTO): ResponseEntity<Mono<ProductDTO>> {
+        return ResponseEntity.ok(productAdminService.updateProduct(id, productRequestDTO))
     }
 
     @DeleteMapping("/{id}")
@@ -54,7 +57,17 @@ class ProductAdminController(private val productAdminService: ProductAdminServic
         tags = ["Administrador Produtos"]
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteProduct(@PathVariable id: Int): Mono<Void> {
-        return productAdminService.deleteProductById(id)
+    fun deleteProduct(@PathVariable id: Int): ResponseEntity<Mono<Void>> {
+        return ResponseEntity.ok(productAdminService.deleteProductById(id))
+    }
+
+    @GetMapping("/get-all-category")
+    @Operation(
+        summary = "Busca todas categorias",
+        description = "Busca todas categorias cadastradas",
+        tags = ["Produtos"]
+    )
+    fun getAllCategory(): ResponseEntity<Flux<CategoryDTO>> {
+        return ResponseEntity.ok(productAdminService.getAllCategory())
     }
 }

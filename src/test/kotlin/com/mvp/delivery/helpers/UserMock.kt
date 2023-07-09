@@ -1,6 +1,6 @@
 package com.mvp.delivery.helpers
 
-import com.mvp.delivery.domain.client.model.user.UserDTO
+import com.mvp.delivery.domain.model.user.UserDTO
 import com.mvp.delivery.utils.Sha512PasswordEncoder
 
 object UserMock {

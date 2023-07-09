@@ -1,7 +1,7 @@
 package com.mvp.delivery.infrastruture.entity.order
 
-import com.mvp.delivery.domain.client.model.order.OrderProductDTO
-import com.mvp.delivery.domain.client.model.order.OrderProductResponseDTO
+import com.mvp.delivery.domain.model.order.OrderProductDTO
+import com.mvp.delivery.domain.model.order.OrderProductResponseDTO
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

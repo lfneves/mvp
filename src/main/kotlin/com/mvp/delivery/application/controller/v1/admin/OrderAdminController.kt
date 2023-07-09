@@ -1,8 +1,10 @@
 package com.mvp.delivery.application.controller.v1.admin
 
 
-import com.mvp.delivery.domain.admin.order.OrderAdminService
-import com.mvp.delivery.domain.client.model.order.*
+import com.mvp.delivery.domain.service.admin.order.OrderAdminService
+import com.mvp.delivery.domain.model.order.OrderDTO
+import com.mvp.delivery.domain.model.order.OrderFinishDTO
+import com.mvp.delivery.domain.model.order.OrderStatusDTO
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -23,8 +25,8 @@ class OrderAdminController(private val orderAdminService: OrderAdminService) {
         description = "Busca todos pedidos",
         tags = ["Admin Pedidos"]
     )
-    fun all(): Flux<OrderDTO> {
-        return orderAdminService.getOrders()
+    fun all(): ResponseEntity<Flux<OrderDTO>> {
+        return ResponseEntity.ok(orderAdminService.getOrders())
     }
 
     @get:GetMapping(path = ["/flux"], produces = [MediaType.APPLICATION_NDJSON_VALUE])
@@ -44,7 +46,7 @@ class OrderAdminController(private val orderAdminService: OrderAdminService) {
         description = "Altera o status do pedido exemplo: PENDING, PREPARING, PAID, FINISHED ",
         tags = ["Admin Pedidos"]
     )
-    suspend fun updateOrderStatus(@PathVariable id: Int, @RequestBody orderStatusDTO: OrderStatusDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
+    fun updateOrderStatus(@PathVariable id: Int, @RequestBody orderStatusDTO: OrderStatusDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
         return ResponseEntity.ok(orderAdminService.updateOrderStatus(id, orderStatusDTO, authentication))
     }
 
@@ -55,7 +57,7 @@ class OrderAdminController(private val orderAdminService: OrderAdminService) {
         tags = ["Admin Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun updateOrderFinishedAndStatus(@RequestBody orderFinishDTO: OrderFinishDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
+    fun updateOrderFinishedAndStatus(@RequestBody orderFinishDTO: OrderFinishDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
         return ResponseEntity.ok(orderAdminService.updateOrderFinishedAndStatus(orderFinishDTO, authentication))
     }
 }

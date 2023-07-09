@@ -1,7 +1,7 @@
 package com.mvp.delivery.application.security
 
-import com.mvp.delivery.domain.client.model.auth.AuthClientDTO
-import com.mvp.delivery.domain.client.model.auth.IAuthDTO
+import com.mvp.delivery.domain.model.auth.AuthClientDTO
+import com.mvp.delivery.domain.model.auth.IAuthDTO
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 

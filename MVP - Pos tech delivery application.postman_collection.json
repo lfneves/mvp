@@ -459,7 +459,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": " {\n        \"name\": \"Suco2\",\n        \"price\": 10000,\n        \"quantity\": 1,\n        \"idCategory\": 249,\n        \"category\": {\n            \"name\": \"Bebidas\",\n            \"description\": \"\"\n        }\n    }",
+													"raw": " {\n        \"name\": \"Suco2\",\n        \"price\": 10000,\n        \"quantity\": 1,\n        \"idCategory\": 1\n    }",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -479,6 +479,42 @@
 														"product",
 														"update",
 														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "busca todas categorias",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/admin/product/get-all-category",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"admin",
+														"product",
+														"get-all-category"
 													]
 												}
 											},
@@ -999,7 +1035,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"orderProductId\": [\n   1\n  ]\n}",
+											"raw": "{\n  \"orderProductId\": [\n   2\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"

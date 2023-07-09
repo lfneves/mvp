@@ -1,9 +1,8 @@
 package com.mvp.delivery.domain.configuration
 
-import com.mvp.delivery.domain.admin.product.ProductAdminService
-import com.mvp.delivery.domain.client.service.product.ProductService
-import com.mvp.delivery.domain.admin.user.UserAdminService
-import com.mvp.delivery.domain.client.service.user.UserService
+import com.mvp.delivery.domain.service.admin.product.ProductAdminService
+import com.mvp.delivery.domain.service.admin.user.UserAdminService
+import com.mvp.delivery.domain.service.client.user.UserService
 import com.mvp.delivery.infrastruture.entity.product.CategoryEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import com.mvp.delivery.infrastruture.entity.user.AddressEntity
@@ -17,11 +16,11 @@ import org.springframework.boot.CommandLineRunner
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
 
+// Start class for test create user, product and category on start application
 class ApplicationRunner: CommandLineRunner {
 
     @Autowired private lateinit var userService: UserService
     @Autowired private lateinit var userAdminService: UserAdminService
-    @Autowired private lateinit var productService: ProductService
     @Autowired private lateinit var productAdminService: ProductAdminService
     @Autowired private lateinit var categoryRepository: CategoryRepository
     @Autowired private lateinit var addressRepository: AddressRepository
@@ -52,7 +51,8 @@ class ApplicationRunner: CommandLineRunner {
             // save a initial products and category's
             Mono.just(
                 CategoryEntity(
-                    name = "Bebidas"
+                    name = "Bebidas",
+                    description = "Consumível líquido que possa ser comprado para consumo, como Água, Refrigerante, Cerveja entre outros."
                 )
             ).flatMap {
                 categoryRepository.save(it)
@@ -83,6 +83,7 @@ class ApplicationRunner: CommandLineRunner {
             Mono.just(
                 CategoryEntity(
                     name = "Lanche",
+                    description = "Refeição pronta para consumo que possa ser comprada como Hambuguer, Pizza, Sanduiche entre outros."
                 )
             ).flatMap { categoryEntity ->
                 categoryRepository.save(categoryEntity)
@@ -101,6 +102,7 @@ class ApplicationRunner: CommandLineRunner {
             Mono.just(
                 CategoryEntity(
                     name = "Sobremesa",
+                    description = "Algum doce, pode incluir bolos, tortas, sorvetes, pudins, entre outros."
                 )
             ).flatMap { categoryEntity ->
                 categoryRepository.save(categoryEntity)
@@ -119,6 +121,7 @@ class ApplicationRunner: CommandLineRunner {
             Mono.just(
                 CategoryEntity(
                     name = "Acompanhamento",
+                    description = "Todo e qualquer alimento de pequena média proporção que possa ser consumido com outras refeições."
                 )
             ).flatMap { categoryEntity ->
                 categoryRepository.save(categoryEntity)

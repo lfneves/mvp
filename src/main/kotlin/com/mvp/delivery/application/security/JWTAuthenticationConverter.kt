@@ -1,7 +1,7 @@
 package com.mvp.delivery.application.security
 
-import com.mvp.delivery.domain.client.model.auth.AuthApplicationDTO
-import com.mvp.delivery.domain.client.model.auth.IAuthDTO
+import com.mvp.delivery.domain.model.auth.AuthApplicationDTO
+import com.mvp.delivery.domain.model.auth.IAuthDTO
 import com.mvp.delivery.infrastruture.repository.auth.IApplicationSecretAuthorityRepository
 import com.mvp.delivery.utils.JWTUtils
 import org.springframework.beans.factory.annotation.Autowired

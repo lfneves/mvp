@@ -1,9 +1,9 @@
 package com.mvp.delivery.application.order
 
 import com.mvp.delivery.application.user.UserApplicationTest
-import com.mvp.delivery.domain.client.model.auth.AuthClientDTO
-import com.mvp.delivery.domain.client.service.order.OrderServiceImpl
-import com.mvp.delivery.domain.admin.user.UserAdminServiceImpl
+import com.mvp.delivery.domain.model.auth.AuthClientDTO
+import com.mvp.delivery.domain.service.client.order.OrderServiceImpl
+import com.mvp.delivery.domain.service.admin.user.UserAdminServiceImpl
 import com.mvp.delivery.domain.configuration.ApplicationRunner
 import com.mvp.delivery.helpers.OrderMock
 import com.mvp.delivery.helpers.UserMock

@@ -1,6 +1,6 @@
 package com.mvp.delivery.infrastruture.repository.order
 
-import com.mvp.delivery.domain.client.model.order.enums.OrderStatusEnum
+import com.mvp.delivery.domain.model.order.enums.OrderStatusEnum
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import com.mvp.delivery.infrastruture.entity.product.ProductEntity
 import org.springframework.data.r2dbc.repository.Query

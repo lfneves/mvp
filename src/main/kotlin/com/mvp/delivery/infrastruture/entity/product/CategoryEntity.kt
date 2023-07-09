@@ -1,6 +1,6 @@
 package com.mvp.delivery.infrastruture.entity.product
 
-import com.mvp.delivery.domain.client.model.product.CategoryDTO
+import com.mvp.delivery.domain.model.product.CategoryDTO
 import jakarta.persistence.CascadeType
 import jakarta.persistence.FetchType
 import jakarta.persistence.OneToMany

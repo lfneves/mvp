@@ -1,7 +1,7 @@
 package com.mvp.delivery.application.controller.v1.admin
 
-import com.mvp.delivery.domain.client.model.user.UserDTO
-import com.mvp.delivery.domain.admin.user.UserAdminService
+import com.mvp.delivery.domain.model.user.UserDTO
+import com.mvp.delivery.domain.service.admin.user.UserAdminService
 import io.swagger.v3.oas.annotations.Operation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

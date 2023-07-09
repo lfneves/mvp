@@ -1,7 +1,7 @@
 package com.mvp.delivery.infrastruture.entity.order
 
-import com.mvp.delivery.domain.client.model.order.OrderByIdResponseDTO
-import com.mvp.delivery.domain.client.model.order.OrderDTO
+import com.mvp.delivery.domain.model.order.OrderByIdResponseDTO
+import com.mvp.delivery.domain.model.order.OrderDTO
 import jakarta.persistence.CascadeType
 import jakarta.persistence.FetchType
 import jakarta.persistence.OneToMany
@@ -10,7 +10,6 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 

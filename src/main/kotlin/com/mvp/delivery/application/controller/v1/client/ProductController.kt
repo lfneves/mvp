@@ -1,9 +1,9 @@
 package com.mvp.delivery.application.controller.v1.client
 
 
-import com.mvp.delivery.domain.client.model.product.CategoryDTO
-import com.mvp.delivery.domain.client.model.product.ProductDTO
-import com.mvp.delivery.domain.client.service.product.ProductService
+import com.mvp.delivery.domain.model.product.CategoryDTO
+import com.mvp.delivery.domain.model.product.ProductDTO
+import com.mvp.delivery.domain.service.client.product.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*

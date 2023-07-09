@@ -1,8 +1,8 @@
 package com.mvp.delivery.application.controller.v1.client
 
 
-import com.mvp.delivery.domain.client.model.auth.AuthClientDTO
-import com.mvp.delivery.domain.client.model.auth.AuthTokenDTO
+import com.mvp.delivery.domain.model.auth.AuthClientDTO
+import com.mvp.delivery.domain.model.auth.AuthTokenDTO
 import com.mvp.delivery.utils.JWTUtils
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content

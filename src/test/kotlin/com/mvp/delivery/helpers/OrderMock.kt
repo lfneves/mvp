@@ -1,8 +1,8 @@
 package com.mvp.delivery.helpers
 
-import com.mvp.delivery.domain.client.model.order.OrderDTO
-import com.mvp.delivery.domain.client.model.order.OrderProductDTO
-import com.mvp.delivery.domain.client.model.order.OrderRequestDTO
+import com.mvp.delivery.domain.model.order.OrderDTO
+import com.mvp.delivery.domain.model.order.OrderProductDTO
+import com.mvp.delivery.domain.model.order.OrderRequestDTO
 import java.math.BigDecimal
 
 object OrderMock {

@@ -1,8 +1,8 @@
 package com.mvp.delivery.application.controller.v1.client
 
-import com.mvp.delivery.domain.client.model.user.UserDTO
-import com.mvp.delivery.domain.client.model.user.UsernameDTO
-import com.mvp.delivery.domain.client.service.user.UserService
+import com.mvp.delivery.domain.model.user.UserDTO
+import com.mvp.delivery.domain.model.user.UsernameDTO
+import com.mvp.delivery.domain.service.client.user.UserService
 import com.mvp.delivery.domain.exception.Exceptions
 import io.swagger.v3.oas.annotations.Operation
 import org.slf4j.Logger

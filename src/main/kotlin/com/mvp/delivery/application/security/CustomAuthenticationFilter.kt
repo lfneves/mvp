@@ -1,6 +1,6 @@
 package com.mvp.delivery.application.security
 
-import com.mvp.delivery.domain.client.service.auth.CustomReactiveAuthenticationManager
+import com.mvp.delivery.domain.service.client.auth.CustomReactiveAuthenticationManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
