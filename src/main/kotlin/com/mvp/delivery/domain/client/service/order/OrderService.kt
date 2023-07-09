@@ -22,5 +22,5 @@ interface OrderService {
 
     fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductResponseDTO>
 
-    fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void>
+    fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Boolean>
 }

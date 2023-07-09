@@ -32,6 +32,7 @@ data class OrderEntity(
             idClient = this.idClient,
             totalPrice = this.totalPrice,
             status = this.status,
+            waitingTime = this.waitingTime,
             isFinished = this.isFinished
         )
     }

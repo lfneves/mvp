@@ -108,6 +108,10 @@ class OrderServiceImpl(
         return orderRepository.findByUsername(authentication.iAuthDTO.username!!)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .flatMap {
+                logger.info(it.status + " " + OrderStatusEnum.PAID.value)
+                if(it.status == OrderStatusEnum.PAID.value) {
+                    return@flatMap Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_PAID_CONSTANT))
+                }
                 return@flatMap createOrder(orderRequestDTO, authentication)
             }
     }
@@ -118,7 +122,7 @@ class OrderServiceImpl(
 
     override fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductResponseDTO> {
        return orderProductRepository.findAllByIdOrderInfo(id)
-           .switchIfEmpty(Flux.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
+           .switchIfEmpty(Flux.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_PRODUCT_NOT_FOUND)))
            .map { it.toDTO() }
     }
 
@@ -137,7 +141,7 @@ class OrderServiceImpl(
             .flatMap { orderProductRepository.deleteById(listProductId) }
     }
 
-    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Void> {
+    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Boolean> {
         authentication as AuthenticationVO
         return orderRepository.findByUsername(authentication.iAuthDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
@@ -147,6 +151,6 @@ class OrderServiceImpl(
                 val z = ZoneId.of( "America/Sao_Paulo")
                 setStatus.waitingTime = ZonedDateTime.now(z).plusMinutes(randomMinutes).toLocalDateTime()
             }.flatMap(orderRepository::save)
-            .then()
+            .thenReturn(true)
     }
 }
