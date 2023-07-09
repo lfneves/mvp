@@ -162,7 +162,7 @@ http://localhost:8099/webjars/swagger-ui/index.html
 - [x] Improve README.md
 - [X] Update order add paid status and adjusting service
 - [x] Create checkout endpoint(simple version)
-- [ ] Add time wait Order after payment
+- [x] Add time wait Order after payment
 - ### Improvements
 - [x] Refactor admin services and repository to new package
 - [ ] Reduce endpoints path size

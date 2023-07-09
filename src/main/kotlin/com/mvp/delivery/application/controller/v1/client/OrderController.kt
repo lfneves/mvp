@@ -32,9 +32,9 @@ class OrderController(private val orderService: OrderService) {
         description = "Busca pedido por id",
         tags = ["Pedidos"]
     )
-    fun getOrderById(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
+    fun getOrderById(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<OrderByIdResponseDTO>> {
         return ResponseEntity.ok(orderService.getOrderById(id, authentication)
-            .defaultIfEmpty(OrderDTO())
+            .defaultIfEmpty(OrderByIdResponseDTO())
         )
     }
 

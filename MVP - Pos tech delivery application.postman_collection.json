@@ -203,7 +203,7 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/users/42",
+											"raw": "{{baseUrl}}/api/v1/users/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -211,7 +211,7 @@
 												"api",
 												"v1",
 												"users",
-												"42"
+												"1"
 											]
 										}
 									},
@@ -252,7 +252,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/users/update-user/83",
+											"raw": "{{baseUrl}}/api/v1/users/update-user/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -261,7 +261,7 @@
 												"v1",
 												"users",
 												"update-user",
-												"83"
+												"1"
 											]
 										}
 									},
@@ -418,7 +418,7 @@
 												"method": "DELETE",
 												"header": [],
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/admin/product/925",
+													"raw": "{{baseUrl}}/api/v1/admin/product/1",
 													"host": [
 														"{{baseUrl}}"
 													],
@@ -427,7 +427,7 @@
 														"v1",
 														"admin",
 														"product",
-														"925"
+														"1"
 													]
 												}
 											},
@@ -468,7 +468,7 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/admin/product/update/927",
+													"raw": "{{baseUrl}}/api/v1/admin/product/update/1",
 													"host": [
 														"{{baseUrl}}"
 													],
@@ -478,7 +478,7 @@
 														"admin",
 														"product",
 														"update",
-														"927"
+														"1"
 													]
 												}
 											},
@@ -507,7 +507,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/product/283",
+											"raw": "{{baseUrl}}/api/v1/product/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -515,7 +515,7 @@
 												"api",
 												"v1",
 												"product",
-												"283"
+												"1"
 											]
 										}
 									},
@@ -685,7 +685,7 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/api/v1/admin/order/update-order-status/23",
+													"raw": "{{baseUrl}}/api/v1/admin/order/update-order-status/1",
 													"host": [
 														"{{baseUrl}}"
 													],
@@ -695,7 +695,7 @@
 														"admin",
 														"order",
 														"update-order-status",
-														"23"
+														"1"
 													]
 												}
 											},
@@ -786,7 +786,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 303\n        }\n    ]\n}",
+											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 2\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -864,7 +864,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/all-products-by-order-id/23",
+											"raw": "{{baseUrl}}/api/v1/order/all-products-by-order-id/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -873,7 +873,7 @@
 												"v1",
 												"order",
 												"all-products-by-order-id",
-												"23"
+												"1"
 											]
 										}
 									},
@@ -905,7 +905,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 303\n        }\n    ]\n}",
+											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 2\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -999,7 +999,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"orderProductId\": [\n    3, 2\n  ]\n}",
+											"raw": "{\n  \"orderProductId\": [\n   1\n  ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"

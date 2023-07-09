@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono
 interface OrderRepository : ReactiveCrudRepository<OrderEntity?, Long?> {
 
     @Query("""
-        SELECT tb_order.id, id_client, SUM(price) AS total_price, status, is_finished
+        SELECT tb_order.id, id_client, SUM(price) AS total_price, status, is_finished, waiting_time
          FROM tb_order 
          INNER JOIN tb_client ON tb_client.id = tb_order.id_client
          INNER JOIN tb_order_product ON tb_order_product.id_order = tb_order.id
@@ -43,7 +43,7 @@ interface OrderRepository : ReactiveCrudRepository<OrderEntity?, Long?> {
     fun saveFirstOrder(username: String?, orderEntity: OrderEntity): Mono<ProductEntity>
 
     @Query("""
-        SELECT tb_order.id, id_client, SUM(price) AS total_price, status, is_finished
+        SELECT tb_order.id, id_client, SUM(price) AS total_price, status, is_finished, waiting_time
          FROM tb_order 
          INNER JOIN tb_client ON tb_client.id = tb_order.id_client
          INNER JOIN tb_order_product ON tb_order_product.id_order = tb_order.id

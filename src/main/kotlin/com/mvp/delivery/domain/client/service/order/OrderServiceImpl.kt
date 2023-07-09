@@ -24,6 +24,11 @@ import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
+import java.sql.Date
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import kotlin.random.Random
 
 @Service
 class OrderServiceImpl(
@@ -35,10 +40,10 @@ class OrderServiceImpl(
 ): OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
 
-    override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderDTO> {
+    override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderByIdResponseDTO> {
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
-            .map { it.toDTO() }
+            .map { it.toResponseDTO() }
     }
 
     override fun saveInitialOrders(order: OrderDTO, authentication: Authentication): Mono<OrderDTO> {
@@ -138,8 +143,10 @@ class OrderServiceImpl(
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .doOnNext { setStatus ->
                 setStatus.status = OrderStatusEnum.PAID.value
-            }.onErrorMap { Exceptions.BadStatusException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND) }
-            .flatMap(orderRepository::save)
+                val randomMinutes = (20..75).random().toLong()
+                val z = ZoneId.of( "America/Sao_Paulo")
+                setStatus.waitingTime = ZonedDateTime.now(z).plusMinutes(randomMinutes).toLocalDateTime()
+            }.flatMap(orderRepository::save)
             .then()
     }
 }

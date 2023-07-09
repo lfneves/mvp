@@ -1,5 +1,6 @@
 package com.mvp.delivery.infrastruture.entity.order
 
+import com.mvp.delivery.domain.client.model.order.OrderByIdResponseDTO
 import com.mvp.delivery.domain.client.model.order.OrderDTO
 import jakarta.persistence.CascadeType
 import jakarta.persistence.FetchType
@@ -8,15 +9,21 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @Table("tb_order")
-data class OrderEntity (
+data class OrderEntity(
     @Id
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = [CascadeType.PERSIST])
     var id: Long? = null,
     @Column("id_client") var idClient: Int? = null,
     @Column("total_price") var totalPrice: BigDecimal = BigDecimal.ZERO,
     @Column("status") var status: String = "",
+    @Column("waiting_time")
+    var waitingTime: LocalDateTime = ZonedDateTime.now(ZoneId.of( "America/Sao_Paulo")).toLocalDateTime(),
     @Column("is_finished") var isFinished: Boolean = false
 ) {
     fun toDTO(): OrderDTO {
@@ -25,6 +32,17 @@ data class OrderEntity (
             idClient = this.idClient,
             totalPrice = this.totalPrice,
             status = this.status,
+            isFinished = this.isFinished
+        )
+    }
+
+    fun toResponseDTO(): OrderByIdResponseDTO {
+        return OrderByIdResponseDTO(
+            id = this.id,
+            idClient = this.idClient,
+            totalPrice = this.totalPrice,
+            status = this.status,
+            waitingTime = this.waitingTime,
             isFinished = this.isFinished
         )
     }

@@ -43,6 +43,7 @@ CREATE TABLE tb_order
     id_client           INTEGER REFERENCES tb_client(id) NOT NULL,
     total_price         NUMERIC NOT NULL,
     status              VARCHAR(50) NULL,
+    waiting_time        TIMESTAMP NULL,
     is_finished         BOOLEAN DEFAULT FALSE,
     dh_insert TIMESTAMP DEFAULT NOW()
 );

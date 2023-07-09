@@ -32,7 +32,12 @@ class ProductServiceImpl(
     override fun getProductById(id: Int): Mono<ProductDTO> {
         return productRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_PRODUCT_NOT_FOUND)))
-            .map { it.toDTO() }
+            .flatMap{ product ->
+                categoryRepository.findById(product?.idCategory!!)
+                    .map { category ->
+                        return@map product.toDTO(category?.toDTO())
+                    }
+            }
     }
 
     @CachePut(cacheNames = ["productsCache"])

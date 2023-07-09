@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 
 interface OrderService {
 
-    fun getOrderById(id: Int, authentication: Authentication): Mono<OrderDTO>
+    fun getOrderById(id: Int, authentication: Authentication): Mono<OrderByIdResponseDTO>
 
     fun createOrder(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO>
 
