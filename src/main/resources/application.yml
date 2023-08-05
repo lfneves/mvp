@@ -17,3 +17,13 @@ logging:
     root:
       org.springframework.web: "debug"
       org.hibernate: "debug"
+
+datasource:
+  protocol: "postgresql"
+  host: "${POSTGRES_HOST}"
+  port: "${POSTGRES_PORT}"
+  database: "delivery-mvp"
+  read-only: true
+  pool:
+    min-connections: 1
+    max-connections: 3
