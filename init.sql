@@ -1,5 +1,4 @@
-CREATE TABLE tb_address
-(
+CREATE TABLE IF NOT EXISTS tb_address (
     id       SERIAL PRIMARY KEY,
     street   VARCHAR(50) NULL,
     city     VARCHAR(50) NULL,
@@ -8,8 +7,7 @@ CREATE TABLE tb_address
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE tb_client
-(
+CREATE TABLE IF NOT EXISTS tb_client (
     id         SERIAL PRIMARY KEY,
     password   VARCHAR(500) NOT NULL,
     email      VARCHAR(50) NULL,
@@ -19,16 +17,14 @@ CREATE TABLE tb_client
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE tb_category
-(
+CREATE TABLE IF NOT EXISTS tb_category (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(250) NOT NULL,
     description VARCHAR(250) NULL,
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE tb_product
-(
+CREATE TABLE IF NOT EXISTS tb_product (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR NOT NULL,
     price       NUMERIC NOT NULL,
@@ -37,8 +33,7 @@ CREATE TABLE tb_product
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE tb_order
-(
+CREATE TABLE IF NOT EXISTS tb_order (
     id                  SERIAL  PRIMARY KEY,
     id_client           INTEGER REFERENCES tb_client(id) NOT NULL,
     total_price         NUMERIC NOT NULL,
@@ -48,8 +43,7 @@ CREATE TABLE tb_order
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE tb_order_product
-(
+CREATE TABLE IF NOT EXISTS tb_order_product (
     id                  SERIAL  PRIMARY KEY,
     id_product          INTEGER REFERENCES tb_product(id),
     id_order            INTEGER REFERENCES tb_order(id)

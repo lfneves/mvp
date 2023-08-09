@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name:  delivery
-          image: lfneves/delivery-mvp:0.0.1
+          image: lfneves/delivery-mvp:0.0.6
           ports:
             - containerPort: 8099
           env:
@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: db-secret-credentials
-                  key: postgres_password
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:

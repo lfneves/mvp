@@ -22,7 +22,7 @@ datasource:
   protocol: "postgresql"
   host: "${POSTGRES_HOST}"
   port: "${POSTGRES_PORT}"
-  database: "delivery-mvp"
+  database: "delivery_database_1"
   read-only: true
   pool:
     min-connections: 1
