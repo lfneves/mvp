@@ -3,6 +3,7 @@ package com.mvp.delivery.domain.configuration
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
 import io.r2dbc.postgresql.PostgresqlConnectionFactory
 import io.r2dbc.spi.ConnectionFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration
@@ -11,16 +12,31 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
 @Configuration
 @EnableR2dbcRepositories
 class DatabaseConfig : AbstractR2dbcConfiguration() {
+
+    @Value("\${datasource.host}")
+    private val host: String? = null
+
+    @Value("\${datasource.port}")
+    private val port: Int? = null
+
+    @Value("\${datasource.user}")
+    private val user: String? = null
+
+    @Value("\${datasource.password}")
+    private val password: String? = null
+
+    @Value("\${datasource.database}")
+    private val database: String? = null
+
     @Bean
     override fun connectionFactory(): ConnectionFactory {
         return PostgresqlConnectionFactory(
             PostgresqlConnectionConfiguration.builder()
-                .host("db")
-                //.host("127.0.0.1")
-                .port(5432)
-                .username("postgres")
-                .password("postgres")
-                .database("delivery_database_1")
+                .host(host!!)
+                .port(port!!)
+                .username(user!!)
+                .password(password)
+                .database(database)
                 .build()
         )
     }
