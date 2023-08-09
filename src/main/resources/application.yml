@@ -21,9 +21,10 @@ logging:
 datasource:
   protocol: "postgresql"
   host: "${POSTGRES_HOST}"
-  port: "${POSTGRES_PORT}"
-  database: "delivery_database_1"
-  read-only: true
+  port: "${POSTGRES_PORT:5432}"
+  database: "${POSTGRES_DB}"
+  user: "${POSTGRES_USER}"
+  password: "${POSTGRES_PASSWORD}"
   pool:
     min-connections: 1
-    max-connections: 3
+    max-connections: 30
