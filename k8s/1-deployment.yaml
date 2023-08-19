@@ -41,5 +41,9 @@ spec:
                 configMapKeyRef:
                   name: db-secret-credentials
                   key: POSTGRES_HOST
+          resources:
+            requests:
+              cpu: 20m
+              memory: 500Mi
       imagePullSecrets:
         - name: secret-dockerhub
