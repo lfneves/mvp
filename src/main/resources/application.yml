@@ -19,12 +19,11 @@ logging:
       org.hibernate: "debug"
 
 datasource:
-  protocol: "postgresql"
-  host: "${POSTGRES_HOST}"
+  host: "${POSTGRES_HOST:db}"
   port: "${POSTGRES_PORT:5432}"
-  database: "${POSTGRES_DB}"
-  user: "${POSTGRES_USER}"
-  password: "${POSTGRES_PASSWORD}"
+  database: "${POSTGRES_DB:delivery_database_1}"
+  user: "${POSTGRES_USER:postgres}"
+  password: "${POSTGRES_PASSWORD:postgres}"
   pool:
     min-connections: 1
     max-connections: 30
