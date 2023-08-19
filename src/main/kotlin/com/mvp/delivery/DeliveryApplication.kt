@@ -17,9 +17,4 @@ class DeliveryApplication {
             SpringApplication.run(DeliveryApplication::class.java, *args)
         }
     }
-
-    @Bean
-    fun applicationStartupRunner(): ApplicationRunner? {
-        return ApplicationRunner()
-    }
 }
