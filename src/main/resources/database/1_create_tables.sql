@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS tb_client (
 
 CREATE TABLE IF NOT EXISTS tb_category (
     id          SERIAL PRIMARY KEY,
-    name        VARCHAR(250) NOT NULL,
+    name        VARCHAR(250) NOT NULL UNIQUE,
     description VARCHAR(250) NULL,
     dh_insert TIMESTAMP DEFAULT NOW()
 );
