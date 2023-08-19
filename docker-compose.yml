@@ -29,6 +29,7 @@ services:
 
   database:
     image: 'postgres:latest'
+#    restart: always
     container_name: 'db'
     expose:
       - '5432'
@@ -40,7 +41,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: delivery_database_1
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/resources/database/1_create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
+      - ./src/main/resources/database/2_inserts_category.sql:/docker-entrypoint-initdb.d/2_inserts_category.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 1s
