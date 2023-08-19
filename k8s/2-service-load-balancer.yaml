@@ -4,8 +4,8 @@ metadata:
   name: delivery
   labels:
     app: delivery
-  annotations:
-    kubernetes.io/ingress.class: alb
+#  annotations:
+#    kubernetes.io/ingress.class: alb
 spec:
   selector:
     app: delivery
