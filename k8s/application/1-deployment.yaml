@@ -23,24 +23,29 @@ spec:
           env:
             - name: POSTGRES_USER
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: db-secret-credentials
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: db-secret-credentials
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
-                  name: db-secret-credentials
+                  name: db-config-map
                   key: POSTGRES_DB
             - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: db-secret-credentials
+                  name: db-config-map
                   key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: POSTGRES_PORT
           resources:
             requests:
               cpu: 20m

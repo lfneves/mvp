@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: postgresdb
-          image: postgres:latest
-          imagePullPolicy: IfNotPresent
+          image: postgres:15.4
+          imagePullPolicy: Always
           lifecycle:
             postStart:
               exec:
