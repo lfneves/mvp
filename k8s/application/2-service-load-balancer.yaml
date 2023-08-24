@@ -12,7 +12,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: http
-      port: 8099
+      port: 80
       targetPort: 8099
       nodePort: 32000
       protocol: TCP
