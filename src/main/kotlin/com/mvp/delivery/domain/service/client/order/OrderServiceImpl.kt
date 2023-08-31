@@ -9,6 +9,7 @@ import com.mvp.delivery.domain.service.client.product.ProductServiceImpl
 import com.mvp.delivery.domain.service.client.user.UserServiceImpl
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.domain.model.order.*
+import com.mvp.delivery.domain.model.order.payment.OrderQrsDTO
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
 import com.mvp.delivery.infrastruture.repository.order.OrderProductRepository
@@ -24,8 +25,6 @@ import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 @Service
 class OrderServiceImpl(
@@ -33,14 +32,19 @@ class OrderServiceImpl(
     private val authValidatorService: AuthValidatorService,
     private val userService: UserServiceImpl,
     private val orderProductRepository: OrderProductRepository,
-    private val productService: ProductServiceImpl
+    private val productService: ProductServiceImpl,
+    private val orderMPservice:  OrderMPService
 ): OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
 
     override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderByIdResponseDTO> {
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
-            .map { it.toResponseDTO() }
+            .map {
+                val orderResponse = it.toResponseDTO()
+                orderResponse.products = getAllOrderProductsByIdOrder(it.id!!, authentication)
+                orderResponse
+            }
     }
 
     override fun saveInitialOrders(order: OrderDTO, authentication: Authentication): Mono<OrderDTO> {
@@ -138,16 +142,12 @@ class OrderServiceImpl(
             .flatMap { orderProductRepository.deleteById(listProductId) }
     }
 
-    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Boolean> {
+    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<String> {
         authentication as AuthenticationVO
         return orderRepository.findByUsername(authentication.iAuthDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
-            .doOnNext { setStatus ->
-                setStatus.status = OrderStatusEnum.PAID.value
-                val randomMinutes = (20..75).random().toLong()
-                val z = ZoneId.of( "America/Sao_Paulo")
-                setStatus.waitingTime = ZonedDateTime.now(z).plusMinutes(randomMinutes).toLocalDateTime()
-            }.flatMap(orderRepository::save)
-            .thenReturn(true)
+            .flatMap {
+                orderMPservice.gerateOrderQrs(OrderQrsDTO().orderCheckoutGerateQrs(it.toResponseDTO()))
+            }
     }
 }

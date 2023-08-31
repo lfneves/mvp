@@ -1,5 +1,7 @@
 server:
   port: 8099
+  servlet:
+    contextPath: /
   error:
     include-message: always
 
@@ -8,6 +10,10 @@ spring-doc:
     path: /swagger-ui.html
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
+  webflux:
+    base-path: /
   docker:
     compose:
       file: "docker-compose.yml"
@@ -27,3 +33,13 @@ datasource:
   pool:
     min-connections: 1
     max-connections: 30
+
+order:
+  mp-api:
+    token: "${TOKEN_API:Bearer TEST-29597298295284-083000-fcac7f6198671d6a6b16cdeecc34c787-170225675}"
+    userId: "${USER_ID:170225675}"
+    sponsorId: "S{SPONSOR_ID:57174696}"
+    url: "https://api.mercadopago.com/"
+    notificationUrl: "${NOTIFICATION_URL:https://webhook.site/3a01d6b2-7c0c-4c45-a5c7-5b305a11a3a8}"
+  api-endpoints:
+    qrs: "instore/orders/qr/seller/collectors/?/pos/?/qrs"

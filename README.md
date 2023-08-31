@@ -54,20 +54,14 @@ Check versions
 This is an example of how to use the software and how to install them.
 
 Main project directory
-* Gradle
-  ```sh
-  ./gradlew clean
-  ./gradlew bootJar
-  
-  or 
-  
-  ./gradlew clean bootJar
-  ```
+
   
   Docker build and start applications
-    ```sh
+  ```sh
   docker-compose up --build
+  
    or
+   
   docker-compose up -d --build
   ```
 

@@ -13,6 +13,8 @@ data class OrderDTO(
     var status: String = "",
     var waitingTime: LocalDateTime = ZonedDateTime.now(ZoneId.of( "America/Sao_Paulo")).toLocalDateTime(),
     var isFinished: Boolean = false,
+    var notificationUrl: String = "",
+    var tokenMP: String = ""
 ) {
     fun toEntity(): OrderEntity{
         return OrderEntity(

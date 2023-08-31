@@ -21,6 +21,7 @@ dependencies {
 	//Spring
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:3.1.1")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.1")
+	implementation("org.springframework.boot:spring-boot-starter-tomcat:3.1.1")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.1")
 	implementation("org.springframework.boot:spring-boot-starter-security:3.1.1")
 	implementation("org.springframework.session:spring-session-core:3.1.1")
@@ -40,7 +41,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.1")
 
 	// Mercado Pago SDK
-	//implementation("com.mercadopago:sdk-java:2.1.11")
+	implementation("com.mercadopago:sdk-java:2.1.14")
 
 	// Test dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")

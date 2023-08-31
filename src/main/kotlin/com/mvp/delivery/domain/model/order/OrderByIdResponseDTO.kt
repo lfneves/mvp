@@ -1,6 +1,7 @@
 package com.mvp.delivery.domain.model.order
 
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
+import reactor.core.publisher.Flux
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -14,6 +15,8 @@ data class OrderByIdResponseDTO(
     var status: String = "",
     var waitingTime: LocalDateTime = ZonedDateTime.now(ZoneId.of( "America/Sao_Paulo")).toLocalDateTime(),
     var isFinished: Boolean = false,
+    var notificationUrl: String = "",
+    var products: Flux<OrderProductResponseDTO> = Flux.empty()
 ) {
     fun toEntity(): OrderEntity {
         return OrderEntity(

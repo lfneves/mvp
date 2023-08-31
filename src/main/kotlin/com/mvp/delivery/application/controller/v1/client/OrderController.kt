@@ -91,7 +91,7 @@ class OrderController(private val orderService: OrderService) {
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<Boolean>> {
+    fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<String>> {
         return ResponseEntity.ok(orderService.checkoutOrder(orderCheckoutDTO, authentication))
     }
 }
