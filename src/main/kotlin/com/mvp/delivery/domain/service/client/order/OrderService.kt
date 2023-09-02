@@ -1,6 +1,7 @@
 package com.mvp.delivery.domain.service.client.order
 
 import com.mvp.delivery.domain.model.order.*
+import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import com.mvp.delivery.domain.model.product.ProductRemoveOrderDTO
 import org.springframework.security.core.Authentication
 import reactor.core.publisher.Flux
@@ -8,7 +9,7 @@ import reactor.core.publisher.Mono
 
 interface OrderService {
 
-    fun getOrderById(id: Int, authentication: Authentication): Mono<OrderByIdResponseDTO>
+    fun getOrderById(id: Long, authentication: Authentication): Mono<OrderByIdResponseDTO>
 
     fun createOrder(orderRequestDTO: OrderRequestDTO, authentication: Authentication): Mono<OrderResponseDTO>
 
@@ -22,5 +23,5 @@ interface OrderService {
 
     fun getAllOrderProductsByIdOrder(id: Long, authentication: Authentication): Flux<OrderProductResponseDTO>
 
-    fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<String>
+    fun checkoutOrder(authentication: Authentication): Mono<QrDataDTO>
 }

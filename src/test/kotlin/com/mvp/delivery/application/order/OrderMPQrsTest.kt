@@ -1,18 +1,18 @@
 package com.mvp.delivery.application.order
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.mvp.delivery.domain.model.order.payment.CashOutDTO
-import com.mvp.delivery.domain.model.order.payment.ItemDTO
-import com.mvp.delivery.domain.model.order.payment.OrderQrsDTO
-import com.mvp.delivery.domain.model.order.payment.SponsorDTO
-import com.mvp.delivery.helpers.OrderMock
+import com.mvp.delivery.domain.model.order.store.CashOutDTO
+import com.mvp.delivery.domain.model.order.store.ItemDTO
+import com.mvp.delivery.domain.model.order.store.OrderQrsDTO
+import com.mvp.delivery.domain.model.order.store.SponsorDTO
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 
 class OrderMPQrsTest {
+
+    private val TEST_MP_TOKEN = "Bearer TEST-29597298295284-083000-fcac7f6198671d6a6b16cdeecc34c787-170225675"
 
     @Value("\${order.mp-api.user-id}")
     private val userID: Long? = null
@@ -62,7 +62,7 @@ class OrderMPQrsTest {
             val client = WebClient.create()
             val responseSpec = client.put()
                 .uri("https://api.mercadopago.com/instore/orders/qr/seller/collectors/170225675/pos/170225675/qrs")
-                .header("Authorization", OrderMock.mockOrder().tokenMP)
+                .header("Authorization", TEST_MP_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(mapper.writeValueAsString(orderQrsDTO))
@@ -84,7 +84,7 @@ class OrderMPQrsTest {
             val client = WebClient.create()
             val responseSpec = client.put()
                 .uri("https://api.mercadopago.com/instore/orders/qr/seller/collectors/170225675/pos/170225675/qrs")
-                .header("Authorization", OrderMock.mockOrder().tokenMP)
+                .header("Authorization", TEST_MP_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(fileContent!!)

@@ -21,7 +21,8 @@ data class OrderProductResponseDTO(
     var id: Long? = null,
     var idProduct: Long? = null,
     var idOrder: Long? = null,
-    var name: String? = null,
+    var productName: String? = null,
+    var categoryName: String? = null,
     var price: BigDecimal = BigDecimal.ZERO
 ) {
     fun toEntity() : OrderProductEntity {

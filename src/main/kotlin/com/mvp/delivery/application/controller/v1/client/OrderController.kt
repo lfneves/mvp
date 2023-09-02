@@ -4,6 +4,7 @@ package com.mvp.delivery.application.controller.v1.client
 import com.mvp.delivery.domain.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.service.client.order.OrderService
 import com.mvp.delivery.domain.model.order.*
+import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -32,7 +33,7 @@ class OrderController(private val orderService: OrderService) {
         description = "Busca pedido por id",
         tags = ["Pedidos"]
     )
-    fun getOrderById(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<OrderByIdResponseDTO>> {
+    fun getOrderById(@PathVariable id: Long, authentication: Authentication): ResponseEntity<Mono<OrderByIdResponseDTO>> {
         return ResponseEntity.ok(orderService.getOrderById(id, authentication)
             .defaultIfEmpty(OrderByIdResponseDTO())
         )
@@ -84,14 +85,25 @@ class OrderController(private val orderService: OrderService) {
         return ResponseEntity.ok(orderService.deleteOrderProductById(productRemoveOrderDTO, authentication))
     }
 
-    @PutMapping("/fake-checkout")
+    @PostMapping("/qr-code-checkout")
     @Operation(
         summary = "Efetua o pagamento atualizando os status",
         description = "Efetua o pagamento atualizando os status",
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<String>> {
-        return ResponseEntity.ok(orderService.checkoutOrder(orderCheckoutDTO, authentication))
+    fun checkoutOrder(authentication: Authentication): ResponseEntity<Mono<QrDataDTO>> {
+        return ResponseEntity.ok(orderService.checkoutOrder(authentication))
+    }
+
+    @PutMapping("/webhook")
+    @Operation(
+        summary = "Recebe chamadas do Mercado Pago",
+        description = "Efetua atualiza o status de pagamento",
+        tags = ["Pedidos"]
+    )
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun handlerWebHook(@RequestBody payload: String): ResponseEntity<Any> {
+        return ResponseEntity.ok().build()
     }
 }

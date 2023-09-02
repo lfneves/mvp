@@ -2,6 +2,7 @@ package com.mvp.delivery.domain.service.client.order
 
 import com.mvp.delivery.domain.configuration.OrderEndpointPropertyConfiguration
 import com.mvp.delivery.domain.configuration.OrderPropertyConfiguration
+import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -14,7 +15,7 @@ class OrderMPServiceImpl(
     private val orderEndpointPropertyConfiguration: OrderEndpointPropertyConfiguration
 ): OrderMPService {
 
-    override fun gerateOrderQrs(requestBody: String): Mono<String> {
+    override fun generateOrderQrs(requestBody: String): Mono<QrDataDTO> {
         val client = WebClient.create()
         val endpoint = orderEndpointPropertyConfiguration.qrs.replace("?", orderPropertyConfiguration.userId)
         val requestUrl = orderPropertyConfiguration.url + endpoint
@@ -23,11 +24,10 @@ class OrderMPServiceImpl(
             .header("Authorization", orderPropertyConfiguration.token)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .bodyValue(requestBody!!)
+            .bodyValue(requestBody)
             .retrieve()
-            .bodyToMono(String::class.java)
+            .bodyToMono(QrDataDTO::class.java)
 
-        println(responseSpec)
-        return responseSpec.toMono()
+        return responseSpec
     }
 }

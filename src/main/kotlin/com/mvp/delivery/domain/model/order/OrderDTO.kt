@@ -12,9 +12,7 @@ data class OrderDTO(
     var totalPrice: BigDecimal = BigDecimal.ZERO,
     var status: String = "",
     var waitingTime: LocalDateTime = ZonedDateTime.now(ZoneId.of( "America/Sao_Paulo")).toLocalDateTime(),
-    var isFinished: Boolean = false,
-    var notificationUrl: String = "",
-    var tokenMP: String = ""
+    var isFinished: Boolean = false
 ) {
     fun toEntity(): OrderEntity{
         return OrderEntity(

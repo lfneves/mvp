@@ -27,7 +27,6 @@ object OrderMock {
         idClient = TEST_CLIENT_ID,
         totalPrice = TEST_TOTAL_PRICE,
         status = TEST_STATUS,
-        isFinished = TEST_FINISHED_FALSE,
-        tokenMP = TEST_MP_TOKEN
+        isFinished = TEST_FINISHED_FALSE
     )
 }

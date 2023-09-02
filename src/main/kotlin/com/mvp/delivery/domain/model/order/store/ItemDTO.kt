@@ -1,4 +1,4 @@
-package com.mvp.delivery.domain.model.order.payment
+package com.mvp.delivery.domain.model.order.store
 
 data class ItemDTO(
     val category: String,

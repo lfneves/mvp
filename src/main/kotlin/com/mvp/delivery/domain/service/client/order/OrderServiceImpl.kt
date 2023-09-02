@@ -9,7 +9,8 @@ import com.mvp.delivery.domain.service.client.product.ProductServiceImpl
 import com.mvp.delivery.domain.service.client.user.UserServiceImpl
 import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.domain.model.order.*
-import com.mvp.delivery.domain.model.order.payment.OrderQrsDTO
+import com.mvp.delivery.domain.model.order.store.OrderQrsDTO
+import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
 import com.mvp.delivery.infrastruture.repository.order.OrderProductRepository
@@ -37,13 +38,17 @@ class OrderServiceImpl(
 ): OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
 
-    override fun getOrderById(id: Int, authentication: Authentication): Mono<OrderByIdResponseDTO> {
+    override fun getOrderById(id: Long, authentication: Authentication): Mono<OrderByIdResponseDTO> {
         return orderRepository.findById(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
-            .map {
-                val orderResponse = it.toResponseDTO()
-                orderResponse.products = getAllOrderProductsByIdOrder(it.id!!, authentication)
-                orderResponse
+            .flatMap { it?.toResponseDTO().toMono() }
+            .flatMap { order ->
+                orderProductRepository.findAllByIdOrderInfo(order.id!!)
+                    .collectList()
+                    .flatMap {
+                        order.products.addAll(it)
+                        order.toMono()
+                    }.then(Mono.just(order))
             }
     }
 
@@ -142,12 +147,19 @@ class OrderServiceImpl(
             .flatMap { orderProductRepository.deleteById(listProductId) }
     }
 
-    override fun checkoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<String> {
+    override fun checkoutOrder(authentication: Authentication): Mono<QrDataDTO> {
         authentication as AuthenticationVO
         return orderRepository.findByUsername(authentication.iAuthDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .flatMap {
-                orderMPservice.gerateOrderQrs(OrderQrsDTO().orderCheckoutGerateQrs(it.toResponseDTO()))
+                getOrderById(it.id!!, authentication)
+                    .flatMap {
+                        Mono.just(OrderQrsDTO().orderCheckoutGenerateQrs(it))
+                    }.map { jsonRequest ->
+                        jsonRequest
+                    }
+            }.flatMap {
+                orderMPservice.generateOrderQrs(it)
             }
     }
 }
