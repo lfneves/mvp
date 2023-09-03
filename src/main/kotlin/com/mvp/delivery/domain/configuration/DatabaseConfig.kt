@@ -32,8 +32,8 @@ class DatabaseConfig : AbstractR2dbcConfiguration() {
     override fun connectionFactory(): ConnectionFactory {
         return PostgresqlConnectionFactory(
             PostgresqlConnectionConfiguration.builder()
-//                .host(host!!)
-                .host("localhost")
+                .host(host!!)
+                //.host("localhost")
                 .port(port!!)
                 .username(user!!)
                 .password(password)
