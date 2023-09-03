@@ -1,10 +1,9 @@
 package com.mvp.delivery.application.controller.v1.client
 
 
+import com.mvp.delivery.domain.model.order.*
 import com.mvp.delivery.domain.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.service.client.order.OrderService
-import com.mvp.delivery.domain.model.order.*
-import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -70,7 +69,7 @@ class OrderController(private val orderService: OrderService) {
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun deleteOrder(@PathVariable id: Int, authentication: Authentication): ResponseEntity<Mono<Void>> {
+    fun deleteOrder(@PathVariable id: Long, authentication: Authentication): ResponseEntity<Mono<Void>> {
         return ResponseEntity.ok(orderService.deleteOrderById(id, authentication))
     }
 
@@ -85,25 +84,14 @@ class OrderController(private val orderService: OrderService) {
         return ResponseEntity.ok(orderService.deleteOrderProductById(productRemoveOrderDTO, authentication))
     }
 
-    @PostMapping("/qr-code-checkout")
+    @PutMapping("/fake-checkout")
     @Operation(
         summary = "Efetua o pagamento atualizando os status",
         description = "Efetua o pagamento atualizando os status",
         tags = ["Pedidos"]
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun checkoutOrder(authentication: Authentication): ResponseEntity<Mono<QrDataDTO>> {
-        return ResponseEntity.ok(orderService.checkoutOrder(authentication))
-    }
-
-    @PutMapping("/webhook")
-    @Operation(
-        summary = "Recebe chamadas do Mercado Pago",
-        description = "Efetua atualiza o status de pagamento",
-        tags = ["Pedidos"]
-    )
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun handlerWebHook(@RequestBody payload: String): ResponseEntity<Any> {
-        return ResponseEntity.ok().build()
+    fun checkoutOrder(@RequestBody orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): ResponseEntity<Mono<Boolean>> {
+        return ResponseEntity.ok(orderService.fakeCheckoutOrder(orderCheckoutDTO, authentication))
     }
 }

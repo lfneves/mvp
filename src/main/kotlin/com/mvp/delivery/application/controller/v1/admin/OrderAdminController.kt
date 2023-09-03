@@ -46,7 +46,7 @@ class OrderAdminController(private val orderAdminService: OrderAdminService) {
         description = "Altera o status do pedido exemplo: PENDING, PREPARING, PAID, FINISHED ",
         tags = ["Admin Pedidos"]
     )
-    fun updateOrderStatus(@PathVariable id: Int, @RequestBody orderStatusDTO: OrderStatusDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
+    fun updateOrderStatus(@PathVariable id: Long, @RequestBody orderStatusDTO: OrderStatusDTO, authentication: Authentication): ResponseEntity<Mono<OrderDTO>> {
         return ResponseEntity.ok(orderAdminService.updateOrderStatus(id, orderStatusDTO, authentication))
     }
 

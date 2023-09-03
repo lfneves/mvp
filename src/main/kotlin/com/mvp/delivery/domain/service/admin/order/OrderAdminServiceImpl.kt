@@ -20,8 +20,8 @@ class OrderAdminServiceImpl(
 ): OrderAdminService {
     var logger: Logger = LoggerFactory.getLogger(OrderAdminServiceImpl::class.java)
 
-    override fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO> {
-        return orderRepository.findById(id)
+    override fun updateOrderStatus(id: Long, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO> {
+        return orderRepository.findByIdOrder(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .doOnNext { setStatus ->
                 setStatus.status = OrderStatusEnum.valueOf(orderStatusDTO.status).value
@@ -31,7 +31,7 @@ class OrderAdminServiceImpl(
     }
 
     override fun updateOrderFinishedAndStatus(orderFinishDTO: OrderFinishDTO, authentication: Authentication): Mono<OrderDTO> {
-        return orderRepository.findById(orderFinishDTO.idOrder.toInt())
+        return orderRepository.findByIdOrder(orderFinishDTO.idOrder)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .doOnNext { orderFinished ->
                 orderFinished.status = OrderStatusEnum.FINISHED.value

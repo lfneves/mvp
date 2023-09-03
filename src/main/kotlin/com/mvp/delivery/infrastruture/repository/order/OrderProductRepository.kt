@@ -20,8 +20,6 @@ interface OrderProductRepository : ReactiveCrudRepository<OrderProductEntity?, L
     """)
     fun findAllByIdOrderInfo(id: Long): Flux<OrderProductResponseEntity>
 
-    fun findAllByIdOrder(id: Long): Flux<OrderProductEntity>
-
     fun deleteByIdOrder(id: Long): Mono<Void>
 
     @Query("""

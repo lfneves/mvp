@@ -12,12 +12,14 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.*
 
 @Table("tb_order")
 data class OrderEntity(
     @Id
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = [CascadeType.PERSIST])
     var id: Long? = null,
+    @Column("external_id") var externalId: UUID? = null,
     @Column("id_client") var idClient: Int? = null,
     @Column("total_price") var totalPrice: BigDecimal = BigDecimal.ZERO,
     @Column("status") var status: String = "",
@@ -28,6 +30,7 @@ data class OrderEntity(
     fun toDTO(): OrderDTO {
         return OrderDTO(
             id = this.id,
+            externalId = this.externalId,
             idClient = this.idClient,
             totalPrice = this.totalPrice,
             status = this.status,
@@ -39,6 +42,7 @@ data class OrderEntity(
     fun toResponseDTO(): OrderByIdResponseDTO {
         return OrderByIdResponseDTO(
             id = this.id,
+            externalId = this.externalId,
             idClient = this.idClient,
             totalPrice = this.totalPrice,
             status = this.status,

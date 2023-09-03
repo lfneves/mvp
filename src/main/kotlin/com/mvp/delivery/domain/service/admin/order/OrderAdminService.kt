@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 
 interface OrderAdminService {
 
-    fun updateOrderStatus(id: Int, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO>
+    fun updateOrderStatus(id: Long, orderStatusDTO: OrderStatusDTO, authentication: Authentication): Mono<OrderDTO>
 
     fun getOrders(): Flux<OrderDTO>
 

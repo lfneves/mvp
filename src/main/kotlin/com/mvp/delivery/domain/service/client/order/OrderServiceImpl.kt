@@ -1,21 +1,20 @@
 package com.mvp.delivery.domain.service.client.order
 
+import com.mvp.delivery.domain.exception.Exceptions
 import com.mvp.delivery.domain.model.auth.AuthenticationVO
+import com.mvp.delivery.domain.model.order.*
 import com.mvp.delivery.domain.model.order.enums.OrderStatusEnum
 import com.mvp.delivery.domain.model.product.ProductDTO
 import com.mvp.delivery.domain.model.product.ProductRemoveOrderDTO
 import com.mvp.delivery.domain.service.client.auth.validator.AuthValidatorService
 import com.mvp.delivery.domain.service.client.product.ProductServiceImpl
 import com.mvp.delivery.domain.service.client.user.UserServiceImpl
-import com.mvp.delivery.domain.exception.Exceptions
-import com.mvp.delivery.domain.model.order.*
-import com.mvp.delivery.domain.model.order.store.OrderQrsDTO
-import com.mvp.delivery.domain.model.order.store.QrDataDTO
 import com.mvp.delivery.infrastruture.entity.order.OrderEntity
 import com.mvp.delivery.infrastruture.entity.order.OrderProductEntity
 import com.mvp.delivery.infrastruture.repository.order.OrderProductRepository
 import com.mvp.delivery.infrastruture.repository.order.OrderRepository
 import com.mvp.delivery.utils.constants.ErrorMsgConstants
+import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
@@ -26,6 +25,9 @@ import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigDecimal
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
 
 @Service
 class OrderServiceImpl(
@@ -33,13 +35,12 @@ class OrderServiceImpl(
     private val authValidatorService: AuthValidatorService,
     private val userService: UserServiceImpl,
     private val orderProductRepository: OrderProductRepository,
-    private val productService: ProductServiceImpl,
-    private val orderMPservice:  OrderMPService
+    private val productService: ProductServiceImpl
 ): OrderService {
     var logger: Logger = LoggerFactory.getLogger(OrderServiceImpl::class.java)
 
     override fun getOrderById(id: Long, authentication: Authentication): Mono<OrderByIdResponseDTO> {
-        return orderRepository.findById(id)
+        return orderRepository.findByIdOrder(id)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
             .flatMap { it?.toResponseDTO().toMono() }
             .flatMap { order ->
@@ -50,6 +51,10 @@ class OrderServiceImpl(
                         order.toMono()
                     }.then(Mono.just(order))
             }
+    }
+
+    override suspend fun getOrderByExternalId(externalId: UUID): OrderByIdResponseDTO? {
+        return orderRepository.findByExternalId(externalId).awaitSingle().toResponseDTO()
     }
 
     override fun saveInitialOrders(order: OrderDTO, authentication: Authentication): Mono<OrderDTO> {
@@ -132,9 +137,9 @@ class OrderServiceImpl(
            .map { it.toDTO() }
     }
 
-    override fun deleteOrderById(id: Int, authentication: Authentication): Mono<Void> {
-        return orderRepository.findById(id).flatMap {order ->
-            orderProductRepository.deleteByIdOrder(order.id!!)
+    override fun deleteOrderById(id: Long, authentication: Authentication): Mono<Void> {
+        return orderRepository.findByIdOrder(id).flatMap {order ->
+            orderProductRepository.deleteByIdOrder(order?.id!!)
                 .then(orderRepository.deleteById(id))
         }
     }
@@ -147,19 +152,16 @@ class OrderServiceImpl(
             .flatMap { orderProductRepository.deleteById(listProductId) }
     }
 
-    override fun checkoutOrder(authentication: Authentication): Mono<QrDataDTO> {
+    override fun fakeCheckoutOrder(orderCheckoutDTO: OrderCheckoutDTO, authentication: Authentication): Mono<Boolean> {
         authentication as AuthenticationVO
         return orderRepository.findByUsername(authentication.iAuthDTO.username)
             .switchIfEmpty(Mono.error(Exceptions.NotFoundException(ErrorMsgConstants.ERROR_ORDER_NOT_FOUND)))
-            .flatMap {
-                getOrderById(it.id!!, authentication)
-                    .flatMap {
-                        Mono.just(OrderQrsDTO().orderCheckoutGenerateQrs(it))
-                    }.map { jsonRequest ->
-                        jsonRequest
-                    }
-            }.flatMap {
-                orderMPservice.generateOrderQrs(it)
-            }
+            .doOnNext { setStatus ->
+                setStatus.status = OrderStatusEnum.PAID.value
+                val randomMinutes = (20..75).random().toLong()
+                val z = ZoneId.of( "America/Sao_Paulo")
+                setStatus.waitingTime = ZonedDateTime.now(z).plusMinutes(randomMinutes).toLocalDateTime()
+            }.flatMap(orderRepository::save)
+            .thenReturn(true)
     }
 }

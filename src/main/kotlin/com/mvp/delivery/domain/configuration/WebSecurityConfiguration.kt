@@ -26,7 +26,7 @@ class WebSecurityConfiguration {
     fun getSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http.authorizeExchange().pathMatchers(
             "/api/auth/*", "/api/v1/users/signup", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
-            "/swagger-ui.html", "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**"
+            "/swagger-ui.html", "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/mp-order/webhook"
         ).permitAll()
             .pathMatchers("/**").authenticated()
             .and().csrf().disable()

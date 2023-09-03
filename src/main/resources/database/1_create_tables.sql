@@ -33,8 +33,11 @@ CREATE TABLE IF NOT EXISTS tb_product (
     dh_insert TIMESTAMP DEFAULT NOW()
 );
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS tb_order (
     id                  SERIAL  PRIMARY KEY,
+    external_id         uuid    DEFAULT uuid_generate_v4() NOT NULL,
     id_client           INTEGER REFERENCES tb_client(id) NOT NULL,
     total_price         NUMERIC NOT NULL,
     status              VARCHAR(50) NULL,
