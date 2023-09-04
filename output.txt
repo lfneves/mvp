@@ -1,0 +1,70 @@
+/home/lucas/0_projects/pos/delivery
+├── Dockerfile
+├── LICENSE.txt
+├── MVP - Pos tech delivery application.postman_collection.json
+├── README.md
+├── build
+|  ├── classes
+|  |  └── kotlin
+|  ├── kotlin
+|  |  └── compileKotlin
+|  ├── libs
+|  |  └── delivery-0.0.1-SNAPSHOT.jar
+|  ├── resolvedMainClassName
+|  ├── resources
+|  |  └── main
+|  └── tmp
+|     └── bootJar
+├── build.gradle.kts
+├── deliveryhelm
+|  ├── Chart.yaml
+|  ├── charts
+|  |  └── postgreshelm
+|  ├── secret-dockerhub.yaml
+|  ├── templates
+|  |  ├── NOTES.txt
+|  |  ├── _helpers.tpl
+|  |  ├── deployment.yaml
+|  |  ├── ingress.yaml
+|  |  ├── service.yaml
+|  |  ├── serviceaccount.yaml
+|  |  └── tests
+|  └── values.yaml
+├── docker-compose.yml
+├── gradle
+|  └── wrapper
+|     ├── gradle-wrapper.jar
+|     └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── images
+|  ├── postman_01.png
+|  ├── postman_02.png
+|  ├── swagger_01.png
+|  └── swagger_02.png
+├── k8s
+|  ├── application
+|  |  ├── 1-deployment.yaml
+|  |  ├── 2-service-load-balancer.yaml
+|  |  ├── 3-hpa.yaml
+|  |  ├── 4-ingress.yaml
+|  |  └── secret-dockerhub.yml
+|  └── postgres
+|     ├── 1-db-persistent-volume.yaml
+|     ├── 2-db-volume-claim.yaml
+|     ├── 3-db-configmap.yaml
+|     ├── 4-db-secret.yaml
+|     ├── 5-db-deployment.yaml
+|     └── 6-db-service.yaml
+├── output.txt
+├── settings.gradle.kts
+└── src
+   ├── main
+   |  ├── kotlin
+   |  └── resources
+   └── test
+      ├── kotlin
+      └── resources
+
+directory: 28 file: 38
+
