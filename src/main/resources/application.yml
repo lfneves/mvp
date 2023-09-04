@@ -40,7 +40,7 @@ order:
     userId: "${USER_ID:170225675}"
     sponsorId: "S{SPONSOR_ID:57174696}"
     url: "https://api.mercadopago.com/"
-#    notificationUrl: "${NOTIFICATION_URL:https://webhook.site/3a01d6b2-7c0c-4c45-a5c7-5b305a11a3a8}"
-    notificationUrl: "${NOTIFICATION_URL:https://hkdk.events/lfMwUjaPsk5y}"
+    notificationUrl: "${NOTIFICATION_URL:https://webhook.site/3a01d6b2-7c0c-4c45-a5c7-5b305a11a3a8}"
+    #notificationUrl: "${NOTIFICATION_URL:https://hkdk.events/lfMwUjaPsk5y}"
   api-endpoints:
     qrs: "instore/orders/qr/seller/collectors/?/pos/?/qrs"
