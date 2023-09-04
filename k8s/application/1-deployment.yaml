@@ -48,7 +48,7 @@ spec:
                   key: POSTGRES_PORT
           resources:
             requests:
-              cpu: 200m
+              cpu: 400m
               memory: 500Mi
       imagePullSecrets:
         - name: secret-dockerhub
