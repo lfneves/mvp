@@ -18,7 +18,7 @@ import java.math.BigDecimal
 
 // Start class for test create user, product and category on start application
 /***
- * Class created for study purposes and currently disabled, using docker compose and k8s create/insert database
+ * Class created for study purposes and in future currently disabled, using docker compose and k8s create/insert database
  */
 class ApplicationRunner: CommandLineRunner {
 

@@ -79,7 +79,7 @@ Main project directory
 ```json
 {
   "username": "99999999999",
-  "password": "admin"
+  "password": "123"
 }
 ```
 ---

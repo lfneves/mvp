@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name:  delivery
-          image: lfneves/delivery-mvp:0.0.8
+          image: lfneves/delivery-mvp:0.0.9
           ports:
             - containerPort: 8099
           env:
@@ -48,7 +48,7 @@ spec:
                   key: POSTGRES_PORT
           resources:
             requests:
-              cpu: 20m
+              cpu: 200m
               memory: 500Mi
       imagePullSecrets:
         - name: secret-dockerhub
