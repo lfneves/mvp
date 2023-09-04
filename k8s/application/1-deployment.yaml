@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name:  delivery
-          image: lfneves/delivery-mvp:1.0.0
+          image: lfneves/delivery-mvp:1.0.1
           ports:
             - containerPort: 8099
           env:
