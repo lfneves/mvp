@@ -288,7 +288,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/api/v1/users/59",
+											"raw": "{{baseUrl}}/api/v1/users/1",
 											"host": [
 												"{{baseUrl}}"
 											],
@@ -296,7 +296,7 @@
 												"api",
 												"v1",
 												"users",
-												"59"
+												"1"
 											]
 										}
 									},
@@ -379,7 +379,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n        \"name\": \"Batata 2\",\n        \"price\": 1,\n        \"quantity\": 1,\n        \"category\": {\n            \"name\": \"Acompanhamento\",\n            \"description\": \"\"\n        }\n    }",
+													"raw": "{\n        \"name\": \"Batata\",\n        \"price\": 1,\n        \"quantity\": 1,\n        \"category\": {\n            \"name\": \"Acompanhamento\",\n            \"description\": \"\"\n        }\n    }",
 													"options": {
 														"raw": {
 															"language": "json"
@@ -687,7 +687,7 @@
 											"response": []
 										},
 										{
-											"name": "atualiza status pedido",
+											"name": "atualiza status pedido {id}",
 											"request": {
 												"auth": {
 													"type": "bearer",
@@ -790,6 +790,50 @@
 									]
 								},
 								{
+									"name": "Mercado Pago",
+									"item": [
+										{
+											"name": "checkout pedido",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/mp-order/qr-code-checkout",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"mp-order",
+														"qr-code-checkout"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
 									"name": "cria pedido",
 									"event": [
 										{
@@ -822,7 +866,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 2\n        }\n    ]\n}",
+											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 1\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -845,7 +889,7 @@
 									"response": []
 								},
 								{
-									"name": "busca pedido id",
+									"name": "busca pedido {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -880,7 +924,7 @@
 									"response": []
 								},
 								{
-									"name": "busca produtos no pedido pelo id",
+									"name": "busca produtos no pedido pelo {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",
@@ -916,6 +960,54 @@
 									"response": []
 								},
 								{
+									"name": "fake checkout pedido",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"isPayment\": true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/order/fake-checkout",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"order",
+												"fake-checkout"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "adiciona items no pedido",
 									"request": {
 										"auth": {
@@ -941,7 +1033,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 2\n        }\n    ]\n}",
+											"raw": "{\n    \"orderProduct\": [\n        {\n            \"idProduct\": 1\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -959,55 +1051,6 @@
 												"v1",
 												"order",
 												"add-new-product-to-order"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "efetua pagamento(fake checkout)",
-									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "{{token}}",
-													"type": "string"
-												}
-											]
-										},
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"key": "Accept",
-												"value": "*/*"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"isPayment\": true\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/api/v1/order/fake-checkout",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"order",
-												"fake-checkout"
 											]
 										}
 									},
@@ -1058,7 +1101,7 @@
 									"response": []
 								},
 								{
-									"name": "cancela pedido",
+									"name": "cancela pedido {id}",
 									"request": {
 										"auth": {
 											"type": "bearer",

@@ -8,7 +8,7 @@ image:
   repository: lfneves/delivery-mvp
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.0.6"
+  tag: "0.0.9"
 
 imagePullSecrets: []
 nameOverride: "delivery"
@@ -47,7 +47,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: delivery-test
+    - host: delivery-mvp.test
       paths:
         - path: /
           pathType: ImplementationSpecific
