@@ -87,4 +87,3 @@ jobs:
             docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ IMAGE_TAG }} .
             docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ IMAGE_TAG }}
             echo "image=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ IMAGE_TAG }}"
-            
