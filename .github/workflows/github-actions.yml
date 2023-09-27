@@ -11,7 +11,7 @@ permissions:
 
 env: 
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp
+  ECR_REPOSITORY: delivery-mvp
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
 
@@ -82,8 +82,9 @@ jobs:
           id: build-image
           env:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            IMAGE_TAG: ${{ github.sha }}
           run:
-            docker build -t lfneves/delivery-mvp:latest .
-            docker push lfneves/delivery-mvp:latest
-            echo "image=lfneves/delivery-mvp:latest" >> $GITHUB_OUTPUT
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+            echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
             
