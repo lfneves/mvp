@@ -84,6 +84,6 @@ jobs:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
             IMAGE_TAG: ${{ github.sha }}
           run:
-            docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest .
-            docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
-            echo "image=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest"
+            docker build -t 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp/${{ env.ECR_REPOSITORY }}:latest .
+            docker push 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp/${{ env.ECR_REPOSITORY }}:latest
+            echo "image=566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp/${{ env.ECR_REPOSITORY }}:latest"
