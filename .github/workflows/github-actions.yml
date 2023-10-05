@@ -11,7 +11,7 @@ permissions:
 
 env: 
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp
+  ECR_REPOSITORY: delivery-mvp
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
@@ -121,6 +121,6 @@ jobs:
        - name: Deploy to Kubernetes cluster
          uses: kodermax/kubectl-aws-eks@master
          env:
-           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.RELEASE_REVISION }}
+           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
          with:
-           args: set image deployment/delivery-mvp app=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE
+           args: set image deployment/delivery-mvp app=latest --record -n $KUBE_NAMESPACE
