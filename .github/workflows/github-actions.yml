@@ -11,7 +11,7 @@ permissions:
 
 env: 
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: delivery-mvp
+  ECR_REPOSITORY: 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
