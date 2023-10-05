@@ -23,7 +23,8 @@ spec:
                     do echo waiting for database; sleep 2; done;' ]
       containers:
         - name:  delivery
-          image: lfneves/delivery-mvp:1.0.1
+#          image:  lfneves/delivery-mvp:1.0.1
+          image: 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp:latest
           ports:
             - containerPort: 8099
           env:

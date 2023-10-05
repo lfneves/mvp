@@ -14,6 +14,9 @@ env:
   ECR_REPOSITORY: delivery-mvp
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
+  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  KUBE_NAMESPACE: production
+  RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
 
 jobs:
    build:
@@ -99,3 +102,25 @@ jobs:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           run:
             docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+
+   eks:
+     needs: ecr
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: checkout
+         uses: actions/checkout@v2
+
+       - name: Configure AWS credentials
+         uses: aws-actions/configure-aws-credentials@v1
+         with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: ${{ env.AWS_REGION }}
+
+       - name: Deploy to Kubernetes cluster
+         uses: kodermax/kubectl-aws-eks@master
+         env:
+           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.RELEASE_REVISION }}
+         with:
+           args: set image deployment/delivery-mvp app=${{ env.RELEASE_IMAGE }} --record -n $KUBE_NAMESPACE
