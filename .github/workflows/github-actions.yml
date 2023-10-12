@@ -15,7 +15,7 @@ env:
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: production
+  KUBE_NAMESPACE: delivery-cluster
   RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
 
 jobs:
@@ -119,8 +119,13 @@ jobs:
            aws-region: ${{ env.AWS_REGION }}
 
        - name: Deploy to Kubernetes cluster
-         uses: kodermax/kubectl-aws-eks@master
-         env:
-           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
-         with:
-           args: set image deployment/delivery-mvp app=latest --record -n $KUBE_NAMESPACE
+         run: kubectl apply -f k8s/*
+
+#         uses: kodermax/kubectl-aws-eks@master
+#         env:
+#           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+#         with:
+#           args: set image deployment/delivery-mvp app=latest -n $KUBE_NAMESPACE
+
+       - name: Wait for Deployment to Finish
+         run: kubectl rollout status deployment/YOUR_DEPLOYMENT_NAME -n YOUR_NAMESPACE # Replace with your deployment and namespace details
