@@ -119,7 +119,16 @@ jobs:
            aws-region: ${{ env.AWS_REGION }}
 
        - name: Deploy to Kubernetes cluster
-         run: kubectl apply -f k8s/application/*
+         run: kubectl apply -f k8s/application/1-deployment.yaml
+
+       - name: Deploy to Kubernetes cluster
+         run: kubectl apply -f k8s/application/2-service-load-balancer.yaml
+
+       - name: Deploy to Kubernetes cluster
+         run: kubectl apply -f k8s/application/3-hpa.yaml
+
+       - name: Deploy to Kubernetes cluster
+         run: kubectl apply -f k8s/application/4-ingress.yaml
 
 #         uses: kodermax/kubectl-aws-eks@master
 #         env:
