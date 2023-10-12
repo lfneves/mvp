@@ -14,7 +14,7 @@ env:
   ECR_REPOSITORY: delivery-mvp
   SHORT_SHA: $(echo ${{ github.sha }} | cut -c 1-8)
   IMAGE_NAME: lfneves
-  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
   KUBE_NAMESPACE: delivery-cluster
   RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
 
