@@ -137,4 +137,4 @@ jobs:
 #           args: set image deployment/delivery-mvp app=latest -n $KUBE_NAMESPACE
 
        - name: Wait for Deployment to Finish
-         run: kubectl rollout status deployment/YOUR_DEPLOYMENT_NAME -n YOUR_NAMESPACE # Replace with your deployment and namespace details
+         run: kubectl rollout status deployment/delivery -n delivery
