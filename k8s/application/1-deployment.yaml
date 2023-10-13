@@ -56,6 +56,6 @@ spec:
           resources:
             requests:
               cpu: 400m
-              memory: 500Mi
+              memory: 100Mi
       imagePullSecrets:
         - name: secret-dockerhub
