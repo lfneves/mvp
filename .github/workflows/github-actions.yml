@@ -135,6 +135,12 @@ jobs:
       - name: Deploy to Kubernetes cluster
         run: kubectl apply -f k8s/application/4-ingress.yaml
 
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/postgres/3-db-configmap.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/postgres/4-db-secret.yaml
+
       #         uses: kodermax/kubectl-aws-eks@master
       #         env:
       #           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest

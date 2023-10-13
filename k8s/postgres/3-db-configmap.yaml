@@ -5,6 +5,6 @@ metadata:
   labels:
     app: postgresdb
 data:
-  POSTGRES_DB: delivery_database_1
+  POSTGRES_DB: postgresdb
   POSTGRES_PORT: "5432"
-  POSTGRES_HOST: postgresdb.default.svc.cluster.local
+  POSTGRES_HOST: postgresdb.cf1zoi5dlyni.us-east-1.rds.amazonaws.com
