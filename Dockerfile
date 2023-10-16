@@ -41,7 +41,7 @@ CMD ["./gradlew", "bootRun", "--parallel", "--build-cache"]
 FROM builder AS intermediate
 
 # Copy the JAR file to an intermediate location
-RUN cp build/libs/*.jar /app/app.jar
+COPY build/libs/*.jar /app/app.jar
 
 # Final stage: Use a minimal image for the application
 FROM eclipse-temurin:17-jdk-focal
