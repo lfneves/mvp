@@ -10,7 +10,6 @@ COPY . .
 
 CMD ["./gradlew", "bootRun", "--parallel", "--build-cache"]
 
-
 #FROM eclipse-temurin:17-jdk-focal
 #
 #MAINTAINER lfneves
