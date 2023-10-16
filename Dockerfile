@@ -60,7 +60,7 @@ FROM  eclipse-temurin:17-jdk-focal
 WORKDIR /app
 
 # Copy the Spring Boot JAR file into the container at /app
-COPY ./build/libs/*.jar /app/app.jar
+COPY build/libs/*.jar app.jar
 
 EXPOSE 8099
 # Command to run the Spring Boot application
