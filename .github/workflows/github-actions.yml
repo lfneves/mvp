@@ -36,10 +36,10 @@ jobs:
         run: ./gradlew bootJar
 
       - name: Copy Jar file
-        run: mv build/libs/$(ls build/libs) app.jar
+        run: mv build/libs/*.jar app.jar
 
       - name: Upload Jar file
-      - uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: jar-file
           path: app.jar
@@ -80,7 +80,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download jar file
-      - uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: jar-file
           path: app.jar
