@@ -38,6 +38,7 @@ jobs:
       - name: Copy Jar file
         run: mv build/libs/$(ls build/libs) app.jar
 
+      - name: Upload Jar file
       - uses: actions/upload-artifact@master
         with:
           name: jar-file
@@ -78,6 +79,7 @@ jobs:
       - name: checkout
       - uses: actions/checkout@v3
 
+      - name: Download jar file
       - uses: actions/download-artifact@master
         with:
           name: jar-file
