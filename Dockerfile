@@ -35,7 +35,7 @@ COPY . /home/gradle/src
 WORKDIR /home/gradle/src
 
 # Build the Java artifact
-RUN gradle build
+RUN ./gradlew bootJar
 
 # Second stage: Create an intermediate image for the JAR file
 FROM builder AS intermediate
@@ -44,7 +44,7 @@ FROM builder AS intermediate
 RUN cp build/libs/*.jar /app/app.jar
 
 # Final stage: Use a minimal image for the application
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:17-jdk-focal
 
 # Copy the JAR file from the intermediate stage
 COPY --from=intermediate /app/app.jar /app/app.jar
