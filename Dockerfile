@@ -24,7 +24,9 @@
 #EXPOSE 8099
 #ENTRYPOINT ["java","-jar","app.jar"]
 
-FROM eclipse-temurin:17-jdk-focal AS builder
+
+# First stage: Build the Java artifact
+FROM gradle:7.2-jdk11 AS builder
 
 # Copy your Gradle project to the image
 COPY . /home/gradle/src
@@ -35,11 +37,18 @@ WORKDIR /home/gradle/src
 # Build the Java artifact
 RUN gradle build
 
-# Copy the JAR file to the image context
-RUN cp build/libs/*.jar /home/gradle/app.jar
+# Second stage: Create an intermediate image for the JAR file
+FROM builder AS intermediate
 
-# Copy the JAR file from the image context into the final image
-COPY --from=builder /home/gradle/app.jar /app/app.jar
+# Copy the JAR file to an intermediate location
+RUN cp build/libs/*.jar /app/app.jar
 
-EXPOSE 8080
+# Final stage: Use a minimal image for the application
+FROM openjdk:11-jre-slim
+
+# Copy the JAR file from the intermediate stage
+COPY --from=intermediate /app/app.jar /app/app.jar
+
+EXPOSE 8099
 CMD ["java", "-jar", "/app/app.jar"]
+
