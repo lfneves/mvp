@@ -40,6 +40,7 @@ jobs:
         
       - name: Build with Gradle
         run: ./gradlew bootJar
+        working-directory: ${{ github.workspace }}
 
       - name: Copy Jar file
         run: mv build/libs/*.jar app.jar
