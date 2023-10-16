@@ -32,7 +32,7 @@ FROM eclipse-temurin:17-jdk-focal AS builder
 COPY . .
 
 # Set the working directory
-WORKDIR /home/gradle/src
+WORKDIR /app
 
 # Build the Java artifact
 CMD ["./gradlew", "bootRun", "--parallel", "--build-cache"]
@@ -41,7 +41,7 @@ CMD ["./gradlew", "bootRun", "--parallel", "--build-cache"]
 FROM builder AS intermediate
 
 # Copy the JAR file to an intermediate location
-COPY build/libs/*.jar /app/app.jar
+COPY /app/build/libs/*.jar /app/app.jar
 
 # Final stage: Use a minimal image for the application
 FROM eclipse-temurin:17-jdk-focal
