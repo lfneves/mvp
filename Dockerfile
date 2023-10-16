@@ -60,7 +60,7 @@ FROM  eclipse-temurin:17-jdk-focal
 WORKDIR /app
 
 # Copy the Spring Boot JAR file into the container at /app
-COPY /home/runner/work/mvp/mvp/build/libs/*.jar /app/app.jar
+COPY build/libs/*.jar /app/app.jar
 
 # Command to run the Spring Boot application
 CMD ["java", "-jar", "app.jar"]
