@@ -34,7 +34,6 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Execute Gradle build
         run: ./gradlew bootJar
-        working-directory: ./
 
   # docker:
   #   needs: build
@@ -89,7 +88,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run:
           docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest .
-        working-directory: ./
+        working-directory: ${{ github.workspace }}
 
       - name: Tag image to Amazon ECR
         id: tag-image
@@ -97,7 +96,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run:
           docker tag ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/delivery-mvp:latest
-        working-directory: ./
         
       - name: Push image to Amazon ECR
         id: push-image
@@ -105,7 +103,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run:
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
-        working-directory: ./
 
   eks:
     needs: ecr
