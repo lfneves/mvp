@@ -34,7 +34,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Execute Gradle build
         run: ./gradlew bootJar
-        working-directory: ./app
+        working-directory: /home/runner/work/mvp/mvp/
 
   # docker:
   #   needs: build
