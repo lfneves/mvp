@@ -26,10 +26,10 @@
 
 
 # First stage: Build the Java artifact
-FROM gradle:7.2-jdk11 AS builder
+FROM eclipse-temurin:17-jdk-focal AS builder
 
 # Copy your Gradle project to the image
-COPY . /home/gradle/src
+COPY . .
 
 # Set the working directory
 WORKDIR /home/gradle/src
