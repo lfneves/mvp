@@ -35,7 +35,7 @@ COPY . .
 WORKDIR /home/gradle/src
 
 # Build the Java artifact
-RUN ./gradlew bootJar
+CMD ["./gradlew", "bootRun", "--parallel", "--build-cache"]
 
 # Second stage: Create an intermediate image for the JAR file
 FROM builder AS intermediate
