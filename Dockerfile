@@ -44,10 +44,10 @@ FROM builder AS intermediate
 COPY *.jar /app/app.jar
 
 # Final stage: Use a minimal image for the application
-FROM eclipse-temurin:17-jdk-focal
+#FROM eclipse-temurin:17-jdk-focal
 
 # Copy the JAR file from the intermediate stage
-COPY --from=intermediate /app/app.jar /app/app.jar
+#COPY --from=intermediate /app/app.jar /app/app.jar
 
 EXPOSE 8099
 CMD ["java", "-jar", "/app/app.jar"]
