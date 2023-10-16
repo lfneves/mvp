@@ -60,9 +60,11 @@ RUN mkdir /app
 
 COPY app.jar /app/app.jar
 
+#COPY docker-compose.yml /app/docker-compose.yml
+
 WORKDIR /app
 
 EXPOSE 8099
 
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
 
