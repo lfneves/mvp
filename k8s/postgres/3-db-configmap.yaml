@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: db-config-map
   labels:
-    app: postgresdb
+    app: postgresql-delivery
 data:
-  POSTGRES_DB: postgresdb
+  POSTGRES_DB: postgresql-delivery
   POSTGRES_PORT: "5432"
-  POSTGRES_HOST: postgresdb.cf1zoi5dlyni.us-east-1.rds.amazonaws.com
+  POSTGRES_HOST: postgresql-delivery.cf1zoi5dlyni.us-east-1.rds.amazonaws.com
