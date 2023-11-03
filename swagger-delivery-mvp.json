@@ -1,0 +1,1405 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "MVP - Pos tech delivery application",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8099",
+            "description": "Generated server url"
+        }
+    ],
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "paths": {
+        "/api/v1/users/update-user/{id}": {
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Atualiza Usuário por id",
+                "description": "Atualiza Usuário por id e dados informados",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/fake-checkout": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Efetua o pagamento atualizando os status",
+                "description": "Efetua o pagamento atualizando os status",
+                "operationId": "checkoutOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderCheckoutDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                      "description": "Accepted",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "success": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+            }
+        },
+        "/api/v1/order/add-new-product-to-order": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Adiciona iten(s) ao pedido",
+                "description": "Adiciona iten(s) ao pedido recebe por uma lista de id(s) do(s) produto(s)",
+                "operationId": "updateOrderProduct",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/product/update/{id}": {
+            "post": {
+                "tags": [
+                    "Administrador Produtos"
+                ],
+                "summary": "Atualiza produto pelo id",
+                "description": "Atualiza produto cadastrados é preciso informa a categoria",
+                "operationId": "updateProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/order/update-order-status/{id}": {
+            "post": {
+                "tags": [
+                    "Admin Pedidos"
+                ],
+                "summary": "Atualiza o status do pedido",
+                "description": "Altera o status do pedido exemplo: PENDING, PREPARING, PAID, FINISHED ",
+                "operationId": "updateOrderStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderStatusDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/order/finish-order": {
+            "post": {
+                "tags": [
+                    "Admin Pedidos"
+                ],
+                "summary": "Finaliza o pedido atualizando os status",
+                "description": "Executa update dos status e fecha o pedido",
+                "operationId": "updateOrderFinishedAndStatus",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderFinishDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/signup": {
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Cadastro de Usuário",
+                "description": "Cadastro usuário usado quando não possui usuário e senha",
+                "operationId": "signup",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/create-order": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Inicia um pedido",
+                "description": "Inicia um pedido informando e adiciona produdos pelo id",
+                "operationId": "createOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mp-order/webhook": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Recebe chamadas do Mercado Pago",
+                "description": "Efetua atualiza o status de pagamento",
+                "operationId": "handlerWebHook",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MerchantOrderDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/mp-order/qr-code-checkout": {
+            "post": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Efetua o pagamento atualizando os status",
+                "description": "Efetua o pagamento atualizando os status",
+                "operationId": "checkoutOrder_1",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QrDataDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/product/create": {
+            "post": {
+                "tags": [
+                    "Administrador Produtos"
+                ],
+                "summary": "Cria produtos",
+                "description": "Cadastro de produtos para utilização visualização de clientes",
+                "operationId": "createProduct",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/token-by-application": {
+            "post": {
+                "tags": [
+                    "Autorização"
+                ],
+                "summary": "Authenticação clientID + secretID",
+                "description": "Se authenticado corretamente, retorno o token de Authorização nas headers",
+                "operationId": "tokenByApplication",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthApplicationDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthTokenDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login-token": {
+            "post": {
+                "tags": [
+                    "Autorização"
+                ],
+                "summary": "Authenticação usuário + senha",
+                "description": "Se authenticado corretamente, retorna o token de Authorização",
+                "operationId": "token",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthClientDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful login token.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthTokenDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error user does not exist."
+                    },
+                    "500": {
+                        "description": "Error application can't find user."
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Busca Usuário por id",
+                "description": "Busca usuário usando o id informado",
+                "operationId": "getUserById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Deleta Usuário por id",
+                "description": "Deleta Usuário por id",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/get-by-username": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Busca Usuário por username(CPF)",
+                "description": "Busca Usuário por username(CPF) cadastrado",
+                "operationId": "getUserByUsername",
+                "parameters": [
+                    {
+                        "name": "usernameDTO",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/UsernameDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product": {
+            "get": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Busca todos produtos",
+                "description": "Busca todos produtos cadastrados",
+                "operationId": "all",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/{id}": {
+            "get": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Busca produtos pelo id",
+                "description": "Busca produtos cadastrados pelo id informado",
+                "operationId": "getProductById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product/get-by-category-name": {
+            "get": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Busca produtos por categoria",
+                "description": "Busca produtos pelo nome da categoria informado",
+                "operationId": "findByCategory",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/CategoryDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/{id}": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Busca pedido id",
+                "description": "Busca pedido por id",
+                "operationId": "getOrderById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderByIdResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Remove pedido pelo id",
+                "description": "Remove um pedido e todos produtos pelo id",
+                "operationId": "deleteOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted"
+                    }
+                }
+            }
+        },
+        "/api/v1/order/all-products-by-order-id/{id}": {
+            "get": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Busca todos os produtos id do pedido",
+                "description": "Busca os produtos que estão associados por um pedido pelo id ",
+                "operationId": "getAllOrderProductsByIdOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderProductResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users": {
+            "get": {
+                "tags": [
+                    "Administrador de Usuários"
+                ],
+                "summary": "Busca todos usuários",
+                "description": "Busca todos usuários cadastrados não valida usuárioa admin neste momento",
+                "operationId": "all_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users/flux": {
+            "get": {
+                "tags": [
+                    "Performace Usuários"
+                ],
+                "summary": "Perfomace Usuários",
+                "description": "Utilizado para testes de performace e latência alterado o delay entre outros parametros",
+                "operationId": "getFlux",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/x-ndjson": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/product/get-all-category": {
+            "get": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Busca todas categorias",
+                "description": "Busca todas categorias cadastradas",
+                "operationId": "getAllCategory",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CategoryDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/product/flux": {
+            "get": {
+                "tags": [
+                    "Produtos Performace"
+                ],
+                "summary": "Perfomace produtos",
+                "description": "Utilizado para testes de performace e latência alterado o delay entre outros parametros",
+                "operationId": "getFlux_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/x-ndjson": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/order": {
+            "get": {
+                "tags": [
+                    "Admin Pedidos"
+                ],
+                "summary": "Busca todos pedidos",
+                "description": "Busca todos pedidos",
+                "operationId": "all_2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/order/flux": {
+            "get": {
+                "tags": [
+                    "Pedidos Performace"
+                ],
+                "summary": "Perfomace Pedidos",
+                "description": "Utilizado para testes de performace e latência alterado o delay entre outros parametros",
+                "operationId": "getFlux_2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/x-ndjson": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/OrderDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order/remove-product-order": {
+            "delete": {
+                "tags": [
+                    "Pedidos"
+                ],
+                "summary": "Remove produto de um pedido",
+                "description": "Remove um produto do pedido informado pelo id",
+                "operationId": "deleteOrderProductById",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRemoveOrderDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/users/delete-all": {
+            "delete": {
+                "tags": [
+                    "Administrador de Usuários"
+                ],
+                "summary": "Deleta todos usuários",
+                "description": "Deleta todos usuários não valida usuárioa admin neste momento - only for development uses",
+                "operationId": "deleteAllUsers",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/product/{id}": {
+            "delete": {
+                "tags": [
+                    "Administrador Produtos"
+                ],
+                "summary": "Remove produto pelo id",
+                "description": "remove produto cadastrado pelo id informado",
+                "operationId": "deleteProduct",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AddressEntity": {
+                "type": "object",
+                "properties": {
+                    "street": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "postalCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "idAddress": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/AddressEntity"
+                    }
+                }
+            },
+            "OrderCheckoutDTO": {
+                "required": [
+                    "isPayment"
+                ],
+                "type": "object",
+                "properties": {
+                    "isPayment": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "OrderProductDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idProduct": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idOrder": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "OrderRequestDTO": {
+                "required": [
+                    "orderProduct"
+                ],
+                "type": "object",
+                "properties": {
+                    "orderProduct": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderProductDTO"
+                        }
+                    }
+                }
+            },
+            "OrderDTO": {
+                "required": [
+                    "isFinished",
+                    "status",
+                    "totalPrice",
+                    "waitingTime"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "externalId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "idClient": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalPrice": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "waitingTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isFinished": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "OrderResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "orderDTO": {
+                        "$ref": "#/components/schemas/OrderDTO"
+                    }
+                }
+            },
+            "ProductRequestDTO": {
+                "required": [
+                    "idCategory",
+                    "name",
+                    "price",
+                    "quantity"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "idCategory": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "CategoryDTO": {
+                "required": [
+                    "description",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductDTO": {
+                "required": [
+                    "category",
+                    "idCategory",
+                    "name",
+                    "price",
+                    "quantity"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "idCategory": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/CategoryDTO"
+                    }
+                }
+            },
+            "OrderStatusDTO": {
+                "required": [
+                    "status"
+                ],
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OrderFinishDTO": {
+                "required": [
+                    "idOrder",
+                    "isFinished"
+                ],
+                "type": "object",
+                "properties": {
+                    "idOrder": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "isFinished": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "MerchantOrderDTO": {
+                "required": [
+                    "resource",
+                    "topic"
+                ],
+                "type": "object",
+                "properties": {
+                    "resource": {
+                        "type": "string"
+                    },
+                    "topic": {
+                        "type": "string"
+                    }
+                }
+            },
+            "QrDataDTO": {
+                "required": [
+                    "in_store_order_id",
+                    "qr_data"
+                ],
+                "type": "object",
+                "properties": {
+                    "in_store_order_id": {
+                        "type": "string"
+                    },
+                    "qr_data": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthApplicationDTO": {
+                "required": [
+                    "clientId",
+                    "secretId"
+                ],
+                "type": "object",
+                "properties": {
+                    "clientId": {
+                        "type": "string",
+                        "description": "O ClientID da aplicação"
+                    },
+                    "secretId": {
+                        "type": "string",
+                        "description": "O SecretID do ClientID"
+                    },
+                    "idClient": {
+                        "type": "integer",
+                        "description": "O identificador do Cliente",
+                        "format": "int64"
+                    }
+                }
+            },
+            "AuthTokenDTO": {
+                "required": [
+                    "token"
+                ],
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "description": "O token a ser utilizado para acessar os serviços que precisam de autorização."
+                    }
+                }
+            },
+            "AuthClientDTO": {
+                "required": [
+                    "password",
+                    "username"
+                ],
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "Identificador do Cliente"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do Cliente"
+                    }
+                }
+            },
+            "UsernameDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OrderByIdResponseDTO": {
+                "required": [
+                    "isFinished",
+                    "products",
+                    "status",
+                    "totalPrice",
+                    "waitingTime"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "externalId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "idClient": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalPrice": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "waitingTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isFinished": {
+                        "type": "boolean"
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderProductResponseEntity"
+                        }
+                    }
+                }
+            },
+            "OrderProductResponseEntity": {
+                "required": [
+                    "price"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idProduct": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idOrder": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productName": {
+                        "type": "string"
+                    },
+                    "categoryName": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    }
+                }
+            },
+            "OrderProductResponseDTO": {
+                "required": [
+                    "price"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idProduct": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "idOrder": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "productName": {
+                        "type": "string"
+                    },
+                    "categoryName": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ProductRemoveOrderDTO": {
+                "required": [
+                    "orderProductId"
+                ],
+                "type": "object",
+                "properties": {
+                    "orderProductId": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
