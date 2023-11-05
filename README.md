@@ -6,7 +6,63 @@
 - Grupo 53
 
 
+Repositorys:
+
+https://github.com/lfneves/mvp
+https://github.com/lfneves/infra-rds-terraform
+https://github.com/lfneves/infra-eks-terraform
+https://github.com/lfneves/infra-vpc-terraform
+
 ---
+
+### AWS Infra Terraform EKS
+
+# Terraform AWS EKS Cluster Deployment
+
+This project uses Terraform to automate the deployment of an Amazon Elastic Kubernetes Service (EKS) cluster on AWS. Amazon EKS is a managed Kubernetes service that simplifies the deployment, scaling, and operation of containerized applications using Kubernetes.
+
+## Prerequisites
+
+Before getting started, make sure you have the following prerequisites installed on your machine:
+
+- [Terraform](https://www.terraform.io/) (you can use `terraform --version` to check)
+- [AWS CLI](https://aws.amazon.com/cli/) configured with appropriate credentials
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for interacting with the cluster
+- [kubectl-aws-iam-authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) for authenticating with the EKS cluster
+- Internet access
+
+## Configuration
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/lfneves/infra-eks-terraform.git
+   cd infra-eks-terraform
+   ```
+
+2. Automatically create a `delivery-eks-terraform.tfstate` file and deploy bucket on `delivery-terraform-s3`` and provide the necessary variables:
+
+   ```hcl
+   region            = "us-east-1"
+   cluster_name      = "delivery-cluster"
+   node_instance_type = "t2.small"
+   node_max_count     = 2
+   node_min_count     = 1
+   ```
+
+   Replace the values above with the specific settings for your environment.
+
+#### AWS Infra Terraform RDS
+
+https://github.com/lfneves/infra-rds-terraform
+
+Terraform AWS RDS PostgreSQL Deployment
+This project uses Terraform to automate the deployment of a single Amazon RDS instance with PostgreSQL on AWS. Amazon RDS (Relational Database Service) is a managed relational database service that makes it easy to deploy, operate, and scale databases.
+
+
+### Application mvp
+
+https://github.com/lfneves/mvp
 
 #### This is a [Spring Boot WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html) application using [Kotlin](https://kotlinlang.org/).
 
