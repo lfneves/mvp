@@ -77,4 +77,3 @@ tasks.withType<Test> {
 	enabled = true
 	useJUnitPlatform()
 }
-
