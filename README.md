@@ -14,6 +14,15 @@ https://github.com/lfneves/infra-eks-terraform
 https://github.com/lfneves/infra-vpc-terraform
 
 ---
+### Infra Video explication:
+
+Part 1
+
+https://youtu.be/FCwZ1W9Dc0s
+
+Part 2
+https://youtu.be/ZpGls-grP6I
+
 
 ### AWS Infra Terraform EKS
 
