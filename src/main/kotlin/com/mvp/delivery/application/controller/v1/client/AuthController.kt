@@ -1,6 +1,7 @@
 package com.mvp.delivery.application.controller.v1.client
 
 
+import com.mvp.delivery.domain.model.auth.AuthApplicationDTO
 import com.mvp.delivery.domain.model.auth.AuthClientDTO
 import com.mvp.delivery.domain.model.auth.AuthTokenDTO
 import com.mvp.delivery.utils.JWTUtils
@@ -47,7 +48,7 @@ class AuthController {
         description = "Se authenticado corretamente, retorno o token de Authorização nas headers",
         tags = ["Autorização"]
     )
-    fun tokenByApplication(@RequestBody authDTO: AuthClientDTO): Mono<AuthTokenDTO> {
+    fun tokenByApplication(@RequestBody authDTO: AuthApplicationDTO): Mono<AuthTokenDTO> {
         return Mono.just(authDTO).flatMap {
             authenticationManager.authenticate(it.toAuthentication())
         }.map {

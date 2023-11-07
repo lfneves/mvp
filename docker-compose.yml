@@ -39,7 +39,7 @@ services:
       TZ: 'America/Sao_Paulo'
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: delivery_database_1
+      POSTGRES_DB: postgresdb
     volumes:
       - ./src/main/resources/database/1_create_tables.sql:/docker-entrypoint-initdb.d/1_create_tables.sql
       - ./src/main/resources/database/2_inserts_category.sql:/docker-entrypoint-initdb.d/2_inserts_category.sql

@@ -4,7 +4,7 @@ metadata:
   name: delivery
 spec:
   minReplicas: 1
-  maxReplicas: 2
+  maxReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment

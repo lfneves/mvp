@@ -15,6 +15,12 @@ spec:
       labels:
         app: delivery
     spec:
+      initContainers:
+        - name: postgresdb
+          image: postgres:15.4
+          command: [ 'sh', '-c',
+            'until pg_isready -h postgresdb -p 5432; 
+                    do echo waiting for database; sleep 2; done;' ]
       containers:
         - name:  {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

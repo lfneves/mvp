@@ -25,9 +25,9 @@ logging:
       org.hibernate: "debug"
 
 datasource:
-  host: "${POSTGRES_HOST:db}"
+  host: "${POSTGRES_HOST:postgresdb.cf1zoi5dlyni.us-east-1.rds.amazonaws.com}"
   port: "${POSTGRES_PORT:5432}"
-  database: "${POSTGRES_DB:delivery_database_1}"
+  database: "${POSTGRES_DB:postgresdb}"
   user: "${POSTGRES_USER:postgres}"
   password: "${POSTGRES_PASSWORD:postgres}"
   pool:

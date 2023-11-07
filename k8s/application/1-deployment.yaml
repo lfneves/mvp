@@ -15,9 +15,16 @@ spec:
       labels:
         app: delivery
     spec:
+#      initContainers:
+#        - name: postgresdb
+#          image: postgres:15.4
+#          command: [ 'sh', '-c',
+#            'until pg_isready -h postgresdb -p 5432;
+#                    do echo waiting for database; sleep 2; done;' ]
       containers:
         - name:  delivery
-          image: lfneves/delivery-mvp:1.0.1
+#          image:  lfneves/delivery-mvp:1.0.1
+          image: 566907801160.dkr.ecr.us-east-1.amazonaws.com/delivery-mvp:latest
           ports:
             - containerPort: 8099
           env:
@@ -48,7 +55,7 @@ spec:
                   key: POSTGRES_PORT
           resources:
             requests:
-              cpu: 400m
-              memory: 500Mi
+              cpu: "0.2"
+              memory: "200Mi"
       imagePullSecrets:
         - name: secret-dockerhub

@@ -1,0 +1,137 @@
+name: Kotlin Build CI with Gradle
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: delivery-mvp
+  SHORT_SHA: ${{ github.sha }}
+  IMAGE_NAME: lfneves
+  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+  KUBE_NAMESPACE: delivery-cluster
+  RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        
+      - name: Build with Gradle
+        run: ./gradlew bootJar
+        working-directory: ${{ github.workspace }}
+
+      - name: Copy Jar file
+        run: mv build/libs/*.jar app.jar
+
+      - name: Upload Jar file
+        uses: actions/upload-artifact@v2
+        with:
+          name: jar-file
+          path: app.jar
+
+  ecr:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Download jar file
+        uses: actions/download-artifact@v2
+        with:
+          name: jar-file
+          path: .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest .
+        working-directory: ${{ github.workspace }}
+
+      - name: Tag image to Amazon ECR
+        id: tag-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: docker tag ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest ${{ env.ECR_REGISTRY }}/delivery-mvp:latest
+        working-directory: ${{ github.workspace }}
+
+      - name: Push image to Amazon ECR
+        id: push-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+        working-directory: ${{ github.workspace }}
+          
+  eks:
+    needs: ecr
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS CLI
+        run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set default.region ${{ env.AWS_REGION }}
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Configure kubectl
+        run: aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name delivery-cluster
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/application/1-deployment.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/application/2-service-load-balancer.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/application/3-hpa.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/application/4-ingress.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/postgres/3-db-configmap.yaml
+
+      - name: Deploy to Kubernetes cluster
+        run: kubectl apply -f k8s/postgres/4-db-secret.yaml
