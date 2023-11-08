@@ -68,3 +68,5 @@ EXPOSE 8099
 
 ENTRYPOINT ["java","-jar","app.jar"]
 
+
+
