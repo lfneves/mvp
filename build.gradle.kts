@@ -60,10 +60,6 @@ dependencies {
 
 	// CPF Validator
 	//implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.5.1")
-
-	// Mapstruct (applies when application growing - need kapt)
-	//implementation("org.mapstruct:mapstruct:1.5.5.Final")
-	//annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 }
 
 tasks.withType<KotlinCompile> {
