@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.order
+package com.mvp.delivery.application.integration.order
 
 import org.junit.jupiter.api.Test
 import java.time.Instant

@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.user
+package com.mvp.delivery.application.integration.user
 
 import com.mvp.delivery.helpers.UserMock
 import org.assertj.core.api.Assertions.assertThat

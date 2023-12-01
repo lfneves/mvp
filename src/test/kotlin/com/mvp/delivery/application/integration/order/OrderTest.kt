@@ -1,6 +1,6 @@
-package com.mvp.delivery.application.order
+package com.mvp.delivery.application.integration.order
 
-import com.mvp.delivery.application.user.UserApplicationTest
+import com.mvp.delivery.application.integration.user.UserApplicationTest
 import com.mvp.delivery.domain.model.auth.AuthClientDTO
 import com.mvp.delivery.domain.service.client.order.OrderServiceImpl
 import com.mvp.delivery.domain.service.admin.user.UserAdminServiceImpl

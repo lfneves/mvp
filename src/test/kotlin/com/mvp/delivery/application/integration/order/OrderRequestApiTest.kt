@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.order
+package com.mvp.delivery.application.integration.order
 
 import com.mvp.delivery.domain.model.order.OrderDTO
 import com.mvp.delivery.domain.model.order.OrderRequestDTO

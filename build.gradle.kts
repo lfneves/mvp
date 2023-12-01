@@ -47,7 +47,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("io.projectreactor:reactor-test:3.5.4")
-	testImplementation("io.mockk:mockk:1.13.4")
+	testImplementation("io.mockk:mockk:1.13.8")
 
 	//Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")

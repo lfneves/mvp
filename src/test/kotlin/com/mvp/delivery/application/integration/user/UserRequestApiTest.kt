@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.user
+package com.mvp.delivery.application.integration.user
 
 import com.mvp.delivery.domain.model.user.UserDTO
 import com.mvp.delivery.helpers.UserMock

@@ -1,4 +1,4 @@
-package com.mvp.delivery.application.order
+package com.mvp.delivery.application.integration.order
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.mercadopago.MercadoPagoConfig
