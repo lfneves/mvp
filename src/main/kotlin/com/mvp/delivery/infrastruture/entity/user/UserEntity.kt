@@ -24,6 +24,18 @@ data class UserEntity (
     @Schema(hidden = true)
     var idAddress: Long? = null,
 ) {
+    fun toDTO(): UserDTO {
+        return UserDTO(
+            id = this.id,
+            name = this.name,
+            email = this.email,
+            cpf = this.cpf,
+            idAddress = this.idAddress,
+            password = this.password,
+            address = null
+        )
+    }
+
     fun toDTO(userEntity: UserEntity, address: AddressEntity? = null): UserDTO {
         return UserDTO(
             id = this.id,

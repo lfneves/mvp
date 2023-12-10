@@ -10,6 +10,8 @@ spring-doc:
     path: /swagger-ui.html
 
 spring:
+  profiles:
+    active: development
   main:
     allow-bean-definition-overriding: true
   webflux:

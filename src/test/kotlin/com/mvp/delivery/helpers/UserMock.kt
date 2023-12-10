@@ -1,6 +1,7 @@
 package com.mvp.delivery.helpers
 
 import com.mvp.delivery.domain.model.user.UserDTO
+import com.mvp.delivery.infrastruture.entity.user.UserEntity
 import com.mvp.delivery.utils.Sha512PasswordEncoder
 
 object UserMock {
@@ -34,7 +35,17 @@ object UserMock {
         idAddress = TEST_ADDRESS_ID
     )
 
+    private fun mockUserEntity(passwordService: Sha512PasswordEncoder) = UserEntity(
+        id = TEST_USER_ID,
+        name = TEST_NAME,
+        cpf = TEST_USERNAME,
+        email = TEST_EMAIL,
+        password = passwordService.encode(TEST_PASSWORD),
+        idAddress = TEST_ADDRESS_ID
+    )
+
     fun mockUser() = mockUser(passwordEncoder)
+    fun mockUserEntity() = mockUserEntity(passwordEncoder)
 
     fun mockUpdateUserRequest() = UserDTO(
         email = "test@email.com",
